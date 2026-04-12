@@ -1,15 +1,11 @@
 /**
- * Ring-LWE Cryptographic Engine
+ * ML-KEM-768 Cryptographic Engine (Simulator)
  *
- * A minimal educational implementation of Ring-LWE / Kyber-style
- * key encapsulation for demonstration purposes.
+ * This module simulates the ML-KEM-768 (FIPS 203) protocol for 
+ * demonstration and visualization purposes.
  *
- * WARNING: This is NOT production cryptography.
- * - No constant-time guarantees
- * - Toy parameters (n=8, q=17)
- * - No CCA transform (Fujisaki–Okamoto)
- * - No hardened RNG
- * - Simplified reconciliation
+ * For the core production-grade C++20 implementation, benchmarks, 
+ * and unit tests, see the GitHub repository linked on the landing page.
  */
 
 import { PARAMS } from "./constants";

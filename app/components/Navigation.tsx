@@ -105,7 +105,7 @@ export default function Navigation() {
             <line x1="8" y1="24" x2="16" y2="16" stroke="var(--accent)" strokeWidth="0.75" opacity="0.5" />
             <line x1="24" y1="24" x2="16" y2="16" stroke="var(--accent)" strokeWidth="0.75" opacity="0.5" />
           </svg>
-            <span>QC-Vis</span>
+            <span>Kyber</span>
           </Link>
 
           {/* Desktop nav */}

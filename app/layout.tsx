@@ -17,32 +17,34 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kyber Algorithm Visualizer",
+  title: "Kyber ML-KEM",
   description:
-    "Interactive documentation and visual simulator for an educational Ring-LWE / Kyber-style post-quantum key encapsulation protocol. Explore lattice-based cryptography with step-by-step animations.",
+    "A high-performance C++20 implementation of the ML-KEM-768 (FIPS 203) post-quantum key encapsulation mechanism, featuring AEAD (AES-256-GCM) and HKDF-SHA256 for secure messaging.",
   keywords: [
     "post-quantum cryptography",
-    "Ring-LWE",
     "Kyber",
     "ML-KEM",
+    "FIPS 203",
     "lattice-based cryptography",
     "key encapsulation",
-    "cryptography simulator",
+    "AES-GCM",
+    "HKDF",
+    "C++20",
     "PQC",
-    "education",
   ],
-  authors: [{ name: "QC-Vis Project" }],
+  authors: [{ name: "Rupak R. Gupta" }, { name: "Abhay Upadhyay" }, { name: "Ghruank Kothare" }],
   icons: {
     icon: "/icon.svg",
   },
   openGraph: {
-    title: "Kyber Algorithm Visualizer",
+    title: "Kyber ML-KEM",
     description:
-      "Interactive Ring-LWE / Kyber-style protocol simulator and documentation for learning post-quantum cryptography.",
+      "A high-performance C++20 implementation of the ML-KEM-768 (FIPS 203) post-quantum key encapsulation mechanism.",
     type: "website",
     locale: "en_US",
   },
 };
+
 
 export default function RootLayout({
   children,

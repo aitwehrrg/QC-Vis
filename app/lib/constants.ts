@@ -1,7 +1,7 @@
 /* ─── Protocol Parameters ─────────────────────────────────────────── */
 export const PARAMS = {
-  n: 8,
-  q: 17,
+  n: 256,
+  q: 3329,
 } as const;
 
 /* ─── Navigation ──────────────────────────────────────────────────── */
@@ -28,37 +28,35 @@ export const ACTOR_COLORS = {
 
 /* ─── Glossary ────────────────────────────────────────────────────── */
 export const GLOSSARY: Record<string, string> = {
-  "Ring-LWE":
-    "Ring Learning With Errors — a lattice-based hard problem where secret information is hidden by adding small random noise to polynomial equations over a ring.",
+  "ML-KEM":
+    "Module-Lattice-based Key Encapsulation Mechanism (formerly known as Kyber). A NIST-standardized (FIPS 203) post-quantum cryptographic algorithm.",
   "Kyber":
-    "ML-KEM (formerly CRYSTALS-Kyber) — a NIST-standardized post-quantum key encapsulation mechanism based on the Module-LWE problem.",
+    "The original name for the ML-KEM algorithm. Part of the CRYSTALS suite.",
   "KEM":
     "Key Encapsulation Mechanism — a protocol that allows two parties to establish a shared symmetric key using asymmetric operations.",
   "PQC":
     "Post-Quantum Cryptography — cryptographic algorithms designed to resist attacks by both classical and quantum computers.",
-  "Lattice":
-    "A regular, repeating arrangement of points in n-dimensional space. Lattice-based cryptography relies on the hardness of finding short vectors in high-dimensional lattices.",
+  "M-LWE":
+    "Module Learning With Errors — the mathematical problem that forms the security foundation of ML-KEM.",
   "Polynomial Ring":
     "The algebraic structure Zq[x]/(x^n + 1), where arithmetic is performed on polynomials with coefficients modulo q, reduced modulo x^n + 1.",
-  "Noise / Error":
-    "Small random values added during encryption. They hide the algebraic structure of the secret but are small enough that the intended recipient can tolerate them during decryption.",
+  "NTT":
+    "Number Theoretic Transform — a highly efficient algorithm for polynomial multiplication used in ML-KEM.",
   "Encapsulation":
-    "The process where the sender uses the receiver's public key to generate a shared secret and a ciphertext that encodes it.",
+    "The process where the sender uses the receiver's public key to generate a shared secret and an encapsulated key (ciphertext).",
   "Decapsulation":
-    "The process where the receiver uses their secret key to extract the shared secret from the ciphertext produced during encapsulation.",
-  "Shared Secret":
-    "A symmetric key derived by both the sender and receiver independently, used to encrypt and decrypt the actual message.",
-  "Modular Arithmetic":
-    "Arithmetic where numbers wrap around after reaching a modulus q. For example, 15 mod 17 = 15, but 18 mod 17 = 1.",
+    "The process where the receiver uses their private key and the encapsulated key to recover the shared secret.",
+  "AEAD":
+    "Authenticated Encryption with Associated Data — a form of encryption which simultaneously assures the confidentiality and authenticity of data (e.g., AES-256-GCM).",
+  "HKDF":
+    "HMAC-based Extract-and-Expand Key Derivation Function — used to derive session keys from the shared secret established by ML-KEM.",
+  "FIPS 203":
+    "The official NIST standard for Module-Lattice-Based Key Encapsulation Mechanism.",
   "CCA Security":
-    "Chosen Ciphertext Attack security — a strong security notion where an attacker cannot learn anything even if they can ask for decryptions of other ciphertexts. This demo does NOT provide CCA security.",
-  "Fujisaki–Okamoto Transform":
-    "A generic transformation that upgrades a CPA-secure KEM to CCA-secure. Used in real Kyber/ML-KEM but omitted in this educational demo.",
-  "Reconciliation":
-    "A mechanism to ensure the sender and receiver derive exactly the same shared key despite small differences caused by noise.",
+    "Chosen Ciphertext Attack security — a security notion where an attacker cannot learn anything even if they can ask for decryptions of other ciphertexts. ML-KEM provides CCA security via the Fujisaki–Okamoto transform.",
 };
 
-/* ─── Sample Vectors (for worked example) ─────────────────────────── */
+/* ─── Sample Vectors (Simplified for Visualization) ───────────────── */
 export const SAMPLE_VECTORS = {
   a: [3, 1, 4, 1, 5, 9, 2, 6],
   s: [1, 0, -1, 1, 0, 0, 1, -1],
@@ -70,19 +68,17 @@ export const SAMPLE_VECTORS = {
 
 /* ─── Installation Commands ───────────────────────────────────────── */
 export const INSTALL_COMMANDS = {
-  clone: "git clone https://github.com/your-org/qc-vis.git\ncd qc-vis",
-  prerequisites: "# Requires: C++17 compiler (GCC 9+, Clang 10+, MSVC 2019+)\n# CMake 3.16 or later\n# Make or Ninja build system",
-  build: "mkdir build && cd build\ncmake .. -DCMAKE_BUILD_TYPE=Release\nmake -j$(nproc)",
-  run: "./build/qc_vis_demo",
-  expectedOutput: `[KeyGen] Generated secret polynomial s
-[KeyGen] Generated error polynomial e
-[KeyGen] Public key (a, b) computed
-[Encapsulate] Generated ephemeral r, e1, e2
-[Encapsulate] Computed (u, v)
-[Encapsulate] Shared key (sender): 0x7a3f...
-[Decrypt] Recovered shared key (receiver): 0x7a3f...
-[Encrypt] Plaintext: "HELLO B"
-[Encrypt] Ciphertext: 0x1d09...
-[Decrypt] Recovered: "HELLO B"
-[Verify] Keys match: YES`,
+  clone: "git clone https://github.com/your-org/kyber.git\ncd kyber",
+  prerequisites: "# Requires: C++20 compiler (GCC 11+, Clang 13+)\n# OpenSSL 3.0 or higher\n# CMake 3.15 or later",
+  build: "mkdir build && cd build\ncmake ..\nmake -j$(nproc)",
+  run: "./kyber_demo",
+  expectedOutput: `[ML-KEM] Key Generation complete.
+[ML-KEM] Public Key (hex): 4a3f2...
+[Sender] Encapsulating shared secret...
+[Sender] Encapsulated Key (hex): 1d09e...
+[Receiver] Decapsulating shared secret...
+[Session] Shared Secret derived successfully.
+[AEAD] Encrypting message: "PQC is here"
+[Session] E2E secure channel established.`,
 } as const;
+

@@ -13,19 +13,19 @@ interface FlowStep {
 }
 
 const FLOW_STEPS: FlowStep[] = [
-  { from: "B", to: "B", label: <LatexInline>{"\\text{Generate } \\mathbf{s}, \\mathbf{e}"}</LatexInline>, detail: <LatexInline>{"\\text{Secret key } \\mathbf{s} \\text{ and error } \\mathbf{e} \\text{ (private)}"}</LatexInline>, type: "private" },
-  { from: "B", to: "B", label: <LatexInline>{"\\text{Compute } \\mathbf{b} = \\mathbf{a} \\cdot \\mathbf{s} + \\mathbf{e}"}</LatexInline>, detail: "Public key component", type: "public" },
-  { from: "B", to: "channel", label: <LatexInline>{"\\text{Publish } (\\mathbf{a}, \\mathbf{b})"}</LatexInline>, detail: "Public key sent to channel", type: "public" },
-  { from: "channel", to: "A", label: <LatexInline>{"\\text{Receive } (\\mathbf{a}, \\mathbf{b})"}</LatexInline>, detail: "Alice receives Bob's public key", type: "public" },
-  { from: "A", to: "A", label: <LatexInline>{"\\text{Generate } \\mathbf{r}, \\mathbf{e}_1, \\mathbf{e}_2"}</LatexInline>, detail: "Ephemeral values (private)", type: "private" },
-  { from: "A", to: "A", label: <LatexInline>{"\\text{Compute } \\mathbf{u}, \\mathbf{v}"}</LatexInline>, detail: <LatexInline>{"\\mathbf{u} = \\mathbf{a} \\cdot \\mathbf{r} + \\mathbf{e}_1, \\; \\mathbf{v} = \\mathbf{b} \\cdot \\mathbf{r} + \\mathbf{e}_2"}</LatexInline>, type: "public" },
-  { from: "A", to: "A", label: "Derive shared key", detail: <LatexInline>{"K_A = \\text{Round}(\\mathbf{v})"}</LatexInline>, type: "private" },
-  { from: "A", to: "A", label: "Encrypt message", detail: <LatexInline>{"\\text{ciphertext} = \\text{msg} \\oplus K_A"}</LatexInline>, type: "encrypted" },
-  { from: "A", to: "channel", label: <LatexInline>{"\\text{Send } (\\mathbf{u}, \\mathbf{v}, \\text{ciphertext})"}</LatexInline>, detail: "Transmitted over public channel", type: "encrypted" },
-  { from: "channel", to: "B", label: <LatexInline>{"\\text{Receive } (\\mathbf{u}, \\mathbf{v}, \\text{ct})"}</LatexInline>, detail: "Bob receives ciphertext bundle", type: "encrypted" },
-  { from: "B", to: "B", label: <LatexInline>{"\\text{Compute } \\mathbf{v} - \\mathbf{u} \\cdot \\mathbf{s}"}</LatexInline>, detail: "Recovers approximate shared value", type: "private" },
-  { from: "B", to: "B", label: "Derive shared key", detail: <LatexInline>{"K_B = \\text{Round}(\\mathbf{v} - \\mathbf{u} \\cdot \\mathbf{s}) \\approx K_A"}</LatexInline>, type: "private" },
-  { from: "B", to: "B", label: "Decrypt message", detail: <LatexInline>{"\\text{msg} = \\text{ciphertext} \\oplus K_B"}</LatexInline>, type: "private" },
+  { from: "B", to: "B", label: <LatexInline>{"\\text{Generate } \\mathbf{s}, \\mathbf{e}"}</LatexInline>, detail: <LatexInline>{"\\text{Secret key vector } \\mathbf{s} \\text{ and error } \\mathbf{e} \\text{ (private)}"}</LatexInline>, type: "private" },
+  { from: "B", to: "B", label: <LatexInline>{"\\text{Compute } \\mathbf{b} = \\mathbf{A} \\cdot \\mathbf{s} + \\mathbf{e}"}</LatexInline>, detail: "Public key vector computation (M-LWE)", type: "public" },
+  { from: "B", to: "channel", label: <LatexInline>{"\\text{Publish Public Key } pk"}</LatexInline>, detail: "Matrix A and vector b sent to channel", type: "public" },
+  { from: "channel", to: "A", label: <LatexInline>{"\\text{Receive } pk"}</LatexInline>, detail: "Alice receives Bob's public key", type: "public" },
+  { from: "A", to: "A", label: <LatexInline>{"\\text{Generate } \\mathbf{r}, \\mathbf{e}_1, \\mathbf{e}_2"}</LatexInline>, detail: "Ephemeral randomness (private)", type: "private" },
+  { from: "A", to: "A", label: <LatexInline>{"\\text{Compute } \\mathbf{u}, \\mathbf{v}"}</LatexInline>, detail: <LatexInline>{"\\mathbf{u} = \\mathbf{A}^T \\mathbf{r} + \\mathbf{e}_1, \\; \\mathbf{v} = \\mathbf{b}^T \\mathbf{r} + \\mathbf{e}_2"}</LatexInline>, type: "public" },
+  { from: "A", to: "A", label: "Derive shared secret", detail: <LatexInline>{"ss = \\text{Compress}(\\mathbf{v})"}</LatexInline>, type: "private" },
+  { from: "A", to: "A", label: "HKDF & AEAD Encrypt", detail: <LatexInline>{"ct = \\text{AES-GCM}(\\text{msg}, \\text{HKDF}(ss))"}</LatexInline>, type: "encrypted" },
+  { from: "A", to: "channel", label: <LatexInline>{"\\text{Send Encapsulated Key } ct_{kem} + ct"}</LatexInline>, detail: "Transmitted over public channel", type: "encrypted" },
+  { from: "channel", to: "B", label: <LatexInline>{"\\text{Receive Ciphertexts}"}</LatexInline>, detail: "Bob receives encapsulated key and message", type: "encrypted" },
+  { from: "B", to: "B", label: <LatexInline>{"\\text{Compute } \\mathbf{v} - \\mathbf{u}^T \\mathbf{s}"}</LatexInline>, detail: "Recovers approximate shared value via cancellation", type: "private" },
+  { from: "B", to: "B", label: "Derive shared secret", detail: <LatexInline>{"ss' = \\text{Decompress}(\\dots) \\approx ss"}</LatexInline>, type: "private" },
+  { from: "B", to: "B", label: "HKDF & AEAD Decrypt", detail: <LatexInline>{"\\text{msg} = \\text{AES-GCM-Decrypt}(ct, \\text{HKDF}(ss'))"}</LatexInline>, type: "private" },
 ];
 
 const typeStyles = {
