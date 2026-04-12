@@ -5,7 +5,7 @@
  */
 
 export const n = 8;
-export const q = 17;
+export const q = 3329;
 
 /** Modulo function that handles negative numbers correctly */
 export function mod(a: number, m: number): number {
@@ -73,7 +73,7 @@ export function smallPoly(): number[] {
 export function deriveKey(v: number[]): number[] {
   return v.map((c) => {
     const centered = centerLift(c);
-    // If |centered| is closer to q/2 (which is 8.5) than 0, return 1
+    // Values close to 0 map to 0, values close to +/- q/2 map to 1
     return Math.abs(centered) > q / 4 ? 1 : 0;
   });
 }
@@ -104,11 +104,16 @@ export function runProtocol(): ProtocolData {
   const e1 = smallPoly();
   const e2 = smallPoly();
   const u = polyAdd(polyMul(a, r), e1);
-  const v = polyAdd(polyMul(b, r), e2);
+  
+  // Alice picks a random message to encapsulate
+  const msg = Array.from({ length: n }, () => Math.round(Math.random()));
+  const msgShifted = msg.map(b => b * Math.floor(q / 2));
+  
+  const v = polyAdd(polyAdd(polyMul(b, r), e2), msgShifted);
 
-  const keyA = deriveKey(v);
+  const keyA = msg; // Alice's key is the message she sent
   const us = polyMul(u, s);
-  const diff = polySub(v, us);
+  const diff = polySub(v, us); // Bob recovers br + e2 + msg - (ar+e1)s approx msg
   const keyB = deriveKey(diff);
 
   return { a, s, e, b, r, e1, e2, u, v, keyA, keyB };
