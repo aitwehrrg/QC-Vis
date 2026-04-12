@@ -27,7 +27,8 @@ export default function Lattice() {
 
   // Use useLayoutEffect for one-time initialization of the static lattice
   useLayoutEffect(() => {
-    if (!meshRef.current) return;
+    const mesh = meshRef.current;
+    if (!mesh) return;
     
     const dummy = new THREE.Object3D();
     points.forEach((pos, i) => {
@@ -35,9 +36,9 @@ export default function Lattice() {
       // Extremely small points to avoid "blob" effect
       dummy.scale.set(0.015, 0.015, 0.015);
       dummy.updateMatrix();
-      meshRef.current!.setMatrixAt(i, dummy.matrix);
+      mesh.setMatrixAt(i, dummy.matrix);
     });
-    meshRef.current.instanceMatrix.needsUpdate = true;
+    mesh.instanceMatrix.needsUpdate = true;
   }, [points]);
 
   const dotColor = theme === "dark" ? "#ffffff" : "#000000";

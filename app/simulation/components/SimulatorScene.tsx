@@ -2,6 +2,7 @@
 
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { useSimulationStore } from "../store";
 import { SCENES } from "../scenes";
 import Lattice from "./Lattice";
@@ -19,7 +20,7 @@ export default function SimulatorScene() {
   const [isMobile, setIsMobile] = useState(false);
   
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
-  const controlsRef = useRef<{ target: THREE.Vector3; update: () => void }>(null);
+  const controlsRef = useRef<OrbitControlsImpl>(null);
 
   // Responsive check
   useEffect(() => {
@@ -36,7 +37,9 @@ export default function SimulatorScene() {
 
   // Handle Camera and Target Transitions
   useEffect(() => {
-    if (!cameraRef.current || !controlsRef.current) return;
+    const camera = cameraRef.current;
+    const controls = controlsRef.current;
+    if (!camera || !controls) return;
     
     let targetPos: THREE.Vector3;
     let targetLookAt: THREE.Vector3;
@@ -58,10 +61,10 @@ export default function SimulatorScene() {
     }
     
     // Kill any existing tweens to prevent conflicts
-    gsap.killTweensOf(cameraRef.current.position);
-    gsap.killTweensOf(controlsRef.current.target);
+    gsap.killTweensOf(camera.position);
+    gsap.killTweensOf(controls.target);
 
-    gsap.to(cameraRef.current.position, {
+    gsap.to(camera.position, {
       x: targetPos.x,
       y: targetPos.y,
       z: targetPos.z,
@@ -69,19 +72,19 @@ export default function SimulatorScene() {
       ease: "power2.inOut",
     });
 
-    gsap.to(controlsRef.current.target, {
+    gsap.to(controls.target, {
       x: targetLookAt.x,
       y: targetLookAt.y,
       z: targetLookAt.z,
       duration: 1.5,
       ease: "power2.inOut",
-      onUpdate: () => controlsRef.current.update(),
+      onUpdate: () => controls.update(),
     });
   }, [currentSceneIndex, isFreeCamera, scene, isMobile]);
 
   return (
     <div className="w-full h-full relative transition-colors duration-500" style={{ backgroundColor: bgColor }}>
-      <Canvas shadows gl={{ antialias: true, shadowMapType: THREE.PCFShadowMap, powerPreference: "high-performance" }} dpr={[1, 2]}>
+      <Canvas shadows="soft" gl={{ antialias: true, powerPreference: "high-performance" }} dpr={[1, 2]}>
         <color attach="background" args={[bgColor]} />
         <PerspectiveCamera
           ref={cameraRef}
