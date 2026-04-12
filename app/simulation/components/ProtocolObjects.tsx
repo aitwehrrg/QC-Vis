@@ -8,11 +8,6 @@ import katex from "katex";
 import { useTheme } from "../../components/ThemeProvider";
 import { useMemo } from "react";
 
-/**
- * Binary Palette for Simulation:
- * 1. Main (Established/Structure) - White (Dark) / Black (Light)
- * 2. Entity (Newly introduced/Focus) - Green/Teal
- */
 const getPalette = (theme: "light" | "dark") => ({
   main: theme === "dark" ? "#ffffff" : "#000000",
   entity: theme === "dark" ? "#2dd4bf" : "#0d9488",
@@ -142,30 +137,28 @@ export default function ProtocolObjects() {
   
   const PALETTE = getPalette(theme as "light" | "dark" || "light");
 
-  // Determine colors based on binary system and scene context
+  
   const getObjectColor = (type: "structure" | "new" | "vector-a" | "vector-b") => {
     if (type === "vector-a") {
-      // a is foundation, usually main color. b is introduced in step 2.
-      // Post step-2 (index > 1), a and b share same color.
+      
       return currentSceneIndex > 1 ? PALETTE.main : PALETTE.main;
     }
     if (type === "vector-b") {
-      if (currentSceneIndex === 1) return PALETTE.entity; // New in step 2
-      return PALETTE.main; // Established thereafter
+      if (currentSceneIndex === 1) return PALETTE.entity; 
+      return PALETTE.main; 
     }
     return type === "new" ? PALETTE.entity : PALETTE.main;
   };
-
   return (
     <group>
-      {/* Dynamic Axes - Thicker and readable */}
+      {}
       <group>
         <Line points={[[0, 0, 0], [3, 0, 0]]} color={PALETTE.muted} lineWidth={3} transparent opacity={0.6} />
         <Line points={[[0, 0, 0], [0, 3, 0]]} color={PALETTE.muted} lineWidth={3} transparent opacity={0.6} />
         <Line points={[[0, 0, 0], [0, 0, 3]]} color={PALETTE.muted} lineWidth={3} transparent opacity={0.6} />
       </group>
 
-      {/* Basis Vectors */}
+      {}
       <VectorArrow
         dir={[2, 0.5, 0]}
         color={getObjectColor("vector-a")}
@@ -179,7 +172,7 @@ export default function ProtocolObjects() {
         visible={visible.includes("basis-b")}
       />
 
-      {/* Secret Point */}
+      {}
       {visible.includes("secret-point") && (
         <group position={[2, 2, 2]}>
           <Sphere args={[0.12, 16, 16]}>
@@ -189,7 +182,7 @@ export default function ProtocolObjects() {
         </group>
       )}
 
-      {/* Noisy Point */}
+      {}
       {visible.includes("noisy-point") && (
         <group position={[2.3, 2.1, 1.8]}>
           <Sphere args={[0.12, 16, 16]}>
@@ -199,7 +192,7 @@ export default function ProtocolObjects() {
         </group>
       )}
 
-      {/* Noise Cloud */}
+      {}
       {visible.includes("noise-cloud") && (
         <group>
           <NoiseCloud 
@@ -211,7 +204,7 @@ export default function ProtocolObjects() {
         </group>
       )}
 
-      {/* Protocol Vectors */}
+      {}
       <VectorArrow
         dir={[-3, 1.5, 0.5]}
         color={currentSceneIndex === 2 ? PALETTE.entity : PALETTE.main}
@@ -225,7 +218,7 @@ export default function ProtocolObjects() {
         visible={visible.includes("v-vector")}
       />
 
-      {/* Ephemeral Randomness (Alice) */}
+      {}
       {visible.includes("r-vector") && (
         <group position={[-1, -1, 0.5]}>
           <Sphere args={[0.1, 16, 16]}>
@@ -235,7 +228,7 @@ export default function ProtocolObjects() {
         </group>
       )}
 
-      {/* Ephemeral Noise Clouds */}
+      {}
       {visible.includes("e1-noise") && (
         <group position={[-3, 1.5, 0.5]}>
           <NoiseCloud radius={0.3} color={PALETTE.entity} count={200} position={[0, 0, 0]} />
@@ -250,7 +243,7 @@ export default function ProtocolObjects() {
         </group>
       )}
 
-      {/* Attacker Ambiguity */}
+      {}
       {visible.includes("ambiguity-sphere") && (
         <group>
           <mesh position={[0, 0, 0]}>
@@ -261,7 +254,7 @@ export default function ProtocolObjects() {
         </group>
       )}
 
-      {/* Shared Secret */}
+      {}
       {visible.includes("shared-secret-point") && (
         <Float speed={2.5}>
           <group position={[0, 0.2, 0]}>

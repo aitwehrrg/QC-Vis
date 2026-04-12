@@ -22,7 +22,6 @@ export default function SimulatorScene() {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
   const controlsRef = useRef<OrbitControlsImpl>(null);
 
-  // Responsive check
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -30,12 +29,10 @@ export default function SimulatorScene() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Colors based on theme
   const bgColor = theme === "dark" ? "#0a0a0a" : "#fafaf9";
   const gridColor = theme === "dark" ? "#222222" : "#e5e5e4";
   const gridSectionColor = theme === "dark" ? "#111111" : "#f0f0ef";
 
-  // Handle Camera and Target Transitions
   useEffect(() => {
     const camera = cameraRef.current;
     const controls = controlsRef.current;
@@ -45,13 +42,10 @@ export default function SimulatorScene() {
     let targetLookAt: THREE.Vector3;
 
     if (isFreeCamera) {
-      // In Free/Orbit mode, we transition the target to the origin [0,0,0]
-      // but keep the camera at a reasonable overview distance
       const scale = isMobile ? 2 : 1;
       targetPos = new THREE.Vector3(12 * scale, 8 * scale, 12 * scale);
       targetLookAt = new THREE.Vector3(0, 0, 0);
     } else {
-      // In Guided mode, use scene-specific poses
       const scale = isMobile ? 2.2 : 1;
       targetPos = new THREE.Vector3(
         scene.cameraPose.position[0] * scale,
@@ -61,7 +55,6 @@ export default function SimulatorScene() {
       targetLookAt = new THREE.Vector3(...scene.cameraPose.target);
     }
     
-    // Kill any existing tweens to prevent conflicts
     gsap.killTweensOf(camera.position);
     gsap.killTweensOf(controls.target);
 

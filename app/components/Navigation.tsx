@@ -11,16 +11,13 @@ export default function Navigation() {
   const [activeSection, setActiveSection] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Determine active item based on pathname and hash
   useEffect(() => {
     const hash = window.location.hash;
     
-    // Default active section matches pathname
     let matched = NAV_SECTIONS.find(
       (s) => s.route === pathname || s.route === `${pathname}${hash}`
     );
     
-    // If it's a root hash link and we have a hash, favor that
     if (pathname === "/" && hash) {
       matched = NAV_SECTIONS.find((s) => s.route === `/${hash}`);
     } else if (!hash) {
@@ -32,7 +29,6 @@ export default function Navigation() {
     }
   }, [pathname]);
 
-  // Scroll spy for slash hash routing on the current page
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -53,7 +49,6 @@ export default function Navigation() {
     return () => observer.disconnect();
   }, [pathname]);
 
-  // Close mobile menu on Escape
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setMobileOpen(false);
@@ -62,7 +57,6 @@ export default function Navigation() {
     return () => document.removeEventListener("keydown", handleKey);
   }, []);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -82,7 +76,7 @@ export default function Navigation() {
         aria-label="Main navigation"
       >
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-14">
-          {/* Logo */}
+          {}
           <Link
             href="/"
             className="flex items-center gap-2 font-bold text-sm tracking-tight"
@@ -108,7 +102,7 @@ export default function Navigation() {
             <span>Kyber</span>
           </Link>
 
-          {/* Desktop nav */}
+          {}
           <div className="hidden md:flex items-center gap-1">
             {NAV_SECTIONS.map(({ id, label, route }) => (
               <Link
@@ -128,7 +122,7 @@ export default function Navigation() {
             </div>
           </div>
 
-          {/* Mobile hamburger */}
+          {}
           <div className="flex md:hidden items-center gap-2">
             <ThemeToggle />
             <button
@@ -154,7 +148,7 @@ export default function Navigation() {
         </div>
       </nav>
 
-      {/* Mobile slide-out panel */}
+      {}
       {mobileOpen && (
         <div className="fixed inset-0 z-50 md:hidden" role="dialog" aria-modal="true">
           <div
@@ -196,7 +190,7 @@ export default function Navigation() {
         </div>
       )}
 
-      {/* Spacer for fixed nav */}
+      {}
       <div className="h-14" aria-hidden="true" />
     </>
   );

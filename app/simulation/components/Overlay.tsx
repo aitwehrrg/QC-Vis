@@ -20,7 +20,7 @@ export default function Overlay() {
 
   return (
     <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-4 md:p-8 z-10 font-sans">
-      {/* Top Left: Rigorous Proof Panel */}
+      {}
       <div className="flex flex-col gap-4 items-start">
         <div className="w-full max-w-[340px] pointer-events-auto bg-surface/95 backdrop-blur-xl p-4 md:p-6 rounded-xl border border-border-subtle shadow-2xl transition-all duration-300">
           <h2 className="text-sm md:text-base font-bold mb-2 md:mb-3 text-foreground tracking-tight border-b border-border-subtle pb-2">
@@ -43,7 +43,7 @@ export default function Overlay() {
         </div>
       </div>
 
-      {/* Bottom Center: Controls */}
+      {}
       <div className="flex justify-center items-end pointer-events-auto pb-2 md:pb-0">
         <div className="bg-surface/95 backdrop-blur-xl px-3 md:px-5 py-2 md:py-2.5 rounded-full border border-border-subtle shadow-2xl flex items-center gap-2 md:gap-4 overflow-x-auto max-w-[95vw]">
           <div className="hidden sm:flex items-center gap-3 pr-4 border-r border-border-subtle">

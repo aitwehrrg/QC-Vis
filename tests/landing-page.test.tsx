@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import Home from '../app/page';
 
-// Mock components that might be problematic in jsdom or use complex hooks
 vi.mock('../app/components/SystemMap', () => ({
   default: () => <div data-testid="system-map">System Map</div>
 }));

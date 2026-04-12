@@ -1,17 +1,14 @@
-/* ─── Protocol Parameters ─────────────────────────────────────────── */
 export const PARAMS = {
   n: 256,
   q: 3329,
 } as const;
 
-/* ─── Navigation ──────────────────────────────────────────────────── */
 export const NAV_SECTIONS = [
   { id: "overview", route: "/", label: "Overview" },
   { id: "documentation", route: "/documentation", label: "Documentation" },
   { id: "simulation", route: "/simulation", label: "Simulation" },
 ] as const;
 
-/* ─── Color Tokens ────────────────────────────────────────────────── */
 export const VALUE_COLORS = {
   public: { bg: "var(--color-value-public-bg)", text: "var(--color-value-public-text)", label: "Public" },
   private: { bg: "var(--color-value-private-bg)", text: "var(--color-value-private-text)", label: "Private" },
@@ -26,7 +23,6 @@ export const ACTOR_COLORS = {
   C: { accent: "var(--color-actor-c)", label: "Eve (Eavesdropper)" },
 } as const;
 
-/* ─── Glossary ────────────────────────────────────────────────────── */
 export const GLOSSARY: Record<string, string> = {
   "ML-KEM":
     "Module-Lattice-based Key Encapsulation Mechanism (formerly known as Kyber). A NIST-standardized (FIPS 203) post-quantum cryptographic algorithm.",
@@ -56,7 +52,6 @@ export const GLOSSARY: Record<string, string> = {
     "Chosen Ciphertext Attack security — a security notion where an attacker cannot learn anything even if they can ask for decryptions of other ciphertexts. ML-KEM provides CCA security via the Fujisaki–Okamoto transform.",
 };
 
-/* ─── Sample Vectors (Simplified for Visualization) ───────────────── */
 export const SAMPLE_VECTORS = {
   a: [3, 1, 4, 1, 5, 9, 2, 6],
   s: [1, 0, -1, 1, 0, 0, 1, -1],
@@ -66,7 +61,6 @@ export const SAMPLE_VECTORS = {
   e2: [0, 0, 1, 0, -1, 0, 0, 0],
 } as const;
 
-/* ─── Installation Commands ───────────────────────────────────────── */
 export const INSTALL_COMMANDS = {
   clone: "git clone https://github.com/aitwehrrg/Kyber.git\ncd Kyber",
   prerequisites: "# Requires: C++20 compiler (GCC 11+, Clang 13+)\n# OpenSSL 3.0 or higher\n# CMake 3.15 or later",

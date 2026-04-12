@@ -41,9 +41,6 @@ export default function LatexBlock({
   );
 }
 
-/**
- * Renders text containing inline LaTeX marked with $...$
- */
 export function LatexText({ children, className = "" }: { children: string; className?: string }) {
   const elements = useMemo(() => {
     const parts = children.split(/(\$[^\$]+\$)/g);
@@ -67,9 +64,6 @@ export function LatexText({ children, className = "" }: { children: string; clas
   return <div className={className}>{elements}</div>;
 }
 
-/**
- * Inline LaTeX shorthand.
- */
 export function LatexInline({
   children,
   className = "",

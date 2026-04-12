@@ -58,7 +58,7 @@ export default function ProtocolFlow() {
 
   return (
     <div ref={containerRef} className="relative max-w-2xl mx-auto">
-      {/* Column headers */}
+      {}
       <div className="grid grid-cols-3 gap-4 mb-6 text-center">
         <div>
           <span className="actor-badge actor-badge-a">● Alice (A)</span>
@@ -73,9 +73,9 @@ export default function ProtocolFlow() {
         </div>
       </div>
 
-      {/* Vertical timeline */}
+      {}
       <div className="relative">
-        {/* Center line */}
+        {}
         <div
           className="absolute left-1/2 top-0 bottom-0 w-px"
           style={{ background: "var(--border)" }}
@@ -104,7 +104,7 @@ export default function ProtocolFlow() {
                 transition: "all 0.5s ease",
               }}
             >
-              {/* Dot on timeline */}
+              {}
               <div
                 className="absolute left-1/2 -translate-x-1/2 w-3 h-3 rounded-full z-10"
                 style={{
@@ -182,7 +182,7 @@ export default function ProtocolFlow() {
         })}
       </div>
 
-      {/* Legend */}
+      {}
       <div className="flex flex-wrap gap-4 justify-center mt-8 text-xs">
         {Object.entries(typeStyles).map(([key, style]) => (
           <div key={key} className="flex items-center gap-1.5">

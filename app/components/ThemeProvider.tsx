@@ -24,7 +24,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
-    // Check system preference
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const initial: Theme = prefersDark ? "dark" : "light";
     setTheme(initial);
@@ -39,7 +38,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  // Prevent flash before hydration
   if (!mounted) {
     return (
       <ThemeContext.Provider value={{ theme: "dark", toggleTheme }}>

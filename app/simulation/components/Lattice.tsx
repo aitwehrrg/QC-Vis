@@ -8,7 +8,6 @@ export default function Lattice() {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const { theme } = useTheme();
   
-  // Reduced size for better performance and visibility (9x9x9 = 729 points)
   const size = 9;
   const count = size * size * size;
   
@@ -25,7 +24,6 @@ export default function Lattice() {
     return temp;
   }, [size]);
 
-  // Use useLayoutEffect for one-time initialization of the static lattice
   useLayoutEffect(() => {
     const mesh = meshRef.current;
     if (!mesh) return;
@@ -33,7 +31,6 @@ export default function Lattice() {
     const dummy = new THREE.Object3D();
     points.forEach((pos, i) => {
       dummy.position.set(pos[0], pos[1], pos[2]);
-      // Extremely small points to avoid "blob" effect
       dummy.scale.set(0.015, 0.015, 0.015);
       dummy.updateMatrix();
       mesh.setMatrixAt(i, dummy.matrix);
@@ -46,7 +43,7 @@ export default function Lattice() {
 
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, count]} frustumCulled={true}>
-      <sphereGeometry args={[1, 4, 4]} /> {/* Low poly spheres */}
+      <sphereGeometry args={[1, 4, 4]} /> {}
       <meshBasicMaterial color={dotColor} transparent opacity={opacity} />
     </instancedMesh>
   );

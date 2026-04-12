@@ -46,16 +46,14 @@ describe('Simulator Math', () => {
     });
 
     it('multiplies polynomials in the ring Zq[x]/(x^n + 1)', () => {
-      // (1 + 2x) * (x + 3x^2) = x + 3x^2 + 2x^2 + 6x^3 = x + 5x^2 + 6x^3
       const a = [1, 2, 0, 0, 0, 0, 0, 0];
       const b = [0, 1, 3, 0, 0, 0, 0, 0];
       const expected = [0, 1, 5, 6, 0, 0, 0, 0];
       expect(polyMul(a, b)).toEqual(expected);
 
-      // Test reduction: x^(n-1) * x = x^n = -1
       const pMax = new Array(n).fill(0);
-      pMax[n-1] = 1; // x^(n-1)
-      const pX = [0, 1, 0, 0, 0, 0, 0, 0]; // x
+      pMax[n-1] = 1; 
+      const pX = [0, 1, 0, 0, 0, 0, 0, 0]; 
       const res = polyMul(pMax, pX);
       const expectedRed = new Array(n).fill(0);
       expectedRed[0] = mod(-1, q);
@@ -65,14 +63,12 @@ describe('Simulator Math', () => {
 
   describe('Key Derivation', () => {
     it('derives 0 for small values and 1 for large values', () => {
-      // q=3329, q/4 = 832.25
       expect(deriveKey([0, 1, 832, 833, 1664, 1665, 2496, 3328])).toEqual([0, 0, 0, 1, 1, 1, 1, 0]);
     });
   });
 
   describe('Full Protocol', () => {
     it('Alice and Bob reach the same shared secret', () => {
-      // Run multiple times to ensure robustness against random noise
       for (let i = 0; i < 50; i++) {
         const data = runProtocol();
         expect(data.keyA).toEqual(data.keyB);

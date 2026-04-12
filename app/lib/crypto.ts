@@ -1,35 +1,13 @@
-/**
- * ML-KEM-768 Cryptographic Engine (Simulator)
- *
- * This module simulates the ML-KEM-768 (FIPS 203) protocol for 
- * demonstration and visualization purposes.
- *
- * For the core production-grade C++20 implementation, benchmarks, 
- * and unit tests, see the GitHub repository linked on the landing page.
- */
-
 import { PARAMS } from "./constants";
-
 const { n, q } = PARAMS;
-
-/* ─── Utility ──────────────────────────────────────────────────────── */
-
-/** Proper modular reduction to [0, q-1] */
 export function mod(a: number, m: number): number {
   return ((a % m) + m) % m;
 }
 
-/** Generate a random integer in [lo, hi] inclusive */
 function randInt(lo: number, hi: number): number {
   return lo + Math.floor(Math.random() * (hi - lo + 1));
 }
 
-/* ─── Polynomial Arithmetic in Zq[x]/(x^n + 1) ───────────────────── */
-
-/**
- * Multiply two polynomials in Zq[x]/(x^n + 1).
- * Uses schoolbook multiplication with negacyclic reduction.
- */
 export function polyMul(a: number[], b: number[]): number[] {
   const result = new Array(n).fill(0);
   for (let i = 0; i < n; i++) {
@@ -38,7 +16,6 @@ export function polyMul(a: number[], b: number[]): number[] {
       if (idx < n) {
         result[idx] = mod(result[idx] + a[i] * b[j], q);
       } else {
-        // x^n ≡ -1, so x^(n+k) ≡ -x^k
         result[idx - n] = mod(result[idx - n] - a[i] * b[j], q);
       }
     }
@@ -46,34 +23,25 @@ export function polyMul(a: number[], b: number[]): number[] {
   return result;
 }
 
-/** Add two polynomials mod q */
 export function polyAdd(a: number[], b: number[]): number[] {
   return a.map((coeff, i) => mod(coeff + b[i], q));
 }
 
-/** Subtract two polynomials mod q */
 export function polySub(a: number[], b: number[]): number[] {
   return a.map((coeff, i) => mod(coeff - b[i], q));
 }
 
-/* ─── Random Generation ───────────────────────────────────────────── */
-
-/** Generate a random polynomial with coefficients in [0, q-1] */
 export function generatePublicA(): number[] {
   return Array.from({ length: n }, () => randInt(0, q - 1));
 }
 
-/** Generate a small secret polynomial with coefficients in {-1, 0, 1} */
 export function generateSecret(): number[] {
   return Array.from({ length: n }, () => randInt(-1, 1));
 }
 
-/** Generate a small error polynomial with coefficients in {-1, 0, 1} */
 export function generateError(): number[] {
   return Array.from({ length: n }, () => randInt(-1, 1));
 }
-
-/* ─── Key Generation ───────────────────────────────────────────────── */
 
 export interface KeyPair {
   publicKey: { a: number[]; b: number[] };
@@ -81,10 +49,6 @@ export interface KeyPair {
   noise: { e: number[] };
 }
 
-/**
- * Generate a keypair.
- * B chooses secret s, error e, random a, computes b = a*s + e mod q
- */
 export function keyGen(
   fixedA?: number[],
   fixedS?: number[],
@@ -101,8 +65,6 @@ export function keyGen(
   };
 }
 
-/* ─── Encapsulation ────────────────────────────────────────────────── */
-
 export interface EncapsulationResult {
   u: number[];
   v: number[];
@@ -110,13 +72,6 @@ export interface EncapsulationResult {
   ephemeral: { r: number[]; e1: number[]; e2: number[] };
 }
 
-/**
- * A encapsulates a shared secret using B's public key.
- * A generates ephemeral r, e1, e2:
- *   u = a*r + e1
- *   v = b*r + e2
- * Shared key is derived from v (rounded).
- */
 export function encapsulate(
   publicKey: { a: number[]; b: number[] },
   fixedR?: number[],
@@ -130,7 +85,6 @@ export function encapsulate(
   const u = polyAdd(polyMul(publicKey.a, r), e1);
   const v = polyAdd(polyMul(publicKey.b, r), e2);
 
-  // Derive shared key by rounding v to nearest {0, floor(q/2)}
   const sharedKey = v.map((coeff) => {
     const half = Math.floor(q / 2);
     return Math.abs(coeff) < Math.abs(coeff - half) &&
@@ -142,20 +96,11 @@ export function encapsulate(
   return { u, v, sharedKey, ephemeral: { r, e1, e2 } };
 }
 
-/* ─── Decapsulation ────────────────────────────────────────────────── */
-
 export interface DecapsulationResult {
   sharedKey: number[];
   intermediate: number[];
 }
 
-/**
- * B decapsulates using their secret key s.
- *   v - u*s ≈ b*r + e2 - (a*r + e1)*s
- *           = (a*s+e)*r + e2 - a*r*s - e1*s
- *           = e*r + e2 - e1*s   (small if errors are small)
- * Then round to recover shared key.
- */
 export function decapsulate(
   u: number[],
   v: number[],
@@ -175,12 +120,6 @@ export function decapsulate(
   return { sharedKey, intermediate };
 }
 
-/* ─── Message Encryption (XOR-based demo) ──────────────────────────── */
-
-/**
- * Encrypt a message using the shared key.
- * Converts message to binary, XORs with repeated key bits.
- */
 export function encryptMessage(message: string, key: number[]): string {
   const msgBits = message
     .split("")
@@ -194,7 +133,7 @@ export function encryptMessage(message: string, key: number[]): string {
     .map((b, i) => (parseInt(b) ^ parseInt(keyBits[i])).toString())
     .join("");
 
-  // Convert to hex for display
+  
   let hex = "";
   for (let i = 0; i < cipherBits.length; i += 4) {
     hex += parseInt(cipherBits.slice(i, i + 4), 2).toString(16);
@@ -202,16 +141,12 @@ export function encryptMessage(message: string, key: number[]): string {
   return "0x" + hex;
 }
 
-/**
- * Decrypt ciphertext using the shared key.
- */
 export function decryptMessage(cipherHex: string, key: number[]): string {
   const hex = cipherHex.startsWith("0x") ? cipherHex.slice(2) : cipherHex;
   const cipherBits = hex
     .split("")
     .map((h) => parseInt(h, 16).toString(2).padStart(4, "0"))
     .join("");
-
   const keyBits = key
     .join("")
     .repeat(Math.ceil(cipherBits.length / key.length));
@@ -232,8 +167,6 @@ export function decryptMessage(cipherHex: string, key: number[]): string {
   return message;
 }
 
-/* ─── Full Protocol Run ────────────────────────────────────────────── */
-
 export interface ProtocolRun {
   keyPair: KeyPair;
   encap: EncapsulationResult;
@@ -244,9 +177,6 @@ export interface ProtocolRun {
   keysMatch: boolean;
 }
 
-/**
- * Run the entire protocol end-to-end.
- */
 export function runProtocol(
   message: string = "HELLO B",
   fixed?: {

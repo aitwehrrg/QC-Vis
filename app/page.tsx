@@ -11,9 +11,7 @@ export default function Home() {
     <>
       <Navigation />
       <main className="flex-1 lattice-bg">
-        {/* ═══════════════════════════════════════════════════════════
-            1. OVERVIEW
-            ═══════════════════════════════════════════════════════════ */}
+        {}
         <section id="overview">
           <div className="section-container">
             <div className="max-w-3xl">
@@ -97,9 +95,7 @@ export default function Home() {
 
         <hr className="section-divider" />
 
-        {/* ═══════════════════════════════════════════════════════════
-            5. PROTOCOL FLOW
-            ═══════════════════════════════════════════════════════════ */}
+        {}
         <section id="protocol-flow">
           <div className="section-container">
             <h2 className="mt-0">The Lattice-Based Exchange</h2>
@@ -115,14 +111,11 @@ export default function Home() {
 
         <hr className="section-divider" />
 
-        {/* ═══════════════════════════════════════════════════════════
-            6. SECURITY NOTES
-            ═══════════════════════════════════════════════════════════ */}
+        {}
         <section id="security">
           <div className="section-container">
             <div className="max-w-3xl">
               <h2 className="mt-0">Security Architecture</h2>
-
               <div className="callout callout-info">
                 <div className="callout-title">✓ FIPS 203 Compliant</div>
                 <p>
@@ -206,9 +199,7 @@ export default function Home() {
 
         <hr className="section-divider" />
 
-        {/* ═══════════════════════════════════════════════════════════
-            7. CONTRIBUTE
-            ═══════════════════════════════════════════════════════════ */}
+        {}
         <section id="contribute">
           <div className="section-container">
             <div className="max-w-3xl">
@@ -236,9 +227,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════
-            FOOTER
-            ═══════════════════════════════════════════════════════════ */}
+        {}
         <footer
           className="border-t py-8"
           style={{ borderColor: "var(--border-subtle)", background: "var(--surface)" }}

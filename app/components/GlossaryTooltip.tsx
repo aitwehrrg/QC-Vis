@@ -17,7 +17,6 @@ export default function GlossaryTooltip({ term, children }: GlossaryTooltipProps
   const show = useCallback(() => {
     if (triggerRef.current) {
       const rect = triggerRef.current.getBoundingClientRect();
-      // If near top of viewport, show below
       setPosition(rect.top < 120 ? "bottom" : "top");
     }
     setVisible(true);
@@ -25,7 +24,6 @@ export default function GlossaryTooltip({ term, children }: GlossaryTooltipProps
 
   const hide = useCallback(() => setVisible(false), []);
 
-  // Close on scroll
   useEffect(() => {
     if (visible) {
       const handleScroll = () => setVisible(false);

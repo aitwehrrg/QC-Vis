@@ -25,7 +25,7 @@ export interface ProtocolScene {
   visibleObjects: string[];
   animationCues?: AnimationCue[];
   actorFocus: ProtocolRole;
-  equationOverlay?: string; // LaTeX equation to show
+  equationOverlay?: string; 
 }
 
 export interface SimulationState {
@@ -37,7 +37,6 @@ export interface SimulationState {
   showMath: boolean;
   showBeginner: boolean;
   
-  // Actions
   nextScene: () => void;
   prevScene: () => void;
   jumpToScene: (index: number) => void;

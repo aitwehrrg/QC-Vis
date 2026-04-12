@@ -33,7 +33,6 @@ describe('Simulation Store', () => {
     store.jumpToScene(3);
     expect(useSimulationStore.getState().currentSceneIndex).toBe(3);
     
-    // Test bounds
     store.jumpToScene(999);
     expect(useSimulationStore.getState().currentSceneIndex).toBe(SCENES.length - 1);
   });
@@ -61,6 +60,6 @@ describe('Simulation Store', () => {
     
     expect(newState.currentSceneIndex).toBe(0);
     expect(newState.playState).toBe('paused');
-    expect(newState.data).not.toBe(initialData); // Should have new random data
+    expect(newState.data).not.toBe(initialData); 
   });
 });

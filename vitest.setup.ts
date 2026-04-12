@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
-// Mock IntersectionObserver as a class
 class IntersectionObserverMock {
   root = null;
   rootMargin = '';

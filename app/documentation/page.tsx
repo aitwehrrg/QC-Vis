@@ -15,9 +15,7 @@ export default function Documentation() {
       <main className="flex-1">
         <div className="section-container">
           <div className="docs-layout">
-            {/* ═══════════════════════════════════════════════════════
-                UNIFIED SIDEBAR
-                ═══════════════════════════════════════════════════════ */}
+            {}
             <aside className="docs-sidebar" aria-label="Documentation navigation">
               <nav>
                 <div className="mb-6 px-3 border-b border-border-subtle pb-4">
@@ -32,7 +30,7 @@ export default function Documentation() {
                   </a>
                 </div>
 
-                {/* Installation */}
+                {}
                 <div className="docs-sidebar-group">
                   <span className="docs-sidebar-heading">Installation</span>
                   <a href="#install-prereqs">Prerequisites</a>
@@ -42,7 +40,7 @@ export default function Documentation() {
                   <a href="#install-troubleshoot">Troubleshooting</a>
                 </div>
 
-                {/* Documentation */}
+                {}
                 <div className="docs-sidebar-group">
                   <span className="docs-sidebar-heading">Documentation</span>
                   <a href="#doc-summary">Protocol Summary</a>
@@ -59,13 +57,9 @@ export default function Documentation() {
               </nav>
             </aside>
 
-            {/* ═══════════════════════════════════════════════════════
-                CONTENT
-                ═══════════════════════════════════════════════════════ */}
+            {}
             <div className="max-w-3xl">
-              {/* ───────────────────────────────────────────────────
-                  INSTALLATION
-                  ─────────────────────────────────────────────────── */}
+              {}
               <section id="installation">
                 <h2 id="install-top" className="mt-0">Installation</h2>
                 <p style={{ color: "var(--muted)" }}>
@@ -162,16 +156,14 @@ export default function Documentation() {
 
               <hr className="section-divider my-12" />
 
-              {/* ───────────────────────────────────────────────────
-                  DOCUMENTATION
-                  ─────────────────────────────────────────────────── */}
+              {}
               <section id="documentation">
                 <h2 id="doc-top" className="mt-0">Technical Documentation</h2>
                 <p style={{ color: "var(--muted)" }}>
                   Deep dive into the ML-KEM (Kyber) implementation architecture.
                 </p>
 
-                {/* Protocol Summary */}
+                {}
                 <h3 id="doc-summary">Protocol Summary</h3>
                 <Tabs
                   tabs={[
@@ -229,7 +221,7 @@ export default function Documentation() {
                   ]}
                 />
 
-                {/* Key Generation */}
+                {}
                 <h3 id="doc-keygen">Key Generation</h3>
                 <p className="text-sm" style={{ color: "var(--fg)" }}>
                   The receiver generates a persistent keypair. The implementation uses
@@ -255,7 +247,7 @@ export default function Documentation() {
                   filename="mlkem.h"
                 />
 
-                {/* Data Structures */}
+                {}
                 <h3 id="doc-data-structures">Core Components</h3>
                 <div className="overflow-x-auto my-4">
                   <table className="w-full text-sm" style={{ borderCollapse: "collapse" }}>
@@ -281,7 +273,7 @@ export default function Documentation() {
                   </table>
                 </div>
 
-                {/* Glossary */}
+                {}
                 <h3 id="doc-glossary">Glossary</h3>
                 <div className="grid grid-cols-1 gap-2 my-4">
                   {Object.keys(GLOSSARY).map((term) => (
@@ -304,9 +296,7 @@ export default function Documentation() {
           </div>
         </div>
 
-        {/* ═══════════════════════════════════════════════════════════
-            FOOTER
-            ═══════════════════════════════════════════════════════════ */}
+        {}
         <footer
           className="border-t py-8 mt-16"
           style={{ borderColor: "var(--border-subtle)", background: "var(--surface)" }}
