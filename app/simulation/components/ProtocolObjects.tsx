@@ -11,11 +11,11 @@ import { useMemo } from "react";
 /**
  * Binary Palette for Simulation:
  * 1. Main (Established/Structure) - White (Dark) / Black (Light)
- * 2. Entity (Newly introduced/Focus) - Light Blue (Dark) / Dark Blue (Light)
+ * 2. Entity (Newly introduced/Focus) - Green/Teal
  */
 const getPalette = (theme: "light" | "dark") => ({
   main: theme === "dark" ? "#ffffff" : "#000000",
-  entity: theme === "dark" ? "#60a5fa" : "#2563eb",
+  entity: theme === "dark" ? "#2dd4bf" : "#0d9488",
   muted: theme === "dark" ? "#57534e" : "#a8a29e",
 });
 
