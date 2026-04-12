@@ -107,7 +107,6 @@ export default function SimulatorScene() {
         <ambientLight intensity={theme === "dark" ? 0.5 : 0.7} />
         <pointLight position={[10, 10, 10]} intensity={1} />
         
-        <axesHelper args={[2]} />
         <gridHelper args={[20, 20, gridColor, gridSectionColor]} position={[0, -0.01, 0]} />
 
         <Lattice />

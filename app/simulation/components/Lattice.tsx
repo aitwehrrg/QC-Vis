@@ -42,7 +42,7 @@ export default function Lattice() {
   }, [points]);
 
   const dotColor = theme === "dark" ? "#ffffff" : "#000000";
-  const opacity = theme === "dark" ? 0.15 : 0.1;
+  const opacity = theme === "dark" ? 0.12 : 0.08;
 
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, count]} frustumCulled={true}>
