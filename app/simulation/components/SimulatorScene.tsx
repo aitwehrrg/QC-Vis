@@ -47,11 +47,12 @@ export default function SimulatorScene() {
     if (isFreeCamera) {
       // In Free/Orbit mode, we transition the target to the origin [0,0,0]
       // but keep the camera at a reasonable overview distance
-      targetPos = new THREE.Vector3(12, 8, 12);
+      const scale = isMobile ? 2 : 1;
+      targetPos = new THREE.Vector3(12 * scale, 8 * scale, 12 * scale);
       targetLookAt = new THREE.Vector3(0, 0, 0);
     } else {
       // In Guided mode, use scene-specific poses
-      const scale = isMobile ? 1.5 : 1;
+      const scale = isMobile ? 2.2 : 1;
       targetPos = new THREE.Vector3(
         scene.cameraPose.position[0] * scale,
         scene.cameraPose.position[1] * scale,
@@ -89,7 +90,7 @@ export default function SimulatorScene() {
         <PerspectiveCamera
           ref={cameraRef}
           makeDefault
-          fov={isMobile ? 50 : 40}
+          fov={isMobile ? 60 : 40}
           near={0.1}
           far={1000}
           position={SCENES[0].cameraPose.position}

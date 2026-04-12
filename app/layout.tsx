@@ -32,6 +32,9 @@ export const metadata: Metadata = {
     "education",
   ],
   authors: [{ name: "QC-Vis Project" }],
+  icons: {
+    icon: "/icon.svg",
+  },
   openGraph: {
     title: "Kyber Algorithm Visualizer",
     description:

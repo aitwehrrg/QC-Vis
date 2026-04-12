@@ -89,22 +89,22 @@ export default function Navigation() {
             style={{ color: "var(--fg)" }}
             onClick={() => setMobileOpen(false)}
           >
-            <svg width="24" height="24" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-              <rect x="2" y="2" width="28" height="28" rx="4" stroke="var(--accent)" strokeWidth="1.5" fill="none" />
-              <circle cx="8" cy="8" r="2" fill="var(--accent)" />
-              <circle cx="16" cy="8" r="2" fill="var(--accent)" />
-              <circle cx="24" cy="8" r="2" fill="var(--accent)" />
-              <circle cx="8" cy="16" r="2" fill="var(--accent)" />
-              <circle cx="16" cy="16" r="2.5" fill="var(--accent)" />
-              <circle cx="24" cy="16" r="2" fill="var(--accent)" />
-              <circle cx="8" cy="24" r="2" fill="var(--accent)" />
-              <circle cx="16" cy="24" r="2" fill="var(--accent)" />
-              <circle cx="24" cy="24" r="2" fill="var(--accent)" />
-              <line x1="8" y1="8" x2="16" y2="16" stroke="var(--accent)" strokeWidth="0.75" opacity="0.5" />
-              <line x1="24" y1="8" x2="16" y2="16" stroke="var(--accent)" strokeWidth="0.75" opacity="0.5" />
-              <line x1="8" y1="24" x2="16" y2="16" stroke="var(--accent)" strokeWidth="0.75" opacity="0.5" />
-              <line x1="24" y1="24" x2="16" y2="16" stroke="var(--accent)" strokeWidth="0.75" opacity="0.5" />
-            </svg>
+          <svg width="24" height="24" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <rect x="2" y="2" width="28" height="28" rx="4" stroke="var(--accent)" strokeWidth="1.5" fill="none" />
+            <circle cx="8" cy="8" r="2" fill="var(--accent)" />
+            <circle cx="16" cy="8" r="2" fill="var(--accent)" />
+            <circle cx="24" cy="8" r="2" fill="var(--accent)" />
+            <circle cx="8" cy="16" r="2" fill="var(--accent)" />
+            <circle cx="16" cy="16" r="2.5" fill="var(--accent)" />
+            <circle cx="24" cy="16" r="2" fill="var(--accent)" />
+            <circle cx="8" cy="24" r="2" fill="var(--accent)" />
+            <circle cx="16" cy="24" r="2" fill="var(--accent)" />
+            <circle cx="24" cy="24" r="2" fill="var(--accent)" />
+            <line x1="8" y1="8" x2="16" y2="16" stroke="var(--accent)" strokeWidth="0.75" opacity="0.5" />
+            <line x1="24" y1="8" x2="16" y2="16" stroke="var(--accent)" strokeWidth="0.75" opacity="0.5" />
+            <line x1="8" y1="24" x2="16" y2="16" stroke="var(--accent)" strokeWidth="0.75" opacity="0.5" />
+            <line x1="24" y1="24" x2="16" y2="16" stroke="var(--accent)" strokeWidth="0.75" opacity="0.5" />
+          </svg>
             <span>QC-Vis</span>
           </Link>
 

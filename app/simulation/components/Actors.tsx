@@ -36,8 +36,8 @@ function ActorNode({ name, position, color, label, isActive }: ActorNodeProps) {
         {name}
       </Text>
       
-      <Html position={[0, -1, 0]} center>
-        <div className="text-[10px] uppercase tracking-widest text-muted-foreground whitespace-nowrap bg-black/50 px-2 py-0.5 rounded border border-white/10">
+      <Html position={[0, -1, 0]} center style={{ pointerEvents: 'none' }}>
+        <div className="text-[10px] uppercase tracking-widest text-muted-foreground whitespace-nowrap bg-black/50 px-2 py-0.5 rounded border border-white/10 select-none">
           {label}
         </div>
       </Html>

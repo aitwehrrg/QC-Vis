@@ -1,0 +1,28 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    :root {
+      --accent: hsl(160, 50%, 38%);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --accent: hsl(160, 50%, 45%);
+      }
+    }
+    .accent-stroke { stroke: var(--accent); }
+    .accent-fill { fill: var(--accent); }
+  </style>
+  <rect x="2" y="2" width="28" height="28" rx="4" class="accent-stroke" stroke-width="1.5" fill="none" />
+  <circle cx="8" cy="8" r="2" class="accent-fill" />
+  <circle cx="16" cy="8" r="2" class="accent-fill" />
+  <circle cx="24" cy="8" r="2" class="accent-fill" />
+  <circle cx="8" cy="16" r="2" class="accent-fill" />
+  <circle cx="16" cy="16" r="2.5" class="accent-fill" />
+  <circle cx="24" cy="16" r="2" class="accent-fill" />
+  <circle cx="8" cy="24" r="2" class="accent-fill" />
+  <circle cx="16" cy="24" r="2" class="accent-fill" />
+  <circle cx="24" cy="24" r="2" class="accent-fill" />
+  <line x1="8" y1="8" x2="16" y2="16" class="accent-stroke" stroke-width="0.75" opacity="0.5" />
+  <line x1="24" y1="8" x2="16" y2="16" class="accent-stroke" stroke-width="0.75" opacity="0.5" />
+  <line x1="8" y1="24" x2="16" y2="16" class="accent-stroke" stroke-width="0.75" opacity="0.5" />
+  <line x1="24" y1="24" x2="16" y2="16" class="accent-stroke" stroke-width="0.75" opacity="0.5" />
+</svg>
