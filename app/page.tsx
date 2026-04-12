@@ -49,7 +49,24 @@ export default function Home() {
                 <GlossaryTooltip term="KEM">key encapsulation</GlossaryTooltip> protocol in C++.
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+              <div className="flex flex-wrap gap-3 mt-4">
+                <a
+                  href="https://github.com/your-org/qc-vis"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary flex items-center gap-2"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 4.365 9.75 10.399 11.14.6.111.82-.258.82-.577 0-.285-.021-1.04-.032-2.037-3.338.724-4.042-1.61-4.042-1.61C6.571 18.259 5.012 17.03 5.012 17.03c-1.091-.745.083-.729.083-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .322.218.694.825.576C20.565 21.792 24 17.302 24 12c0-6.627-5.373-12-12-12z" />
+                  </svg>
+                  View C++ Source on GitHub
+                </a>
+                <a href="#installation" className="btn-secondary">
+                  Installation Guide
+                </a>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
                 <div className="p-4 rounded-lg" style={{ background: "var(--surface)", border: "1px solid var(--border-subtle)" }}>
                   <h3 className="text-sm font-semibold m-0 mb-2" style={{ color: "var(--accent)" }}>
                     What problem does this solve?
@@ -207,7 +224,8 @@ export default function Home() {
             <div className="max-w-3xl">
               <h2 className="mt-0">Open Source &amp; Contribute</h2>
               <p style={{ color: "var(--muted)" }}>
-                QC-Vis is open source. Contributions, issues, and discussions are welcome.
+                QC-Vis is open source. The C++ core and this visualizer are available on{" "}
+                <a href="https://github.com/your-org/qc-vis" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">GitHub</a>. Contributions, issues, and discussions are welcome.
               </p>
 
               <h3>Repository Structure</h3>

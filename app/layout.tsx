@@ -51,6 +51,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${jetbrains.variable} h-full`}
       data-theme="dark"
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col antialiased">

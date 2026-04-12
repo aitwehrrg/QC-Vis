@@ -4,24 +4,16 @@ import { useMemo } from "react";
 import katex from "katex";
 
 interface LatexBlockProps {
-  /** LaTeX source string */
   children: string;
-  /** Display mode (centered block) vs inline */
   display?: boolean;
-  /** Additional class names */
   className?: string;
 }
 
-/**
- * Renders LaTeX math using KaTeX.
- * Supports both display (block) and inline modes.
- */
 export default function LatexBlock({
   children,
   display = false,
   className = "",
 }: LatexBlockProps) {
-
   const html = useMemo(() => {
     try {
       return katex.renderToString(children, {
@@ -30,7 +22,7 @@ export default function LatexBlock({
         strict: false,
         trust: true,
         macros: {
-          "\\vect": "\\mathbf{#1}",
+          "\\mathcal{R}": "\\mathcal{R}",
           "\\Z": "\\mathbb{Z}",
           "\\Zq": "\\mathbb{Z}_q",
         },
@@ -42,12 +34,37 @@ export default function LatexBlock({
 
   return (
     <span
-      className={`katex-container ${display ? "katex-display-block" : "katex-inline"} ${className}`}
+      className={`katex-container ${display ? "block my-2" : "inline"} ${className}`}
       dangerouslySetInnerHTML={{ __html: html }}
       role="math"
-      aria-label={children}
     />
   );
+}
+
+/**
+ * Renders text containing inline LaTeX marked with $...$
+ */
+export function LatexText({ children, className = "" }: { children: string; className?: string }) {
+  const elements = useMemo(() => {
+    const parts = children.split(/(\$[^\$]+\$)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith("$") && part.endsWith("$")) {
+        const tex = part.slice(1, -1);
+        try {
+          const html = katex.renderToString(tex, {
+            displayMode: false,
+            throwOnError: false,
+          });
+          return <span key={i} dangerouslySetInnerHTML={{ __html: html }} />;
+        } catch {
+          return <span key={i}>{part}</span>;
+        }
+      }
+      return <span key={i}>{part}</span>;
+    });
+  }, [children]);
+
+  return <div className={className}>{elements}</div>;
 }
 
 /**

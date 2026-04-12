@@ -1,0 +1,67 @@
+import { ProtocolScene } from "./types";
+
+export const SCENES: ProtocolScene[] = [
+  {
+    id: "foundation",
+    title: "1. Algebraic Foundation",
+    shortExplanation: "Protocol stability is rooted in the ring $\\mathcal{R}_q = \\mathbb{Z}_q[x] / (x^n+1)$. We operate in a $n=8$ dimensional space where coefficients are bound by $q=17$.",
+    cameraPose: { position: [10, 6, 10], target: [0, 0, 0] },
+    visibleObjects: ["lattice", "axes", "basis-a"],
+    actorFocus: null,
+    equationOverlay: "\\begin{aligned} \\mathcal{R}_q &:= \\mathbb{Z}_{17}[x] / (x^8 + 1) \\\\ \\mathbf{a} &\\leftarrow \\mathcal{R}_q \\text{ (Uniform)} \\end{aligned}",
+  },
+  {
+    id: "keygen",
+    title: "2. Key Generation (Bob)",
+    shortExplanation: "Bob generates a small secret $\\mathbf{s}$ and error $\\mathbf{e}$. His public key $\\mathbf{b}$ is a noisy product that appears uniform without knowledge of $\\mathbf{s}$.",
+    cameraPose: { position: [6, 4, 6], target: [1, 1, 0.5] },
+    visibleObjects: ["lattice", "axes", "basis-a", "basis-b", "secret-point", "noise-vector"],
+    actorFocus: "B",
+    equationOverlay: "\\begin{aligned} \\mathbf{s}, \\mathbf{e} &\\leftarrow \\chi \\text{ (Small)} \\\\ \\mathbf{b} &= \\mathbf{a} \\cdot \\mathbf{s} + \\mathbf{e} \\\\ pk &= (\\mathbf{a}, \\mathbf{b}) \\end{aligned}",
+  },
+  {
+    id: "encapsulation",
+    title: "3. Encapsulation (Alice)",
+    shortExplanation: "Alice Establish a shared secret by masking the public key with ephemeral randomness $\\mathbf{r}$. She produces two components $(\\mathbf{u}, \\mathbf{v})$ which form the ciphertext.",
+    cameraPose: { position: [8, 5, 8], target: [-1, 0.5, 1.5] },
+    visibleObjects: ["lattice", "axes", "basis-a", "basis-b", "u-vector", "v-vector"],
+    actorFocus: "A",
+    equationOverlay: "\\begin{aligned} \\mathbf{r}, \\mathbf{e}_1, \\mathbf{e}_2 &\\leftarrow \\chi \\\\ \\mathbf{u} &= \\mathbf{a} \\cdot \\mathbf{r} + \\mathbf{e}_1 \\\\ \\mathbf{v} &= \\mathbf{b} \\cdot \\mathbf{r} + \\mathbf{e}_2 \\end{aligned}",
+  },
+  {
+    id: "decapsulation-init",
+    title: "4. Decapsulation Core",
+    shortExplanation: "Bob receives $(\\mathbf{u}, \\mathbf{v})$. He uses his secret $\\mathbf{s}$ to strip the mask. The goal is to isolate the noisy shared term $\\mathbf{v} - \\mathbf{u}\\mathbf{s}$.",
+    cameraPose: { position: [5, 3, 5], target: [0, 2, 0] },
+    visibleObjects: ["lattice", "axes", "basis-a", "basis-b", "u-vector", "v-vector", "secret-point"],
+    actorFocus: "B",
+    equationOverlay: "\\begin{aligned} \\mathbf{x} &= \\mathbf{v} - \\mathbf{u} \\cdot \\mathbf{s} \\\\ &= (\\mathbf{as}+\\mathbf{e})\\mathbf{r} + \\mathbf{e}_2 \\\\ &\\quad - (\\mathbf{ar}+\\mathbf{e}_1)\\mathbf{s} \\end{aligned}",
+  },
+  {
+    id: "cancellation",
+    title: "5. Algebraic Cancellation",
+    shortExplanation: "The structured term $\\mathbf{asr}$ appears in both components. Subtraction cancels this term, leaving only an aggregate of small error values.",
+    cameraPose: { position: [4, 2, 4], target: [0, 0, 0] },
+    visibleObjects: ["lattice", "axes", "shared-secret-point", "noise-vector"],
+    actorFocus: "B",
+    equationOverlay: "\\begin{aligned} \\mathbf{x} &= \\mathbf{asr} + \\mathbf{er} + \\mathbf{e}_2 \\\\ &\\quad - \\mathbf{asr} - \\mathbf{e}_1\\mathbf{s} \\\\ &= \\mathbf{er} + \\mathbf{e}_2 - \\mathbf{e}_1\\mathbf{s} \\end{aligned}",
+  },
+  {
+    id: "correctness",
+    title: "6. Proof of Correctness",
+    shortExplanation: "Let $\\delta = \\mathbf{er} + \\mathbf{e}_2 - \\mathbf{e}_1\\mathbf{s}$. Since all constituents are small, $|\\delta| < q/4$ holds. Rounding removes $\\delta$ to recover the exact secret bits.",
+    cameraPose: { position: [3, 2, 3], target: [0, 4, 0] },
+    visibleObjects: ["lattice", "axes", "shared-secret-point"],
+    actorFocus: "B",
+    equationOverlay: "\\begin{aligned} \\mathbf{x} &= \\delta \\approx 0 \\pmod{q} \\\\ K &= \\text{Round}(\\mathbf{v}) \\\\ K' &= \\text{Round}(\\mathbf{x}) \\\\ K &= K' \\text{ (Q.E.D.)} \\end{aligned}",
+  },
+  {
+    id: "security",
+    title: "7. Security Analysis",
+    shortExplanation: "Eve sees $(\\mathbf{a}, \\mathbf{b}, \\mathbf{u}, \\mathbf{v})$. Without $\\mathbf{s}$, she faces the Decision Ring-LWE problem: distinguishing these from uniform random elements in $\\mathcal{R}_q$.",
+    cameraPose: { position: [16, 10, 16], target: [0, 0, 0] },
+    visibleObjects: ["lattice", "axes", "basis-a", "basis-b", "ambiguity-sphere"],
+    actorFocus: "C",
+    equationOverlay: "\\begin{aligned} \\text{Adv}_{Eve} &\\approx \\text{Poly}(n) \\cdot 2^{-n} \\\\ &\\text{Reduction to SVFA} \\\\ &\\text{on } 2n\\text{-dim lattice} \\end{aligned}",
+  }
+];

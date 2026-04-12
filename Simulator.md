@@ -1,237 +1,324 @@
-Build the 3D protocol simulator for my PQC project website in a clean Manim-inspired mathematical walkthrough style, similar in spirit to a 3Blue1Brown explainer, but implemented natively for the web. Do not copy branding or assets. Recreate the explanatory method: sparse stage, precise vector graphics, staged transformations, persistent objects, synchronized labels, and calm cinematic pacing. Browser-based Manim-style scene systems and SVG-driven animation are the reference model for implementation quality. [manim](https://www.manim.community)
+## Goal
 
-### Core goal
+Create a **fullscreen, 3D, cinematic protocol walkthrough** for a minimal Ring-LWE / Kyber-style educational algorithm. The simulation should explain the full protocol visually inside a 3D coordinate space where vectors, lattice structure, perturbations, transformations, ciphertext movement, and attacker limitations can be physically seen. A standard Three.js scene consists of a scene, camera, renderer, and animated objects; this simulator should use that foundation, but wrapped in a clean typed React architecture. [peerdh](https://peerdh.com/blogs/programming-insights/building-interactive-3d-graphics-with-typescript-and-three-js)
 
-Create an interactive web simulator for a minimal Ring-LWE / Kyber-style protocol that feels like a narrated math animation, not like a dashboard, app UI, or game. The simulator must visually explain how:
-- B generates a secret and public key,
-- A uses the public key to derive a shared secret and encrypt a message,
-- B derives the same secret and decrypts,
-- C sees public data and ciphertext but cannot recover the secret because noise hides structure. [manim](https://www.manim.community)
+This is not a game.  
+This is not a generic 3D background.  
+This is not a dashboard widget.  
+This is a mathematically serious, authored visual explanation.
 
-### Technical direction
+## What the simulator must communicate
 
-Implement the simulator using:
-- SVG as the primary rendering layer,
-- GSAP or a custom timeline engine for animation sequencing,
-- JavaScript scene management with persistent objects across scenes,
-- optional Canvas only if needed for large point clouds,
-- equation and label rendering as SVG or LaTeX, not as clumsy HTML overlays.
+The simulator must visually explain:
 
-Do not use React unless absolutely necessary. Do not use generic card-based UI for the simulation. The animation system should feel like a programmable scene engine. SVG and scene-based sequencing are preferred because they preserve object identity and support crisp mathematical storytelling. [youtube](https://www.youtube.com/watch?v=NuUWZ38cbuk)
+1. B generates secret `s`, public random `a`, noise `e`, and computes `b = a*s + e`.
+2. B publishes `(a, b)` while keeping `s` private.
+3. A generates ephemeral `r`, `e1`, `e2`.
+4. A computes `u = a*r + e1` and `v = b*r + e2`.
+5. A derives a shared key.
+6. A encrypts an example plaintext message like `HELLO`.
+7. B uses `s` and received values to derive the same conceptual shared key and decrypt.
+8. C sees public values and ciphertext only, but cannot recover the hidden secret relation.
 
-### Visual style
+The simulator must make the role of **noise hiding structure** visually intuitive.
 
-The simulation stage should have:
+## Scope boundaries
+
+Build only:
+- the fullscreen simulator page or route,
+- the 3D scene,
+- the overlay controls,
+- the scene engine,
+- the typed data/config/model layer,
+- supporting visual components,
+- a small legend and transcript panel if needed.
+
+Do not build:
+- homepage,
+- docs content pages,
+- repo pages,
+- install instructions,
+- blog sections,
+- general site shell beyond what the simulator route needs.
+
+## Visual style
+
+The simulation should feel like:
+- a web-native Manim-inspired walkthrough,
+- mathematically elegant,
+- cinematic but restrained,
+- minimal and exact,
+- dark-stage educational visualization.
+
+The simulation should not feel like:
+- cyberpunk,
+- security-brand cliché,
+- glowing gamer UI,
+- flashy tech demo,
+- random 3D art piece.
+
+Visual rules:
 - dark matte background,
-- off-white primary text,
-- restrained accent palette,
-- clean geometry,
-- high whitespace,
-- subtle motion,
-- no neon gradients,
-- no cyberpunk styling,
-- no startup hero aesthetic,
-- no glowing blobs,
-- no skeuomorphic UI.
+- off-white text,
+- careful use of color,
+- high contrast,
+- sparse and meaningful geometry,
+- large empty space around objects,
+- no unnecessary post-processing,
+- no decorative particle spam.
 
-Style target:
-- mathematical,
-- elegant,
-- exact,
-- calm,
-- legible,
-- cinematic.
+Semantic colors:
+- public values: blue/cyan,
+- private values: amber/gold,
+- noise: muted purple-gray,
+- ciphertext/shared secret: green,
+- attacker uncertainty: muted red-gray.
 
-The animation should feel like a proof being drawn and transformed in front of the viewer.
+## 3D scene design
 
-### Scene design principles
+The scene must use a meaningful 3D coordinate system with visible axes and a mathematical spatial structure. A 3D coordinate system should act as a real explanatory frame, not as a decorative backdrop. [youtube](https://www.youtube.com/watch?v=YA28VQQ1vNM)
 
-Use these Manim-like principles:
-- introduce one idea at a time,
-- keep objects persistent across scenes,
-- transform objects rather than replacing them abruptly,
-- use fades sparingly and intentionally,
-- use motion to explain causality,
-- use braces, arrows, boxes, highlights, and labels to direct attention,
-- attach labels to moving objects so the meaning stays bound to the geometry,
-- use color consistently as semantic encoding.
+Use one or more of these visual metaphors in 3D:
+- lattice point grid,
+- vector arrows in space,
+- polynomial coefficients represented as vertical bars or points,
+- circular coefficient rings floating in 3D,
+- perturbation fields showing small error,
+- public/private object clusters,
+- packet-like ciphertext transfer objects,
+- ghost candidate reconstructions for attacker failure.
 
-### Required semantic color mapping
+Key requirement:
+The viewer should be able to physically see:
+- structure,
+- perturbation,
+- transformation,
+- transmission,
+- alignment,
+- ambiguity.
 
-- Public values: blue or cyan family.
-- Private values: warm gold or amber family.
-- Noise / error: purple-gray or jittered white accent.
-- Ciphertext / transmitted data: green.
-- Attacker uncertainty / failed inference: muted red or desaturated gray.
-- Neutral explanatory text: off-white and gray.
+## Narrative structure
 
-### Required protocol scenes
+Build the simulator as a sequence of authored scenes with persistent objects. Object continuity matters more than raw spectacle. React Three Fiber encourages reusable state-driven components; use that pattern to preserve semantic objects across scene transitions. [r3f.docs.pmnd](https://r3f.docs.pmnd.rs/getting-started/introduction)
 
-Build the simulator as a sequence of scenes, each with title, subtitle, explanatory text, and animation timeline.
+Each scene must have:
+- `id`
+- `title`
+- `shortExplanation`
+- `technicalNote`
+- `cameraKeyframes`
+- `visibleObjects`
+- `animationCues`
+- `optionalEquationOverlay`
 
-Scene 1: protocol stage setup
-- Show three actors: A, B, C.
-- Show the communication channel.
-- Show that B owns a private secret and later publishes a public key.
-- Minimal stage, simple actor positioning, clean labels.
+Required scenes:
 
-Scene 2: B generates secret structure
-- Show secret polynomial `s` as a private object.
-- Show random public polynomial `a`.
-- Show error polynomial `e` as a small perturbation visual.
-- Compute and display `b = a*s + e`.
-- Make the role of noise visually obvious but not chaotic.
+### Scene 1: World setup
+- Show actors A, B, C anchored in different regions of 3D space.
+- Show the axes and base lattice/grid.
+- Introduce public zone vs private zones.
 
-Scene 3: public key publication
-- Publish `(a, b)` from B to the shared/public area.
-- Show private `s` staying anchored near B and visually inaccessible to C.
-- C can observe only public objects.
+### Scene 2: B creates the private/public structure
+- Show secret `s` near B.
+- Show `a`.
+- Show `e` as a small perturbation field.
+- Animate `b = a*s + e`.
+- Keep the explanation geometric and legible.
 
-Scene 4: A encapsulates
-- Show A taking `(a, b)`.
-- Show ephemeral secret `r`, plus `e1`, `e2`.
-- Animate computation of `u = a*r + e1` and `v = b*r + e2`.
-- Keep visual continuity from `a`, `b` to `u`, `v`.
+### Scene 3: Public key publication
+- Move `(a, b)` into a shared/public region.
+- Keep `s` locked near B.
+- Make it visually obvious that C can observe the public region only.
 
-Scene 5: shared secret emergence
-- Show A deriving a shared key from the ciphertext-related structure.
-- Use converging geometry or matched highlight patterns to imply a stable shared secret.
-- Do not make it flashy.
+### Scene 4: A encapsulates
+- Show A pulling in `(a, b)`.
+- Show ephemeral `r`, `e1`, `e2`.
+- Animate creation of `u` and `v`.
+- Preserve continuity from `a`, `b` into the new objects.
 
-Scene 6: message encryption
-- Use a concrete plaintext like HELLO.
-- Show message bytes transforming into ciphertext using the derived key.
-- Keep the symmetric encryption layer visually simple and secondary.
+### Scene 5: Shared key at A
+- Show how A derives a shared secret from the structure.
+- Use a stable geometric motif to indicate key formation.
 
-Scene 7: B decapsulates
-- Show B using `s` together with received values to derive the same shared secret.
-- Visually align A’s and B’s derived keys.
-- If the toy model is imperfect, indicate conceptually matched keys and explain that full reconciliation is used in practical schemes.
+### Scene 6: Encrypt message
+- Use plaintext `HELLO`.
+- Show conversion to ciphertext using the shared key.
+- Keep this layer visually simple and subordinate to the protocol itself.
 
-Scene 8: attacker view
-- Show C receiving public values and ciphertext only.
-- Present attempted inference visually as branching ambiguity, fuzzy reconstruction, or unresolved candidate cloud.
-- Clearly show that C lacks the private structure needed to derive the shared secret.
+### Scene 7: B decapsulates
+- Show B combining private `s` with received values.
+- Show B recovering the conceptual same shared key.
+- Visually align A and B outputs.
 
-Scene 9: final recap
-- Summarize the flow with all major objects reduced to a clean annotated overview.
-- Show public vs private vs noisy vs encrypted categories in a legend.
+### Scene 8: C fails
+- Show C observing `(a, b, u, v, ciphertext)`.
+- Show failed attempts to infer the secret.
+- Use ambiguity clouds, branching vectors, or unresolved candidate structures.
 
-### Required visual metaphors
+### Scene 9: Final pullback
+- Pull the camera back and show the whole protocol in one coherent spatial summary.
+- Display legend for public/private/noisy/encrypted.
 
-Use one or more of these clean mathematical metaphors:
-- lattice point grids with perturbed points,
-- coefficient bars arranged on a ring,
-- vectors over a modular grid,
-- grouped polynomial blocks with highlighted transformations,
-- braces and boxed equations connected to animated shapes.
+## Camera choreography
 
-The lattice must be meaningful, not decorative. Noise should be visually encoded as slight displacement, blur cloud, micro-jitter, or offset arrows so viewers can intuit that structure exists but is obscured.
+The camera is part of the explanation.  
+Use authored camera states per scene:
+- wide establishing shots,
+- close inspection shots,
+- smooth transitions,
+- slow dolly/orbit only when it clarifies the concept,
+- no chaotic free camera by default.
 
-### Interaction model
+User interaction:
+- guided autoplay first,
+- optional orbit controls second,
+- reset camera button,
+- free camera toggle,
+- scene jump support.
 
-Default behavior:
-- guided autoplay walkthrough.
+Do not let unrestricted camera interaction weaken the narrative.
 
-Controls:
+## Animation rules
+
+Animation must be deliberate and explanatory:
+- smooth interpolation,
+- object transforms instead of abrupt replacement,
+- line/vector draw-ins,
+- subtle opacity changes,
+- selective emphasis,
+- no bounce-heavy motion,
+- no constant ambient motion that distracts.
+
+The simulation should feel authored like a mathematical lecture, not procedurally busy.
+
+## Architecture requirements
+
+Implement a **typed scene engine**.
+
+Create reusable types such as:
+- `ProtocolScene`
+- `SceneObject`
+- `ActorAnchor`
+- `ProtocolRole`
+- `CameraPose`
+- `AnimationCue`
+- `OverlayState`
+- `SimulationConfig`
+
+Create reusable scene primitives such as:
+- `Axes3D`
+- `LatticeGrid`
+- `VectorArrow`
+- `CoefficientRing`
+- `CoefficientBars`
+- `PerturbationCloud`
+- `ActorNode`
+- `TransmissionPath`
+- `CipherPacket`
+- `EquationBillboard`
+- `KeyGlyph`
+- `LegendOverlay`
+
+The system must be data-driven. Do not hardcode a giant monolithic canvas file.
+
+## Overlay UI
+
+Build a minimal overlay UI with Tailwind on top of the fullscreen 3D scene.
+
+Required overlay elements:
+- scene title,
+- one-line explanation,
+- optional technical note,
+- progress indicator,
 - play/pause,
-- step next,
-- step previous,
+- previous/next scene,
 - restart,
 - speed control,
-- toggle beginner explanation,
-- toggle technical overlay,
+- toggle labels,
 - toggle equations,
-- toggle labels.
+- toggle beginner/technical mode,
+- toggle free camera,
+- reset camera,
+- compact legend.
 
-The simulator should still work as a passive explanatory filmstrip when the user does nothing.
+Optional:
+- collapsible transcript panel,
+- collapsible data panel showing current values like `a`, `b`, `s`, `u`, `v`.
 
-### Text integration
+The UI must stay minimal and not dominate the stage.
 
-For each scene include:
-- one short title,
-- one short explanation line,
-- one optional technical note.
+## Mathematical content
 
-Keep on-stage text concise. Long prose belongs outside the stage. Labels must be integrated with objects and animate with them.
+Use sample toy parameters and actual values suitable for a didactic demo:
+- `n = 8`
+- `q = 17`
+- example `a`, `b`, `s`, `u`, `v`
+- plaintext `HELLO`
 
-### Motion requirements
+The visuals do not need to literally compute every matrix/ring operation in real time, but they must correspond coherently to the protocol steps and values.
 
-Animation must be deliberate and math-explainer-like:
-- smooth easing,
-- stroke draw-ins for lines and paths,
-- object transforms over cuts,
-- subtle zoom/pan only when it clarifies focus,
-- no excessive bouncing,
-- no ornamental parallax.
+Use LaTeX throughout for any labels or equations needed.
 
-Each scene should feel authored, not auto-generated.
+If the toy implementation lacks reconciliation, indicate that clearly in the technical note while preserving the conceptual shared-key explanation.
 
-### Architecture requirements
+## Performance requirements
 
-Implement a reusable scene engine:
-- declarative scene data structure,
-- reusable graphic primitives,
-- timeline-based transitions,
-- persistent object registry,
-- semantic grouping of objects by role,
-- configuration object for colors, timings, and parameter values.
+The simulator must be performant and architected properly for the web:
+- lazy-load the simulation route,
+- reuse geometry/materials,
+- use instancing for repeated points if needed,
+- avoid excessive draw calls,
+- use efficient update loops,
+- cap DPR when appropriate,
+- avoid gratuitous post-processing,
+- degrade detail on weaker devices.
 
-Suggested object primitives:
-- point,
-- vector,
-- grid,
-- polynomial strip,
-- coefficient ring,
-- label,
-- equation block,
-- brace annotation,
-- transmission arrow,
-- key badge,
-- ciphertext block.
+Three.js mathematical visualization benefits from careful scene management and performance discipline; repeated structures should be rendered efficiently. [discourse.threejs](https://discourse.threejs.org/t/three-js-for-visual-mathematics-advice-and-best-practices/2822)
 
-### Website integration
+## Accessibility and fallback
 
-Embed this simulator into a documentation website for an open-source protocol.
-The simulator section should include:
-- the stage on the left or top,
-- scene explanation panel on the right or below,
-- controls below the stage,
-- legend,
-- optional transcript of the current step.
+Provide:
+- keyboard-accessible overlay controls,
+- focus styles,
+- reduced-motion mode,
+- text transcript per scene,
+- fallback message if WebGL is unavailable.
 
-It must integrate visually with a serious documentation site, not overpower it.
+## Deliverables
 
-### Accessibility
+Produce only the simulation-related code and files:
+- fullscreen simulation page,
+- 3D scene components,
+- overlay components,
+- typed scene data,
+- configuration,
+- styles necessary for the simulation,
+- any helper utilities.
 
-- keyboard-accessible controls,
-- visible focus states,
-- reduced-motion support,
-- sufficient contrast,
-- meaningful ARIA labels,
-- text alternatives or transcript for each scene.
+Do not spend effort on unrelated site sections.
 
-### Output
+## Code quality
 
-Produce:
-- the full simulator implementation,
-- all HTML/CSS/JS needed,
-- clean code structure,
-- comments only where necessary,
-- polished default scene content using my Ring-LWE protocol,
-- no placeholders.
+Requirements:
+- idiomatic Next.js App Router code,
+- strong TypeScript typing,
+- clean component boundaries,
+- reusable scene primitives,
+- no giant unstructured page component,
+- concise comments only where necessary,
+- code ready to drop into an existing repository.
 
-### Quality bar
+## Quality bar
 
 The result should feel like:
-- an interactive mathematical lecture,
-- a cryptography explainer made by someone who understands visual pedagogy,
-- a web-native Manim-like walkthrough.
+- a serious 3D mathematical protocol explainer,
+- a clean research-demo simulator,
+- a fullscreen authored walkthrough.
 
 It should not feel like:
-- a generic cyber-security website,
-- a dashboard,
-- a slideshow of cards,
-- a toy animation with disconnected effects.
+- an embedded toy,
+- a 3D background demo,
+- a game,
+- a generic security visualization.
 
-Prioritize explanatory clarity, object continuity, mathematical elegance, and controlled pacing over feature count. [3blue1brown](https://www.3blue1brown.com)
+Final instruction: build only the simulator experience, optimized for fullscreen immersive explanation of the protocol in 3D space, using Next.js, Tailwind, TypeScript, React Three Fiber, and Three.js.

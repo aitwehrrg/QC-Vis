@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
-import LatexBlock, { LatexInline } from "./LatexBlock";
+import { LatexInline } from "./LatexBlock";
 
 export default function SystemMap() {
   const svgRef = useRef<SVGSVGElement>(null);
@@ -19,139 +18,91 @@ export default function SystemMap() {
     return () => observer.disconnect();
   }, []);
 
-  const steps = [
-    { x: 120, y: 60, label: "B generates", sublabel: <LatexInline>{"\\text{keypair } (\\mathbf{a}, \\mathbf{b}, \\mathbf{s})"}</LatexInline>, color: "var(--color-actor-b)" },
-    { x: 350, y: 60, label: "B publishes", sublabel: <LatexInline>{"\\text{public key } (\\mathbf{a}, \\mathbf{b})"}</LatexInline>, color: "var(--color-actor-b)" },
-    { x: 580, y: 60, label: "A encapsulates", sublabel: "shared secret", color: "var(--color-actor-a)" },
-    { x: 580, y: 180, label: "A encrypts", sublabel: "message", color: "var(--color-actor-a)" },
-    { x: 350, y: 180, label: "B decrypts", sublabel: "message", color: "var(--color-actor-b)" },
-    { x: 120, y: 180, label: "C observes", sublabel: "learns nothing", color: "var(--color-actor-c)" },
-  ];
-
-  const arrows = [
-    { from: 0, to: 1 },
-    { from: 1, to: 2 },
-    { from: 2, to: 3 },
-    { from: 3, to: 4 },
-    { from: 4, to: 5 },
-  ];
-
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full overflow-x-auto py-8">
       <svg
         ref={svgRef}
-        viewBox="0 0 700 260"
-        className="w-full max-w-3xl mx-auto"
-        style={{ minWidth: "500px" }}
+        viewBox="0 0 800 320"
+        className="w-full max-w-4xl mx-auto"
+        style={{ minWidth: "600px" }}
         role="img"
         aria-label="System map showing the Ring-LWE protocol flow between Alice, Bob, and Eve"
       >
         <title>Protocol System Map</title>
-        {/* Arrows */}
+        
         <defs>
-          <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-            <polygon points="0 0, 8 3, 0 6" fill="var(--muted)" />
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="var(--muted)" />
           </marker>
+          <linearGradient id="grad-public" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="var(--color-value-public-bg)" stopOpacity="0.5" />
+            <stop offset="100%" stopColor="var(--color-value-public-bg)" stopOpacity="0.2" />
+          </linearGradient>
         </defs>
-        {arrows.map((arrow, i) => {
-          const from = steps[arrow.from];
-          const to = steps[arrow.to];
-          return (
-            <line
-              key={i}
-              x1={from.x + 60}
-              y1={from.y + 20}
-              x2={to.x - 60}
-              y2={to.y + 20}
-              stroke="var(--muted)"
-              strokeWidth="1.5"
-              markerEnd="url(#arrowhead)"
-              opacity={visible ? 1 : 0}
-              style={{
-                transition: `opacity 0.5s ${i * 0.15}s`,
-              }}
-            />
-          );
-        })}
-        {/* Step boxes */}
-        {steps.map((step, i) => (
-          <g
-            key={i}
-            opacity={visible ? 1 : 0}
-            transform={`translate(0, ${visible ? 0 : 10})`}
-            style={{
-              transition: `all 0.5s ${i * 0.1}s`,
-            }}
-          >
-            <rect
-              x={step.x - 55}
-              y={step.y - 5}
-              width="110"
-              height="50"
-              rx="6"
-              fill="var(--surface)"
-              stroke={step.color}
-              strokeWidth="1.5"
-            />
-            <text
-              x={step.x}
-              y={step.y + 16}
-              textAnchor="middle"
-              fontSize="11"
-              fontWeight="600"
-              fill={step.color}
-              fontFamily="var(--font-inter), sans-serif"
-            >
-              {step.label}
-            </text>
-            <foreignObject
-              x={step.x - 55}
-              y={step.y + 22}
-              width="110"
-              height="20"
-            >
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "9px",
-                  color: "var(--muted)",
-                  fontFamily: "var(--font-jetbrains), monospace",
-                  textAlign: "center"
-                }}
-              >
-                {step.sublabel}
-              </div>
-            </foreignObject>
-          </g>
-        ))}
-        {/* Dashed line from C to channel */}
-        <line
-          x1={120}
-          y1={170}
-          x2={350}
-          y2={130}
-          stroke="var(--color-actor-c)"
-          strokeWidth="1"
-          strokeDasharray="4 4"
-          opacity={visible ? 0.4 : 0}
-          style={{ transition: "opacity 0.5s 0.5s" }}
-        />
-        <text
-          x={235}
-          y={142}
-          textAnchor="middle"
-          fontSize="8"
-          fill="var(--color-actor-c)"
-          opacity={visible ? 0.6 : 0}
-          style={{ transition: "opacity 0.5s 0.6s" }}
-          fontFamily="var(--font-inter), sans-serif"
-        >
-          observes public channel
-        </text>
+
+        {/* ─── Role Labels ─────────────────────────────────────────── */}
+        <g opacity={visible ? 1 : 0} style={{ transition: "opacity 0.5s" }}>
+          <text x="150" y="30" textAnchor="middle" fontSize="12" fontWeight="700" fill="var(--color-actor-b)" className="uppercase tracking-widest">Bob (Receiver)</text>
+          <text x="400" y="30" textAnchor="middle" fontSize="12" fontWeight="700" fill="var(--muted)" className="uppercase tracking-widest">Public Channel</text>
+          <text x="650" y="30" textAnchor="middle" fontSize="12" fontWeight="700" fill="var(--color-actor-a)" className="uppercase tracking-widest">Alice (Sender)</text>
+        </g>
+
+        {/* ─── Background Zones ────────────────────────────────────── */}
+        <rect x="300" y="45" width="200" height="240" rx="12" fill="url(#grad-public)" stroke="var(--border-subtle)" strokeDasharray="4 4" opacity={visible ? 1 : 0} style={{ transition: "opacity 0.8s 0.2s" }} />
+        <text x="400" y="275" textAnchor="middle" fontSize="10" fill="var(--muted)" opacity={visible ? 0.6 : 0}>Untrusted Zone</text>
+
+        {/* ─── Bob's Actions ───────────────────────────────────────── */}
+        <g opacity={visible ? 1 : 0} transform={`translate(0, ${visible ? 0 : 10})`} style={{ transition: "all 0.5s 0.3s" }}>
+          <rect x="50" y="60" width="200" height="60" rx="8" fill="var(--surface)" stroke="var(--color-actor-b)" strokeWidth="1.5" />
+          <text x="150" y="85" textAnchor="middle" fontSize="11" fontWeight="600" fill="var(--fg)">1. Key Generation</text>
+          <foreignObject x="60" y="92" width="180" height="20">
+            <div className="flex justify-center text-[9px] text-muted font-mono"><LatexInline>{"\\text{pk}=(\\mathbf{a}, \\mathbf{b}), \\text{sk}=\\mathbf{s}"}</LatexInline></div>
+          </foreignObject>
+        </g>
+
+        <g opacity={visible ? 1 : 0} transform={`translate(0, ${visible ? 0 : 10})`} style={{ transition: "all 0.5s 0.9s" }}>
+          <rect x="50" y="200" width="200" height="60" rx="8" fill="var(--surface)" stroke="var(--color-actor-b)" strokeWidth="1.5" />
+          <text x="150" y="225" textAnchor="middle" fontSize="11" fontWeight="600" fill="var(--fg)">6. Decapsulation</text>
+          <foreignObject x="60" y="232" width="180" height="20">
+            <div className="flex justify-center text-[9px] text-muted font-mono"><LatexInline>{"\\text{Recover } K = \\text{Round}(\\mathbf{v}-\\mathbf{us})"}</LatexInline></div>
+          </foreignObject>
+        </g>
+
+        {/* ─── Alice's Actions ─────────────────────────────────────── */}
+        <g opacity={visible ? 1 : 0} transform={`translate(0, ${visible ? 0 : 10})`} style={{ transition: "all 0.5s 0.6s" }}>
+          <rect x="550" y="130" width="200" height="60" rx="8" fill="var(--surface)" stroke="var(--color-actor-a)" strokeWidth="1.5" />
+          <text x="650" y="155" textAnchor="middle" fontSize="11" fontWeight="600" fill="var(--fg)">3. Encapsulation</text>
+          <foreignObject x="560" y="162" width="180" height="20">
+            <div className="flex justify-center text-[9px] text-muted font-mono"><LatexInline>{"\\text{Derive } K, \\text{ compute } (\\mathbf{u}, \\mathbf{v})"}</LatexInline></div>
+          </foreignObject>
+        </g>
+
+        {/* ─── Flow Arrows ─────────────────────────────────────────── */}
+        {/* Step 2: PK Bob -> Channel */}
+        <path d="M 250 90 L 320 90 Q 350 90 350 120 L 350 130" fill="none" stroke="var(--muted)" strokeWidth="1.5" markerEnd="url(#arrowhead)" opacity={visible ? 1 : 0} style={{ transition: "opacity 0.5s 0.5s" }} />
+        <text x="300" y="82" textAnchor="middle" fontSize="10" fill="var(--color-value-public-text)" fontWeight="600" opacity={visible ? 1 : 0} style={{ transition: "opacity 0.5s 0.5s" }}>2. Publish PK</text>
+
+        {/* Step 2 continued: Channel -> Alice */}
+        <path d="M 350 130 Q 350 160 380 160 L 550 160" fill="none" stroke="var(--muted)" strokeWidth="1.5" markerEnd="url(#arrowhead)" opacity={visible ? 1 : 0} style={{ transition: "opacity 0.5s 0.6s" }} />
+
+        {/* Step 4: CT Alice -> Channel */}
+        <path d="M 550 180 L 450 180 Q 420 180 420 210 L 420 220" fill="none" stroke="var(--muted)" strokeWidth="1.5" markerEnd="url(#arrowhead)" opacity={visible ? 1 : 0} style={{ transition: "opacity 0.5s 0.8s" }} />
+        <text x="500" y="200" textAnchor="middle" fontSize="10" fill="var(--color-value-cipher-text)" fontWeight="600" opacity={visible ? 1 : 0} style={{ transition: "opacity 0.5s 0.8s" }}>4. Send Ciphertext</text>
+
+        {/* Step 5: Channel -> Bob */}
+        <path d="M 420 220 Q 420 250 390 250 L 250 250" fill="none" stroke="var(--muted)" strokeWidth="1.5" markerEnd="url(#arrowhead)" opacity={visible ? 1 : 0} style={{ transition: "opacity 0.5s 0.9s" }} />
+        <text x="320" y="242" textAnchor="middle" fontSize="10" fill="var(--color-value-cipher-text)" fontWeight="600" opacity={visible ? 1 : 0} style={{ transition: "opacity 0.5s 0.9s" }}>5. Transport CT</text>
+
+        {/* ─── Eve ─────────────────────────────────────────────────── */}
+        <g opacity={visible ? 1 : 0} transform={`translate(0, ${visible ? 0 : 5})`} style={{ transition: "all 0.5s 1.2s" }}>
+          <circle cx="400" cy="160" r="25" fill="var(--surface)" stroke="var(--color-actor-c)" strokeWidth="1.5" />
+          <text x="400" y="164" textAnchor="middle" fontSize="14" fill="var(--color-actor-c)" fontWeight="bold">Eve</text>
+          <text x="400" y="195" textAnchor="middle" fontSize="9" fill="var(--color-actor-c)" fontWeight="600" className="uppercase tracking-tighter">Attacker</text>
+          
+          <path d="M 375 160 Q 350 160 350 145" fill="none" stroke="var(--color-actor-c)" strokeWidth="1" strokeDasharray="3 3" opacity="0.6" />
+          <path d="M 425 160 Q 450 160 450 175" fill="none" stroke="var(--color-actor-c)" strokeWidth="1" strokeDasharray="3 3" opacity="0.6" />
+        </g>
+
       </svg>
     </div>
   );

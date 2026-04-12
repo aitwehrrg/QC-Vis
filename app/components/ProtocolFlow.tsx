@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import LatexBlock, { LatexInline } from "./LatexBlock";
+import { LatexInline } from "./LatexBlock";
 
 interface FlowStep {
   from: "A" | "B" | "channel";
