@@ -17,7 +17,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "QC-Vis — Post-Quantum Cryptography: Ring-LWE / Kyber Protocol Visualizer",
+  title: "Kyber Algorithm Visualizer",
   description:
     "Interactive documentation and visual simulator for an educational Ring-LWE / Kyber-style post-quantum key encapsulation protocol. Explore lattice-based cryptography with step-by-step animations.",
   keywords: [
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "QC-Vis Project" }],
   openGraph: {
-    title: "QC-Vis — Post-Quantum Cryptography Visualizer",
+    title: "Kyber Algorithm Visualizer",
     description:
       "Interactive Ring-LWE / Kyber-style protocol simulator and documentation for learning post-quantum cryptography.",
     type: "website",
