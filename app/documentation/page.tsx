@@ -6,6 +6,7 @@ import GlossaryTooltip from "../components/GlossaryTooltip";
 import ActorBadge from "../components/ActorBadge";
 import LatexBlock from "../components/LatexBlock";
 import { INSTALL_COMMANDS, PARAMS, SAMPLE_VECTORS, GLOSSARY } from "../lib/constants";
+import { FaGithub } from "react-icons/fa";
 
 export default function Documentation() {
   return (
@@ -21,15 +22,13 @@ export default function Documentation() {
               <nav>
                 <div className="mb-6 px-3 border-b border-border-subtle pb-4">
                   <a
-                    href="https://github.com/your-org/kyber"
+                    href="https://github.com/aitwehrrg/Kyber"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs flex items-center gap-2 text-muted hover:text-accent transition-colors"
+                    className="text-xs !flex items-center gap-2 text-muted hover:text-accent transition-colors"
                   >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 4.365 9.75 10.399 11.14.6.111.82-.258.82-.577 0-.285-.021-1.04-.032-2.037-3.338.724-4.042-1.61-4.042-1.61C6.571 18.259 5.012 17.03 5.012 17.03c-1.091-.745.083-.729.083-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .322.218.694.825.576C20.565 21.792 24 17.302 24 12c0-6.627-5.373-12-12-12z" />
-                    </svg>
-                    GitHub Repository
+                    <FaGithub className="w-4 h-4 shrink-0" />
+                    <span className="whitespace-nowrap">GitHub Repository</span>
                   </a>
                 </div>
 
@@ -105,7 +104,7 @@ export default function Documentation() {
 
                 <div className="mt-6 mb-10 border-t border-border-subtle pt-6">
                   <a
-                    href="https://github.com/your-org/kyber"
+                    href="https://github.com/aitwehrrg/Kyber"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-sm text-accent hover:underline font-medium"
@@ -128,7 +127,21 @@ export default function Documentation() {
                           <p className="m-0 text-sm" style={{ color: "var(--muted)" }}>
                             Install the OpenSSL development headers:
                           </p>
-                          <CodeBlock code="# Ubuntu/Debian\nsudo apt install libssl-dev\n\n# macOS\nbrew install openssl@3" language="bash" filename="install openssl" />
+                          <CodeBlock
+                            code={`# Ubuntu / Debian\nsudo apt update\nsudo apt install libssl-dev\n\n# Fedora\nsudo dnf install openssl-devel\n\n# Arch Linux\nsudo pacman -S openssl\n\n# macOS (Homebrew)\nbrew install openssl@3\n\n# Verify installation\nopenssl version`}
+                            language="bash"
+                            filename="install-openssl"
+                          />
+
+                          <p className="mt-3 text-xs" style={{ color: "var(--muted)" }}>
+                            On macOS, you may need to explicitly point CMake to OpenSSL:
+                          </p>
+
+                          <CodeBlock
+                          code={`export OPENSSL_ROOT_DIR=$(brew --prefix openssl@3)\nexport OPENSSL_LIBRARIES=$OPENSSL_ROOT_DIR/lib\n\ncmake ..`}
+                            language="bash"
+                            filename="cmake-config"
+                          />
                         </div>
                       ),
                     },
@@ -137,7 +150,7 @@ export default function Documentation() {
                       title: "C++20 Support",
                       content: (
                         <p className="m-0 text-sm" style={{ color: "var(--muted)" }}>
-                          This project requires C++20 (for <code>std::span</code>, <code>consteval</code>, etc.). 
+                          This project requires C++20 (for <code>std::span</code>, <code>consteval</code>, etc.).
                           Ensure you are using GCC 11+ or Clang 13+.
                         </p>
                       ),
@@ -168,12 +181,12 @@ export default function Documentation() {
                       content: (
                         <div className="text-sm space-y-3" style={{ color: "var(--fg)" }}>
                           <p>
-                            ML-KEM-768 is a Module Lattice-based Key Encapsulation Mechanism. 
+                            ML-KEM-768 is a Module Lattice-based Key Encapsulation Mechanism.
                             It is standardized by NIST in FIPS 203 for post-quantum security.
                           </p>
                           <p>
-                            The protocol allows a receiver to publish a public key that any sender 
-                            can use to "encapsulate" a shared secret. Only the receiver, using their 
+                            The protocol allows a receiver to publish a public key that any sender
+                            can use to "encapsulate" a shared secret. Only the receiver, using their
                             private key, can "decapsulate" and recover the same secret.
                           </p>
                           <ul className="space-y-1">
@@ -198,15 +211,15 @@ export default function Documentation() {
                           <p>For ML-KEM-768, the module rank is $k=3$.</p>
                           <ol className="space-y-2">
                             <li>
-                              <strong>Key Generation</strong>: Bob samples secret vectors and computes 
+                              <strong>Key Generation</strong>: Bob samples secret vectors and computes
                               a noisy product with a random matrix $A$.
                             </li>
                             <li>
-                              <strong>Encapsulation</strong>: Alice masks the public key with her own 
+                              <strong>Encapsulation</strong>: Alice masks the public key with her own
                               randomness to produce the ciphertext and shared secret.
                             </li>
                             <li>
-                              <strong>Decapsulation</strong>: Bob uses his secret vector to strip the 
+                              <strong>Decapsulation</strong>: Bob uses his secret vector to strip the
                               noise and recover the bits of the shared secret.
                             </li>
                           </ol>
@@ -219,7 +232,7 @@ export default function Documentation() {
                 {/* Key Generation */}
                 <h3 id="doc-keygen">Key Generation</h3>
                 <p className="text-sm" style={{ color: "var(--fg)" }}>
-                  The receiver generates a persistent keypair. The implementation uses 
+                  The receiver generates a persistent keypair. The implementation uses
                   <code>SecureBuffer</code> for all private material.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">

@@ -2,36 +2,35 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { LatexInline } from "./LatexBlock";
-
 interface FlowStep {
   from: "A" | "B" | "channel";
   to: "A" | "B" | "channel";
   label: React.ReactNode;
   detail: React.ReactNode;
-  type: "private" | "public" | "encrypted";
+  type: "private" | "public" | "encrypted" | "noise";
 }
 
 const FLOW_STEPS: FlowStep[] = [
-  { from: "B", to: "B", label: <LatexInline>{"\\text{Generate } \\mathbf{s}, \\mathbf{e}"}</LatexInline>, detail: <LatexInline>{"\\text{Secret key vector } \\mathbf{s} \\text{ and error } \\mathbf{e} \\text{ (private)}"}</LatexInline>, type: "private" },
-  { from: "B", to: "B", label: <LatexInline>{"\\text{Compute } \\mathbf{b} = \\mathbf{A} \\cdot \\mathbf{s} + \\mathbf{e}"}</LatexInline>, detail: "Public key vector computation (M-LWE)", type: "public" },
-  { from: "B", to: "channel", label: <LatexInline>{"\\text{Publish Public Key } pk"}</LatexInline>, detail: "Matrix A and vector b sent to channel", type: "public" },
-  { from: "channel", to: "A", label: <LatexInline>{"\\text{Receive } pk"}</LatexInline>, detail: "Alice receives Bob's public key", type: "public" },
-  { from: "A", to: "A", label: <LatexInline>{"\\text{Generate } \\mathbf{r}, \\mathbf{e}_1, \\mathbf{e}_2"}</LatexInline>, detail: "Ephemeral randomness (private)", type: "private" },
-  { from: "A", to: "A", label: <LatexInline>{"\\text{Compute } \\mathbf{u}, \\mathbf{v}"}</LatexInline>, detail: <LatexInline>{"\\mathbf{u} = \\mathbf{A}^T \\mathbf{r} + \\mathbf{e}_1, \\; \\mathbf{v} = \\mathbf{b}^T \\mathbf{r} + \\mathbf{e}_2"}</LatexInline>, type: "public" },
-  { from: "A", to: "A", label: "Derive shared secret", detail: <LatexInline>{"ss = \\text{Compress}(\\mathbf{v})"}</LatexInline>, type: "private" },
-  { from: "A", to: "A", label: "HKDF & AEAD Encrypt", detail: <LatexInline>{"ct = \\text{AES-GCM}(\\text{msg}, \\text{HKDF}(ss))"}</LatexInline>, type: "encrypted" },
-  { from: "A", to: "channel", label: <LatexInline>{"\\text{Send Encapsulated Key } ct_{kem} + ct"}</LatexInline>, detail: "Transmitted over public channel", type: "encrypted" },
-  { from: "channel", to: "B", label: <LatexInline>{"\\text{Receive Ciphertexts}"}</LatexInline>, detail: "Bob receives encapsulated key and message", type: "encrypted" },
-  { from: "B", to: "B", label: <LatexInline>{"\\text{Compute } \\mathbf{v} - \\mathbf{u}^T \\mathbf{s}"}</LatexInline>, detail: "Recovers approximate shared value via cancellation", type: "private" },
-  { from: "B", to: "B", label: "Derive shared secret", detail: <LatexInline>{"ss' = \\text{Decompress}(\\dots) \\approx ss"}</LatexInline>, type: "private" },
-  { from: "B", to: "B", label: "HKDF & AEAD Decrypt", detail: <LatexInline>{"\\text{msg} = \\text{AES-GCM-Decrypt}(ct, \\text{HKDF}(ss'))"}</LatexInline>, type: "private" },
+  { from: "B", to: "B", label: "Generate Secret Lattice", detail: "Bob picks a hidden set of points in a complex multi-dimensional space (Private Key).", type: "private" },
+  { from: "B", to: "B", label: "Add Obfuscating Noise", detail: "Bob adds tiny errors (noise) to the lattice points, making the pattern unsolvable without the secret key.", type: "noise" },
+  { from: "B", to: "channel", label: "Publish Public Key", detail: "The 'noisy' lattice is published. It looks like random data to anyone without the secret key.", type: "public" },
+  { from: "channel", to: "A", label: "Receive Public Key", detail: "Alice receives Bob's noisy public key to start a secure conversation.", type: "public" },
+  { from: "A", to: "A", label: "Pick a Random Secret", detail: "Alice generates a temporary secret value to use as the base for the encryption key.", type: "private" },
+  { from: "A", to: "A", label: "Create Lattice Puzzle", detail: "Alice uses Bob's noisy public key to 'wrap' her secret into a new mathematical puzzle.", type: "noise" },
+  { from: "A", to: "A", label: "Derive Session Key", detail: "Alice turns her secret into a strong AES-256 encryption key via HKDF.", type: "private" },
+  { from: "A", to: "A", label: "Encrypt Message", detail: "Alice's message is encrypted with the session key using AES-GCM.", type: "encrypted" },
+  { from: "A", to: "channel", label: "Send Secure Package", detail: "Alice sends the Lattice Puzzle (Encapsulated Key) and the Encrypted Message.", type: "encrypted" },
+  { from: "channel", to: "B", label: "Receive Package", detail: "Bob receives the encrypted data and the puzzle from the public channel.", type: "encrypted" },
+  { from: "B", to: "B", label: "Filter Out Noise", detail: "Using his private lattice structure, Bob precisely 'subtracts' the noise from Alice's puzzle.", type: "noise" },
+  { from: "B", to: "B", label: "Recover Shared Secret", detail: "The noise disappears, revealing the exact secret Alice originally picked.", type: "private" },
+  { from: "B", to: "B", label: "Decrypt Message", detail: "Bob derives the same session key and unlocks Alice's message.", type: "private" },
 ];
 
 const typeStyles = {
   private: { bg: "var(--color-value-private-bg)", border: "var(--color-value-private-text)", text: "var(--color-value-private-text)" },
   public: { bg: "var(--color-value-public-bg)", border: "var(--color-value-public-text)", text: "var(--color-value-public-text)" },
   encrypted: { bg: "var(--color-value-cipher-bg)", border: "var(--color-value-cipher-text)", text: "var(--color-value-cipher-text)" },
+  noise: { bg: "var(--color-value-noise-bg)", border: "var(--color-value-noise-text)", text: "var(--color-value-noise-text)" },
 };
 
 export default function ProtocolFlow() {
@@ -192,7 +191,7 @@ export default function ProtocolFlow() {
               style={{ background: style.bg, border: `1px solid ${style.border}` }}
             />
             <span style={{ color: "var(--muted)" }}>
-              {key === "private" ? "Private" : key === "public" ? "Public" : "Encrypted"}
+              {key.charAt(0).toUpperCase() + key.slice(1)}
             </span>
           </div>
         ))}

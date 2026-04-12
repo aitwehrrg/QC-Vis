@@ -49,7 +49,7 @@ export default function Home() {
 
               <div className="flex flex-wrap gap-3 mt-4">
                 <a
-                  href="https://github.com/your-org/kyber"
+                  href="https://github.com/aitwehrrg/Kyber"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary flex items-center gap-2"
@@ -87,8 +87,8 @@ export default function Home() {
 
               <h2 id="system-map">System Map</h2>
               <p style={{ color: "var(--muted)" }}>
-                Architecture of the Kyber messaging stack, illustrating how <ActorBadge actor="A" /> (Sender) and <ActorBadge actor="B" /> (Receiver) 
-                establish a secure session.
+                A high-level overview of the messaging stack. Bob generates a public key that Alice uses to "encapsulate" 
+                a shared secret, creating an end-to-end encrypted session.
               </p>
               <SystemMap />
             </div>
@@ -102,10 +102,10 @@ export default function Home() {
             ═══════════════════════════════════════════════════════════ */}
         <section id="protocol-flow">
           <div className="section-container">
-            <h2 className="mt-0">ML-KEM-768 Protocol Flow</h2>
+            <h2 className="mt-0">The Lattice-Based Exchange</h2>
             <p style={{ color: "var(--muted)" }} className="max-w-2xl">
-              Standard FIPS 203 encapsulation and decapsulation process. 
-              The resulting shared secret is used to derive session keys via HKDF.
+              ML-KEM-768 achieves post-quantum security by hiding secrets within "noisy" mathematical lattices. 
+              This flow illustrates how Alice and Bob establish a secure channel.
             </p>
             <div className="mt-8">
               <ProtocolFlow />
@@ -215,7 +215,7 @@ export default function Home() {
               <h2 className="mt-0">Open Source &amp; Development</h2>
               <p style={{ color: "var(--muted)" }}>
                 The Kyber messaging stack is open source. The C++20 core and benchmarks are available on{" "}
-                <a href="https://github.com/your-org/kyber" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">GitHub</a>.
+                <a href="https://github.com/aitwehrrg/Kyber" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">GitHub</a>.
               </p>
 
               <h3>Repository Structure</h3>

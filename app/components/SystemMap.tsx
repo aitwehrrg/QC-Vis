@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { LatexInline } from "./LatexBlock";
 
 export default function SystemMap() {
   const svgRef = useRef<SVGSVGElement>(null);
@@ -55,26 +54,23 @@ export default function SystemMap() {
         <g opacity={visible ? 1 : 0} transform={`translate(0, ${visible ? 0 : 10})`} style={{ transition: "all 0.5s 0.3s" }}>
           <rect x="50" y="60" width="200" height="60" rx="8" fill="var(--surface)" stroke="var(--color-actor-b)" strokeWidth="1.5" />
           <text x="150" y="85" textAnchor="middle" fontSize="11" fontWeight="600" fill="var(--fg)">1. Key Generation</text>
-          <foreignObject x="60" y="92" width="180" height="20">
-            <div className="flex justify-center text-[9px] text-muted font-mono"><LatexInline>{"\\text{pk}=(\\mathbf{a}, \\mathbf{b}), \\text{sk}=\\mathbf{s}"}</LatexInline></div>
-          </foreignObject>
+          <text x="150" y="102" textAnchor="middle" fontSize="9" fill="var(--muted)">Generate Secret Lattice</text>
+          <text x="150" y="112" textAnchor="middle" fontSize="9" fill="var(--muted)">& Add Obfuscating Noise</text>
         </g>
 
         <g opacity={visible ? 1 : 0} transform={`translate(0, ${visible ? 0 : 10})`} style={{ transition: "all 0.5s 0.9s" }}>
           <rect x="50" y="200" width="200" height="60" rx="8" fill="var(--surface)" stroke="var(--color-actor-b)" strokeWidth="1.5" />
           <text x="150" y="225" textAnchor="middle" fontSize="11" fontWeight="600" fill="var(--fg)">6. Decapsulation</text>
-          <foreignObject x="60" y="232" width="180" height="20">
-            <div className="flex justify-center text-[9px] text-muted font-mono"><LatexInline>{"\\text{Recover } K = \\text{Round}(\\mathbf{v}-\\mathbf{us})"}</LatexInline></div>
-          </foreignObject>
+          <text x="150" y="242" textAnchor="middle" fontSize="9" fill="var(--muted)">Filter Noise with Private Key</text>
+          <text x="150" y="252" textAnchor="middle" fontSize="9" fill="var(--muted)">to Recover Shared Secret</text>
         </g>
 
         {/* ─── Alice's Actions ─────────────────────────────────────── */}
         <g opacity={visible ? 1 : 0} transform={`translate(0, ${visible ? 0 : 10})`} style={{ transition: "all 0.5s 0.6s" }}>
           <rect x="550" y="130" width="200" height="60" rx="8" fill="var(--surface)" stroke="var(--color-actor-a)" strokeWidth="1.5" />
           <text x="650" y="155" textAnchor="middle" fontSize="11" fontWeight="600" fill="var(--fg)">3. Encapsulation</text>
-          <foreignObject x="560" y="162" width="180" height="20">
-            <div className="flex justify-center text-[9px] text-muted font-mono"><LatexInline>{"\\text{Derive } K, \\text{ compute } (\\mathbf{u}, \\mathbf{v})"}</LatexInline></div>
-          </foreignObject>
+          <text x="650" y="172" textAnchor="middle" fontSize="9" fill="var(--muted)">Create Lattice Puzzle</text>
+          <text x="650" y="182" textAnchor="middle" fontSize="9" fill="var(--muted)">from Public Key</text>
         </g>
 
         {/* ─── Flow Arrows ─────────────────────────────────────────── */}

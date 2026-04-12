@@ -68,7 +68,7 @@ export const SAMPLE_VECTORS = {
 
 /* ─── Installation Commands ───────────────────────────────────────── */
 export const INSTALL_COMMANDS = {
-  clone: "git clone https://github.com/your-org/kyber.git\ncd kyber",
+  clone: "git clone https://github.com/aitwehrrg/Kyber.git\ncd Kyber",
   prerequisites: "# Requires: C++20 compiler (GCC 11+, Clang 13+)\n# OpenSSL 3.0 or higher\n# CMake 3.15 or later",
   build: "mkdir build && cd build\ncmake ..\nmake -j$(nproc)",
   run: "./kyber_demo",
