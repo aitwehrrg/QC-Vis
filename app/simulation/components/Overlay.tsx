@@ -7,10 +7,8 @@ import LatexBlock, { LatexText } from "../../components/LatexBlock";
 export default function Overlay() {
   const {
     currentSceneIndex,
-    playState,
     nextScene,
     prevScene,
-    togglePlay,
     resetSimulation,
     isFreeCamera,
     toggleFreeCamera,
@@ -65,25 +63,9 @@ export default function Overlay() {
             className="p-1.5 text-muted hover:text-accent disabled:opacity-20 transition-colors"
             title="Previous"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
               <path d="M15 18l-6-6 6-6" />
             </svg>
-          </button>
-
-          <button
-            onClick={togglePlay}
-            className="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center bg-accent text-white rounded-full hover:scale-105 transition-all shadow-lg active:scale-95 flex-shrink-0"
-          >
-            {playState === "playing" ? (
-              <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 md:w-[18px] md:h-[18px]">
-                <rect x="6" y="4" width="4" height="16" />
-                <rect x="14" y="4" width="4" height="16" />
-              </svg>
-            ) : (
-              <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 md:w-[18px] md:h-[18px] ml-0.5">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            )}
           </button>
 
           <button
@@ -92,7 +74,7 @@ export default function Overlay() {
             className="p-1.5 text-muted hover:text-accent disabled:opacity-20 transition-colors"
             title="Next"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
               <path d="M9 18l6-6-6-6" />
             </svg>
           </button>

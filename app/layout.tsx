@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Atkinson_Hyperlegible, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "./components/ThemeProvider";
 import "./globals.css";
 import "katex/dist/katex.min.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const atkinson = Atkinson_Hyperlegible({
+  variable: "--font-atkinson",
+  weight: ["400", "700"],
   subsets: ["latin"],
   display: "swap",
 });
@@ -17,12 +18,11 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kyber ML-KEM",
+  title: "ML-KEM Stack",
   description:
-    "A high-performance C++20 implementation of the ML-KEM-768 (FIPS 203) post-quantum key encapsulation mechanism, featuring AEAD (AES-256-GCM) and HKDF-SHA256 for secure messaging.",
+    "A high-performance C++20 implementation of ML-KEM (FIPS 203) supporting all parameter sets, featuring AEAD (AES-256-GCM) and AVX2 acceleration.",
   keywords: [
     "post-quantum cryptography",
-    "Kyber",
     "ML-KEM",
     "FIPS 203",
     "lattice-based cryptography",
@@ -31,15 +31,16 @@ export const metadata: Metadata = {
     "HKDF",
     "C++20",
     "PQC",
+    "AVX2",
   ],
   authors: [{ name: "Rupak R. Gupta" }, { name: "Abhay Upadhyay" }, { name: "Ghruank Kothare" }],
   icons: {
     icon: "/icon.svg",
   },
   openGraph: {
-    title: "Kyber ML-KEM",
+    title: "ML-KEM PQC Stack",
     description:
-      "A high-performance C++20 implementation of the ML-KEM-768 (FIPS 203) post-quantum key encapsulation mechanism.",
+      "A high-performance C++20 implementation of the ML-KEM (FIPS 203) post-quantum key encapsulation mechanism.",
     type: "website",
     locale: "en_US",
   },
@@ -54,7 +55,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrains.variable} h-full`}
+      className={`${atkinson.variable} ${jetbrains.variable} h-full`}
       data-theme="dark"
       data-scroll-behavior="smooth"
       suppressHydrationWarning

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════════════
-   Kyber Design System
+   ML-KEM Design System
    Swiss / systems / research-lab aesthetic
    ═══════════════════════════════════════════════════════════════════ */
 
@@ -16,7 +16,7 @@
   --color-accent: var(--accent);
   --color-accent-muted: var(--accent-muted);
   --color-muted: var(--muted);
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-atkinson);
   --font-mono: var(--font-jetbrains);
 }
 
@@ -124,7 +124,7 @@ html {
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-atkinson), system-ui, -apple-system, sans-serif;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

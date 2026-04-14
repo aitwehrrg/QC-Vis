@@ -13,21 +13,21 @@ vi.mock('../app/components/ProtocolFlow', () => ({
 describe('Landing Page', () => {
   it('renders the main heading', () => {
     render(<Home />);
-    expect(screen.getAllByText('Kyber').length).toBeGreaterThan(0);
-    expect(screen.getByText('ML-KEM Messaging Stack')).toBeInTheDocument();
+    expect(screen.getAllByText('ML-KEM').length).toBeGreaterThan(0);
+    expect(screen.getByText('FIPS 203 Post-Quantum Messaging Stack')).toBeInTheDocument();
   });
 
   it('renders key sections', () => {
     render(<Home />);
     expect(screen.getByTestId('system-map')).toBeInTheDocument();
     expect(screen.getByTestId('protocol-flow')).toBeInTheDocument();
-    expect(screen.getByText('The Lattice-Based Exchange')).toBeInTheDocument();
+    expect(screen.getByText('ML-KEM Protocol Flow')).toBeInTheDocument();
   });
 
-  it('contains links to GitHub and Installation', () => {
+  it('contains links to GitHub and Documentation', () => {
     render(<Home />);
     const githubLink = screen.getByRole('link', { name: /View C\+\+ Source on GitHub/i });
     expect(githubLink).toBeInTheDocument();
-    expect(githubLink).toHaveAttribute('href', 'https://github.com/aitwehrrg/Kyber');
+    expect(githubLink).toHaveAttribute('href', 'https://github.com/example/mlkem');
   });
 });

@@ -30,8 +30,6 @@ export interface ProtocolScene {
 
 export interface SimulationState {
   currentSceneIndex: number;
-  playState: "playing" | "paused";
-  speed: number;
   data: ProtocolData;
   isFreeCamera: boolean;
   showMath: boolean;
@@ -40,8 +38,6 @@ export interface SimulationState {
   nextScene: () => void;
   prevScene: () => void;
   jumpToScene: (index: number) => void;
-  togglePlay: () => void;
-  setSpeed: (speed: number) => void;
   resetSimulation: () => void;
   toggleFreeCamera: () => void;
   toggleMath: () => void;

@@ -4,7 +4,7 @@ import Tabs from "../components/Tabs";
 import Accordion from "../components/Accordion";
 import GlossaryTooltip from "../components/GlossaryTooltip";
 import ActorBadge from "../components/ActorBadge";
-import LatexBlock from "../components/LatexBlock";
+import LatexBlock, { LatexText } from "../components/LatexBlock";
 import { INSTALL_COMMANDS, PARAMS, SAMPLE_VECTORS, GLOSSARY } from "../lib/constants";
 import { FaGithub } from "react-icons/fa";
 
@@ -20,7 +20,7 @@ export default function Documentation() {
               <nav>
                 <div className="mb-6 px-3 border-b border-border-subtle pb-4">
                   <a
-                    href="https://github.com/aitwehrrg/Kyber"
+                    href="https://github.com/example/mlkem"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-xs !flex items-center gap-2 text-muted hover:text-accent transition-colors"
@@ -68,26 +68,31 @@ export default function Documentation() {
 
                 <h3 id="install-prereqs">Prerequisites</h3>
                 <ul className="text-sm space-y-1" style={{ color: "var(--fg)" }}>
-                  <li>C++20-compatible compiler: GCC 11+ or Clang 13+</li>
-                  <li>OpenSSL 3.0 or higher</li>
+                  <li>C++20-compatible compiler (GCC 11+, Clang 13+, MSVC 19.30+)</li>
+                  <li>OpenSSL 3.0 or higher (for AEAD and HKDF)</li>
                   <li>CMake 3.15 or later</li>
-                  <li>Build Tools: Make, Ninja, or MSVC (Visual Studio 2022)</li>
+                  <li>AVX2-capable CPU (optional, for acceleration)</li>
                 </ul>
                 <CodeBlock code={INSTALL_COMMANDS.prerequisites} language="bash" filename="prerequisites" />
 
                 <h3 id="install-clone">Clone &amp; Build</h3>
                 <p className="text-sm" style={{ color: "var(--muted)" }}>
-                  Clone the repository and build using the standard CMake workflow:
+                  Clone the repository and build using the standard CMake workflow. Use <code>ENABLE_AVX2</code> 
+                  to toggle optimized NTT paths.
                 </p>
                 <CodeBlock code={INSTALL_COMMANDS.clone} language="bash" filename="terminal" />
                 <CodeBlock code={INSTALL_COMMANDS.build} language="bash" filename="terminal" />
 
                 <h3 id="install-run">Run the Demo</h3>
+                <p className="text-sm" style={{ color: "var(--muted)" }}>
+                  The <code>demo</code> target runs an end-to-end flow of ML-KEM-768 key exchange 
+                  followed by AEAD encryption.
+                </p>
                 <CodeBlock code={INSTALL_COMMANDS.run} language="bash" filename="terminal" />
 
                 <h3 id="install-output">Expected Output</h3>
                 <p className="text-sm" style={{ color: "var(--muted)" }}>
-                  The demo establishes a secure session and establishes an AEAD channel:
+                  The demo establishes a secure session and initializes the AEAD channel:
                 </p>
                 <CodeBlock
                   code={INSTALL_COMMANDS.expectedOutput}
@@ -98,7 +103,7 @@ export default function Documentation() {
 
                 <div className="mt-6 mb-10 border-t border-border-subtle pt-6">
                   <a
-                    href="https://github.com/aitwehrrg/Kyber"
+                    href="https://github.com/example/mlkem"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-sm text-accent hover:underline font-medium"
@@ -115,37 +120,29 @@ export default function Documentation() {
                   items={[
                     {
                       id: "openssl",
-                      title: "OpenSSL 3.0 Not Found",
+                      title: "OpenSSL 3.0+ Not Found",
                       content: (
                         <div>
                           <p className="m-0 text-sm" style={{ color: "var(--muted)" }}>
-                            Install the OpenSSL development headers:
+                            This library requires OpenSSL 3.0+ for <code>EVP_CIPHER</code> 
+                            and <code>HKDF</code> support. Ensure the development packages are installed.
                           </p>
                           <CodeBlock
-                            code={`# Ubuntu / Debian\nsudo apt update\nsudo apt install libssl-dev\n\n# Fedora\nsudo dnf install openssl-devel\n\n# Arch Linux\nsudo pacman -S openssl\n\n# macOS (Homebrew)\nbrew install openssl@3\n\n# Verify installation\nopenssl version`}
+                            code={`# Ubuntu / Debian\nsudo apt install libssl-dev\n\n# macOS\nbrew install openssl@3`}
                             language="bash"
                             filename="install-openssl"
-                          />
-
-                          <p className="mt-3 text-xs" style={{ color: "var(--muted)" }}>
-                            On macOS, you may need to explicitly point CMake to OpenSSL:
-                          </p>
-
-                          <CodeBlock
-                          code={`export OPENSSL_ROOT_DIR=$(brew --prefix openssl@3)\nexport OPENSSL_LIBRARIES=$OPENSSL_ROOT_DIR/lib\n\ncmake ..`}
-                            language="bash"
-                            filename="cmake-config"
                           />
                         </div>
                       ),
                     },
                     {
-                      id: "cpp20",
-                      title: "C++20 Support",
+                      id: "avx2",
+                      title: "AVX2 Support Issues",
                       content: (
                         <p className="m-0 text-sm" style={{ color: "var(--muted)" }}>
-                          This project requires C++20 (for <code>std::span</code>, <code>consteval</code>, etc.).
-                          Ensure you are using GCC 11+ or Clang 13+.
+                          If building for an older CPU, ensure <code>-DENABLE_AVX2=OFF</code> is passed to 
+                          CMake. The library uses runtime detection, but the AVX2 object file must be 
+                          compilable by your toolchain.
                         </p>
                       ),
                     },
@@ -160,7 +157,7 @@ export default function Documentation() {
               <section id="documentation">
                 <h2 id="doc-top" className="mt-0">Technical Documentation</h2>
                 <p style={{ color: "var(--muted)" }}>
-                  Deep dive into the ML-KEM (Kyber) implementation architecture.
+                  Deep dive into the ML-KEM implementation architecture.
                 </p>
 
                 {}
@@ -173,19 +170,18 @@ export default function Documentation() {
                       content: (
                         <div className="text-sm space-y-3" style={{ color: "var(--fg)" }}>
                           <p>
-                            ML-KEM-768 is a Module Lattice-based Key Encapsulation Mechanism.
-                            It is standardized by NIST in FIPS 203 for post-quantum security.
-                          </p>
-                          <p>
-                            The protocol allows a receiver to publish a public key that any sender
-                            can use to "encapsulate" a shared secret. Only the receiver, using their
-                            private key, can "decapsulate" and recover the same secret.
+                            ML-KEM (FIPS 203) is the primary post-quantum key encapsulation 
+                            standard. It provides three security levels:
                           </p>
                           <ul className="space-y-1">
-                            <li><strong>Standard Compliant</strong>: Follows FIPS 203 exactly.</li>
-                            <li><strong>Quantum Secure</strong>: Based on the Module-LWE problem.</li>
-                            <li><strong>Production Grade</strong>: Optimized for speed and side-channel resistance.</li>
+                            <li><strong>ML-KEM-512</strong>: NIST Level 1 (AES-128 equivalent)</li>
+                            <li><strong>ML-KEM-768</strong>: NIST Level 3 (AES-192 equivalent)</li>
+                            <li><strong>ML-KEM-1024</strong>: NIST Level 5 (AES-256 equivalent)</li>
                           </ul>
+                          <p>
+                            The protocol enables secure key exchange in the presence of quantum computers 
+                            by leveraging the hardness of Module Learning With Errors (M-LWE).
+                          </p>
                         </div>
                       ),
                     },
@@ -194,25 +190,21 @@ export default function Documentation() {
                       label: "Mathematics",
                       content: (
                         <div className="text-sm space-y-3" style={{ color: "var(--fg)" }}>
-                          <p>
-                            ML-KEM operates in a module of rank $k$ over the polynomial ring{" "}
-                            <LatexBlock>{`\\mathcal{R}_q = \\mathbb{Z}_q[x]/(x^n + 1)`}</LatexBlock> where{" "}
-                            <LatexBlock>{`n = 256`}</LatexBlock> and{" "}
-                            <LatexBlock>{`q = 3329`}</LatexBlock>.
-                          </p>
-                          <p>For ML-KEM-768, the module rank is $k=3$.</p>
+                          <div className="text-sm leading-relaxed">
+                            <LatexText>{`ML-KEM operates in a module of rank $k$ over the polynomial ring $\\mathcal{R}_q = \\mathbb{Z}_q[x]/(x^n + 1)$ where $n = 256$ and $q = 3329$.`}</LatexText>
+                          </div>
+                          <div className="text-sm">
+                            <LatexText>{`Module rank $k$ varies by parameter set: $k=2$ (512), $k=3$ (768), $k=4$ (1024).`}</LatexText>
+                          </div>
                           <ol className="space-y-2">
                             <li>
-                              <strong>Key Generation</strong>: Bob samples secret vectors and computes
-                              a noisy product with a random matrix $A$.
+                              <strong>KeyGen</strong>: <LatexText className="inline">{`Samples secret $\\mathbf{s}, \\mathbf{e}$ and computes $\\mathbf{b} = \\mathbf{A}\\mathbf{s} + \\mathbf{e}$.`}</LatexText>
                             </li>
                             <li>
-                              <strong>Encapsulation</strong>: Alice masks the public key with her own
-                              randomness to produce the ciphertext and shared secret.
+                              <strong>Encaps</strong>: <LatexText className="inline">{`Uses public key to encrypt a random 32-byte message $m$ into ciphertext $c$.`}</LatexText>
                             </li>
                             <li>
-                              <strong>Decapsulation</strong>: Bob uses his secret vector to strip the
-                              noise and recover the bits of the shared secret.
+                              <strong>Decaps</strong>: <LatexText className="inline">{`Recovers $m$ and derives shared secret $K$ using implicit rejection if the ciphertext is tampered.`}</LatexText>
                             </li>
                           </ol>
                         </div>
@@ -222,29 +214,15 @@ export default function Documentation() {
                 />
 
                 {}
-                <h3 id="doc-keygen">Key Generation</h3>
+                <h3 id="doc-keygen">API Reference</h3>
                 <p className="text-sm" style={{ color: "var(--fg)" }}>
-                  The receiver generates a persistent keypair. The implementation uses
-                  <code>SecureBuffer</code> for all private material.
+                  The <code>MLKEM768</code> class provides a high-level, object-oriented 
+                  interface for the category 3 parameter set.
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
-                  <div className="p-3 rounded-lg text-center" style={{ background: "var(--color-value-private-bg)" }}>
-                    <div className="text-xs font-semibold" style={{ color: "var(--color-value-private-text)" }}>
-                      Secret Key
-                    </div>
-                    <p className="text-xs mt-1">LWE secret vector {"$\\mathbf{s}$"}</p>
-                  </div>
-                  <div className="p-3 rounded-lg text-center" style={{ background: "var(--color-value-public-bg)" }}>
-                    <div className="text-xs font-semibold" style={{ color: "var(--color-value-public-text)" }}>
-                      Public Key
-                    </div>
-                    <p className="text-xs mt-1">Matrix {"$\\mathbf{A}$"} and vector {"$\\mathbf{b}$"}</p>
-                  </div>
-                </div>
                 <CodeBlock
-                  code={`// mlkem.h\nclass MLKEM768 {\npublic:\n    KeyPair generate();\n    Ciphertext encapsulate(const PublicKey& pk);\n    Secret decapsulate(const Ciphertext& ct, const PrivateKey& sk);\n};`}
+                  code={`// mlkem768.hpp\nclass MLKEM768 {\npublic:\n    // Generates a new keypair using OS CSPRNG\n    static KeyPair generate();\n\n    // Encapsulates a shared secret for the given public key\n    static EncapsResult encapsulate(const PublicKey& ek);\n\n    // Decapsulates the shared secret from a ciphertext\n    static SharedSecret decapsulate(const Ciphertext& c, const PrivateKey& dk);\n};`}
                   language="cpp"
-                  filename="mlkem.h"
+                  filename="mlkem768.hpp"
                 />
 
                 {}
@@ -259,10 +237,11 @@ export default function Documentation() {
                     </thead>
                     <tbody style={{ color: "var(--muted)" }}>
                       {[
-                        ["NTT", "High-efficiency Number Theoretic Transform for polynomial arithmetic."],
-                        ["AEAD", "AES-256-GCM authenticated encryption for the data channel."],
-                        ["HKDF", "SHA-256 based key derivation for session keys."],
-                        ["SecureBuffer", "RAII-based memory management with automatic zeroization."],
+                        ["mlkem.hpp", "Low-level templated implementation of FIPS 203 Algorithms 16-18."],
+                        ["ntt_avx2.hpp", "AVX2-optimized Number Theoretic Transform for x86_64."],
+                        ["aead.hpp", "OpenSSL-backed HKDF-SHA256 and AES-256-GCM implementation."],
+                        ["secure_buffer.hpp", "RAII buffer that zeroizes memory on destruction."],
+                        ["symmetric.hpp", "FIPS-compliant SHA3 and SHAKE primitives."],
                       ].map(([mod, desc], i) => (
                         <tr key={i} style={{ borderBottom: "1px solid var(--border-subtle)" }}>
                           <td className="py-2 pr-4 font-medium" style={{ color: "var(--fg)" }}>{mod}</td>
@@ -307,7 +286,7 @@ export default function Documentation() {
                 <rect x="2" y="2" width="28" height="28" rx="4" stroke="var(--accent)" strokeWidth="1.5" fill="none" />
                 <circle cx="16" cy="16" r="2.5" fill="var(--accent)" />
               </svg>
-              <span>Kyber ML-KEM Messaging Stack</span>
+              <span>ML-KEM C++20 Project</span>
             </div>
             <div>
               FIPS 203 Compliant · MIT License

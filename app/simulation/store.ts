@@ -5,8 +5,6 @@ import { SCENES } from "./scenes";
 
 export const useSimulationStore = create<SimulationState>((set) => ({
   currentSceneIndex: 0,
-  playState: "paused",
-  speed: 1,
   data: runProtocol(),
   isFreeCamera: false,
   showMath: true,
@@ -24,15 +22,8 @@ export const useSimulationStore = create<SimulationState>((set) => ({
     currentSceneIndex: Math.max(0, Math.min(index, SCENES.length - 1))
   }),
   
-  togglePlay: () => set((state) => ({
-    playState: state.playState === "playing" ? "paused" : "playing"
-  })),
-  
-  setSpeed: (speed: number) => set({ speed }),
-  
   resetSimulation: () => set({
     currentSceneIndex: 0,
-    playState: "paused",
     data: runProtocol()
   }),
   

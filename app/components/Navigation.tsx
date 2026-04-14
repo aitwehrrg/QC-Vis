@@ -10,6 +10,8 @@ export default function Navigation() {
   const pathname = usePathname();
   const [activeSection, setActiveSection] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const isSimulationPage = pathname === "/simulation";
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -64,8 +66,21 @@ export default function Navigation() {
 
   return (
     <>
+      {}
+      {isSimulationPage && (
+        <div 
+          className="fixed top-0 left-0 right-0 h-4 z-50 pointer-events-auto"
+          onMouseEnter={() => setIsHovered(true)}
+          aria-hidden="true"
+        />
+      )}
+      
       <nav
-        className="fixed top-0 left-0 right-0 z-40 border-b"
+        className={`fixed top-0 left-0 right-0 z-40 border-b transition-transform duration-500 ease-in-out ${
+          isSimulationPage && !isHovered ? "-translate-y-full" : "translate-y-0"
+        }`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         style={{
           background: "var(--bg)",
           borderColor: "var(--border-subtle)",
@@ -99,7 +114,7 @@ export default function Navigation() {
             <line x1="8" y1="24" x2="16" y2="16" stroke="var(--accent)" strokeWidth="0.75" opacity="0.5" />
             <line x1="24" y1="24" x2="16" y2="16" stroke="var(--accent)" strokeWidth="0.75" opacity="0.5" />
           </svg>
-            <span>Kyber</span>
+            <span>ML-KEM</span>
           </Link>
 
           {}
@@ -191,7 +206,7 @@ export default function Navigation() {
       )}
 
       {}
-      <div className="h-14" aria-hidden="true" />
+      {!isSimulationPage && <div className="h-14" aria-hidden="true" />}
     </>
   );
 }

@@ -1,6 +1,11 @@
 export const PARAMS = {
   n: 256,
   q: 3329,
+  k: {
+    "512": 2,
+    "768": 3,
+    "1024": 4,
+  }
 } as const;
 
 export const NAV_SECTIONS = [
@@ -25,9 +30,9 @@ export const ACTOR_COLORS = {
 
 export const GLOSSARY: Record<string, string> = {
   "ML-KEM":
-    "Module-Lattice-based Key Encapsulation Mechanism (formerly known as Kyber). A NIST-standardized (FIPS 203) post-quantum cryptographic algorithm.",
-  "Kyber":
-    "The original name for the ML-KEM algorithm. Part of the CRYSTALS suite.",
+    "Module-Lattice-based Key Encapsulation Mechanism. A NIST-standardized (FIPS 203) post-quantum cryptographic algorithm.",
+  "ML-KEM-768":
+    "The parameter set targeting security category 3 (roughly equivalent to AES-192).",
   "KEM":
     "Key Encapsulation Mechanism — a protocol that allows two parties to establish a shared symmetric key using asymmetric operations.",
   "PQC":
@@ -49,7 +54,9 @@ export const GLOSSARY: Record<string, string> = {
   "FIPS 203":
     "The official NIST standard for Module-Lattice-Based Key Encapsulation Mechanism.",
   "CCA Security":
-    "Chosen Ciphertext Attack security — a security notion where an attacker cannot learn anything even if they can ask for decryptions of other ciphertexts. ML-KEM provides CCA security via the Fujisaki–Okamoto transform.",
+    "Chosen Ciphertext Attack security — a security notion where an attacker cannot learn anything even if they can ask for decryptions of other ciphertexts.",
+  "AVX2":
+    "Advanced Vector Extensions 2 — an expansion of the x86 instruction set architecture used to accelerate NTT computations.",
 };
 
 export const SAMPLE_VECTORS = {
@@ -62,17 +69,18 @@ export const SAMPLE_VECTORS = {
 } as const;
 
 export const INSTALL_COMMANDS = {
-  clone: "git clone https://github.com/aitwehrrg/Kyber.git\ncd Kyber",
-  prerequisites: "# Requires: C++20 compiler (GCC 11+, Clang 13+)\n# OpenSSL 3.0 or higher\n# CMake 3.15 or later",
-  build: "mkdir build && cd build\ncmake ..\nmake -j$(nproc)",
-  run: "./kyber_demo",
+  clone: "git clone https://github.com/example/mlkem.git\ncd mlkem",
+  prerequisites: "# Requires: OpenSSL 3.0+, CMake 3.15+, C++20 compiler",
+  build: "mkdir build && cd build\ncmake .. -DBUILD_TESTS=ON\nmake -j$(nproc)",
+  run: "./demo",
   expectedOutput: `[ML-KEM] Key Generation complete.
-[ML-KEM] Public Key (hex): 4a3f2...
+[ML-KEM] Public Key (ek) generated.
 [Sender] Encapsulating shared secret...
-[Sender] Encapsulated Key (hex): 1d09e...
+[Sender] Ciphertext (c) generated.
 [Receiver] Decapsulating shared secret...
-[Session] Shared Secret derived successfully.
-[AEAD] Encrypting message: "PQC is here"
-[Session] E2E secure channel established.`,
+[Session] Shared Secret (K) derived successfully.
+[AEAD] HKDF-SHA256 session key established.
+[AEAD] AES-256-GCM encryption verified.`,
 } as const;
+
 
