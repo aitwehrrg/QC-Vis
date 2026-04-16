@@ -52,12 +52,47 @@ describe('Simulator Math', () => {
       expect(polyMul(a, b)).toEqual(expected);
 
       const pMax = new Array(n).fill(0);
-      pMax[n-1] = 1; 
-      const pX = [0, 1, 0, 0, 0, 0, 0, 0]; 
+      pMax[n - 1] = 1; // x^{n-1}
+      const pX = [0, 1, 0, 0, 0, 0, 0, 0]; // x
       const res = polyMul(pMax, pX);
       const expectedRed = new Array(n).fill(0);
-      expectedRed[0] = mod(-1, q);
+      expectedRed[0] = mod(-1, q); // x^n = -1
       expect(res).toEqual(expectedRed);
+    });
+
+    it('verifies the distributive property of polynomial multiplication', () => {
+      const a = [1, 2, 3, 4, 5, 6, 7, 8];
+      const b = [8, 7, 6, 5, 4, 3, 2, 1];
+      const c = [1, 0, 1, 0, 1, 0, 1, 0];
+      
+      const res1 = polyMul(a, polyAdd(b, c));
+      const res2 = polyAdd(polyMul(a, b), polyMul(a, c));
+      
+      expect(res1).toEqual(res2);
+    });
+
+    it('verifies the associative property of polynomial multiplication', () => {
+      const a = [1, 2, 3, 4, 5, 6, 7, 8];
+      const b = [8, 7, 6, 5, 4, 3, 2, 1];
+      const c = [1, 1, 1, 1, 1, 1, 1, 1];
+      
+      const res1 = polyMul(polyMul(a, b), c);
+      const res2 = polyMul(a, polyMul(b, c));
+      
+      expect(res1).toEqual(res2);
+    });
+
+    it('multiplication by 0 results in 0', () => {
+      const a = [1, 2, 3, 4, 5, 6, 7, 8];
+      const zero = new Array(n).fill(0);
+      expect(polyMul(a, zero)).toEqual(zero);
+    });
+
+    it('multiplication by 1 results in the same polynomial', () => {
+      const a = [1, 2, 3, 4, 5, 6, 7, 8];
+      const one = new Array(n).fill(0);
+      one[0] = 1;
+      expect(polyMul(a, one)).toEqual(a);
     });
   });
 
