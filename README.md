@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ML-KEM (Kyber) Interactive Visualizer
+
+An interactive, high-fidelity visualization dashboard and simulation environment for understanding **ML-KEM (FIPS 203)**, the NIST-standardized Module-Lattice-Based Key-Encapsulation Mechanism.
+
+This project serves as the visual companion to a high-performance C++20 implementation of ML-KEM, providing an intuitive way to explore the mathematical foundations and protocol flows of post-quantum cryptography.
+
+## Key Features
+
+- **3D Lattice Simulation:** Interactive visualization of Module-LWE (Learning With Errors) using Three.js and React Three Fiber.
+- **Interactive Protocol Flow:** Step-by-step breakdown of KeyGen, Encapsulation, and Decapsulation processes.
+- **Cryptographic System Map:** A high-level overview of the full messaging stack, including KEM, HKDF-SHA256, and AES-256-GCM.
+- **Real-time Math Rendering:** Mathematical foundations explained through live simulations and KaTeX-rendered equations.
+- **Performance Insights:** Visualization of benchmarks for ML-KEM-512/768/1024 parameter sets.
+- **Educational Glossary:** Deep-dive tooltips and documentation for cryptographic primitives and lattice theory.
+
+## Tech Stack
+
+- **Framework:** [Next.js](https://nextjs.org/) (App Router)
+- **Library:** [React 19](https://react.dev/)
+- **3D Graphics:** [Three.js](https://threejs.org/) via [@react-three/fiber](https://github.com/pmndrs/react-three-fiber) & [@react-three/drei](https://github.com/pmndrs/drei)
+- **State Management:** [Zustand](https://github.com/pmndrs/zustand)
+- **Animations:** [GSAP](https://greensock.com/gsap/) (GreenSock Animation Platform)
+- **Styling:** [Tailwind CSS 4](https://tailwindcss.com/)
+- **Mathematics:** [KaTeX](https://katex.org/)
+- **Testing:** [Vitest](https://vitest.dev/)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js 20+
+- npm, yarn, pnpm, or bun
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd QC-Vis
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Testing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The project uses Vitest for unit and component testing.
 
-## Learn More
+```bash
+# Run all tests
+npm run test:run
 
-To learn more about Next.js, take a look at the following resources:
+# Run tests in watch mode
+npm run test
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Check coverage
+npm run test -- --coverage
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+- `app/`: Next.js App Router pages and layouts.
+  - `components/`: Core UI components (Navigation, SystemMap, etc.).
+  - `simulation/`: The 3D simulation environment and scene logic.
+  - `lib/`: Cryptographic math, constants, and utilities.
+- `tests/`: Vitest test suites.
+- `public/`: Static assets and icons.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License.

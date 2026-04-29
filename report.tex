@@ -1,0 +1,158 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{cite}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\geometry{margin=1in}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={ML-KEM Visualizer Report},
+}
+
+\title{Visualizing the ML-KEM Post-Quantum Key Encapsulation Mechanism}
+\author{Rupak R. Gupta (231080028) \\ Third Year B. Tech. Information Technology (IT)}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+As quantum computing advances, traditional public-key cryptographic systems like RSA and ECC face potential obsolescence due to Shor's algorithm. To mitigate this threat, the National Institute of Standards and Technology (NIST) has standardized Post-Quantum Cryptography (PQC) algorithms. This report details the development of a high-performance visualizer for ML-KEM (Module-Lattice-Based Key-Encapsulation Mechanism), as specified in FIPS 203. The project focuses on providing an interactive 3D simulation and a comprehensive educational interface to explain the complex mathematical operations of ML-KEM, including Key Generation, Encapsulation, and Decapsulation. The visualizer leverages modern web technologies to render lattice-based operations, providing an intuitive understanding of how secrets are hidden within "noisy" module equations.
+\end{abstract}
+
+\section{Objective}
+The primary objective of this project is to bridge the gap between abstract lattice-based cryptographic theory and practical understanding through interactive visualization. Specifically, the project aims to:
+\begin{itemize}
+    \item Implement a web-based interactive visualizer for the ML-KEM protocol.
+    \item Visualize the internal steps of KeyGen, Encapsulation, and Decapsulation in a 3D coordinate space.
+    \item Provide a clear educational interface mapping mathematical equations to protocol actions.
+    \item Demonstrate the security architecture and performance characteristics of ML-KEM.
+    \item Facilitate an intuitive understanding of the Module Learning With Errors (M-LWE) problem.
+\end{itemize}
+
+\section{Tools Used}
+The project utilizes a combined technology stack for both the core cryptographic research (QC-Miniproj) and the visualization interface (QC-Vis).
+
+\subsection{Core Cryptographic Research (QC-Miniproj)}
+\begin{itemize}
+    \item \textbf{C++20:} For the reference implementation of the ML-KEM algorithm.
+    \item \textbf{CMake:} As the primary build system.
+    \item \textbf{OpenSSL 3.0+:} Used for auxiliary cryptographic functions such as HKDF and AES-GCM in the transport layer.
+    \item \textbf{GoogleTest:} For unit testing and Known Answer Test (KAT) verification.
+    \item \textbf{AVX2:} Instruction set optimization for high-performance polynomial arithmetic.
+\end{itemize}
+
+\subsection{Web-based Visualizer (QC-Vis)}
+\begin{itemize}
+    \item \textbf{Next.js (React):} Framework for building the user interface and routing.
+    \item \textbf{TypeScript:} For type-safe application logic.
+    \item \textbf{Three.js (React Three Fiber):} For rendering the 3D interactive simulation of lattices and protocol actors.
+    \item \textbf{GSAP (GreenSock Animation Platform):} For smooth, high-performance transitions and protocol step animations.
+    \item \textbf{Tailwind CSS:} For responsive styling and layout.
+    \item \textbf{Zustand:} For lightweight and efficient state management of the simulation.
+    \item \textbf{KaTeX:} For high-quality LaTeX mathematical formula rendering within the web interface.
+\end{itemize}
+
+\section{Algorithm and Operation}
+ML-KEM is a key encapsulation mechanism based on the hardness of the Module Learning With Errors (M-LWE) problem. Unlike direct encryption schemes, it allows two parties to derive a shared secret over a public channel.
+
+\subsection{Algebraic Setting}
+Let $R_q = \mathbb{Z}_q[x] / (x^n + 1)$ be a polynomial ring modulo $q=3329$, where $n=256$. Computations are performed on polynomial vectors and matrices in the module $R_q^k$, where $k \in \{2, 3, 4\}$ corresponds to ML-KEM-512, 768, and 1024 respectively. A typical M-LWE public relation is expressed as:
+\begin{equation}
+\mathbf{t} = \mathbf{A}\mathbf{s} + \mathbf{e} \pmod q
+\end{equation}
+where $\mathbf{A}$ is a public matrix, $\mathbf{s}$ is a secret small polynomial vector (secret key), and $\mathbf{e}$ is a small error vector.
+
+\subsection{Formal Operations}
+The ML-KEM protocol consists of three main phases, which are interactively animated in the visualizer:
+
+\subsubsection{Key Generation (KeyGen)}
+The receiver generates a public key and a secret key:
+\begin{enumerate}
+    \item Generates random seeds $d$ and $z$ using a CSPRNG.
+    \item Samples a public matrix $\mathbf{A} \in R_q^{k \times k}$ using the SHAKE-128 XOF.
+    \item Samples secret small vectors $\mathbf{s}, \mathbf{e} \in R_q^k$ via Centered Binomial Distribution (CBD).
+    \item Computes the public key component $\mathbf{t} = \mathbf{A}\mathbf{s} + \mathbf{e} \pmod q$.
+    \item The public key $pk$ contains $\mathbf{t}$ and the seed for $\mathbf{A}$, while the secret key $dk$ contains $\mathbf{s}$ and rejection seeds.
+\end{enumerate}
+
+\subsubsection{Encapsulation (Encaps)}
+The sender uses the receiver's public key to generate a ciphertext and a shared secret:
+\begin{equation}
+\mathbf{u} = \mathbf{A}^T \mathbf{r} + \mathbf{e}_1 \pmod q
+\end{equation}
+\begin{equation}
+\mathbf{v} = \mathbf{t}^T \mathbf{r} + \mathbf{e}_2 + \mathrm{Encode}(m) \pmod q
+\end{equation}
+where $\mathbf{r}, \mathbf{e}_1, \mathbf{e}_2$ are fresh noise terms and $m$ is an encoded internal secret. This produces a ciphertext $c = (\mathbf{u}, \mathbf{v})$ and a shared secret $K$ derived via a Key Derivation Function (KDF).
+
+\subsubsection{Decapsulation (Decaps)}
+The receiver uses the secret key to recover the shared secret:
+\begin{enumerate}
+    \item Decrypts the ciphertext to recover the internal secret $m'$.
+    \item Recomputes the expected encapsulation $(c', K')$.
+    \item Performs a constant-time comparison of $c$ and $c'$.
+    \item If they match, it outputs $K'$; otherwise, it uses an implicit rejection path to output a pseudo-random key, preventing side-channel leakage.
+\end{enumerate}
+
+\subsection{Implementation Security}
+To ensure the integrity of the cryptographic operations, the following security measures are implemented:
+\begin{itemize}
+    \item \textbf{Constant-Time Execution:} All decapsulation steps use branchless logic to mitigate timing side-channel attacks.
+    \item \textbf{Secure Memory Management:} Sensitive data is stored in auto-zeroing buffers (\texttt{SecureBuffer}) to prevent secret leakage in memory.
+    \item \textbf{CSPRNG Integration:} Uses OS-native entropy sources (\texttt{getrandom(2)} or \texttt{/dev/urandom}) for seeding.
+\end{itemize}
+
+\section{Visualizer Architecture}
+The visualizer (\texttt{QC-Vis}) is designed as a modular React application that maps these abstract operations to a 3D coordinate space.
+
+\subsection{Simulation Engine}
+The engine uses \texttt{Three.js} to manage a 3D scene containing protocol actors (Alice and Bob) and cryptographic objects (Matrices, Vectors, Keys). The \texttt{Zustand} state manager controls the transition between protocol steps, ensuring synchronization between the 3D scene and the UI overlay.
+
+\subsection{Animation and Rendering}
+Animations are handled by \texttt{GSAP}, allowing for smooth interpolation of vector movements and data transformations. Mathematical formulas are rendered in real-time using \texttt{KaTeX}, providing a synchronized "Step-by-Step" view where the highlighted equation matches the active 3D animation.
+
+\section{Output Obtained}
+The primary output of the project is the ML-KEM Visualizer application, which includes:
+\begin{itemize}
+    \item \textbf{Interactive 3D Simulation:} A real-time rendering of the protocol steps where users can see "Alice" and "Bob" exchanging cryptographic primitives.
+    \item \textbf{Lattice Visualization:} A representation of the module-lattice structure, showing how noise vectors hide the secret values.
+    \item \textbf{Protocol Flow Diagrams:} A high-level sequence view of KeyGen, Encapsulation, and Decapsulation.
+    \item \textbf{System Map:} A detailed architecture diagram showing the integration of ML-KEM with HKDF and AES-GCM.
+    \item \textbf{Security Dashboard:} A summary of security levels (ML-KEM-512/768/1024) and performance benchmarks.
+\end{itemize}
+
+\section{Real-world Uses}
+ML-KEM is a critical component in the transition to quantum-resistant security:
+\begin{itemize}
+    \item \textbf{Secure Messaging:} Protecting end-to-end encrypted chats (e.g., Signal, iMessage) against "harvest now, decrypt later" attacks.
+    \item \textbf{TLS 1.3/VPNs:} Securing web traffic and private tunnels against future quantum computers.
+    \item \textbf{Cloud Security:} Protecting long-term data storage in government and financial sectors.
+    \item \textbf{Cryptographic Agility:} Serving as a drop-in replacement for ECDH in modern security stacks.
+\end{itemize}
+
+\section{Conclusion}
+This project successfully implemented a visualizer for the ML-KEM algorithm, providing an accessible yet technically rigorous platform for understanding Post-Quantum Cryptography. By combining high-performance C++ research with modern 3D web visualization, we have demonstrated how complex lattice-based operations can be made intuitive. As the industry moves towards FIPS 203 compliance, such tools will be essential for educating developers and security professionals on the next generation of cryptographic standards.
+
+\begin{thebibliography}{9}
+\bibitem{nistfips203}
+NIST, ``FIPS 203: Module-Lattice-Based Key-Encapsulation Mechanism Standard,'' 2024.
+\bibitem{crystalskyber}
+Schwabe et al., ``CRYSTALS-Kyber: A CCA-secure module-lattice-based KEM,'' 2017.
+\bibitem{pqc_transition}
+NIST, ``Post-Quantum Cryptography Standardization,'' \url{https://csrc.nist.gov/projects/post-quantum-cryptography}.
+\end{thebibliography}
+
+\end{document}
