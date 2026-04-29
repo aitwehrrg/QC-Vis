@@ -5,7 +5,7 @@ import Accordion from "../components/Accordion";
 import GlossaryTooltip from "../components/GlossaryTooltip";
 import ActorBadge from "../components/ActorBadge";
 import LatexBlock, { LatexText } from "../components/LatexBlock";
-import { INSTALL_COMMANDS, PARAMS, SAMPLE_VECTORS, GLOSSARY } from "../lib/constants";
+import { INSTALL_COMMANDS, PARAMS, SAMPLE_VECTORS, GLOSSARY, BENCHMARK_OUTPUT, LOCAL_DEMO_OUTPUT, IRC_SESSION_OUTPUT } from "../lib/constants";
 import { FaGithub } from "react-icons/fa";
 
 export default function Documentation() {
@@ -50,9 +50,11 @@ export default function Documentation() {
                   <a href="#doc-noise">Role of Noise</a>
                   <a href="#doc-why-c-fails">Why Eavesdropping Fails</a>
                   <a href="#doc-worked-example">Worked Example</a>
+                  <a href="#doc-performance">Performance</a>
                   <a href="#doc-data-structures">Data Structures</a>
                   <a href="#doc-limitations">Limitations</a>
                   <a href="#doc-glossary">Glossary</a>
+                  <a href="#doc-contributors">Contributors</a>
                 </div>
               </nav>
             </aside>
@@ -92,13 +94,13 @@ export default function Documentation() {
 
                 <h3 id="install-output">Expected Output</h3>
                 <p className="text-sm" style={{ color: "var(--muted)" }}>
-                  The demo establishes a secure session and initializes the AEAD channel:
+                  The local <code>demo</code> target validates the hybrid flow by running a 
+                  standalone KeyGen, Encaps, and Decaps loop:
                 </p>
                 <CodeBlock
-                  code={INSTALL_COMMANDS.expectedOutput}
+                  code={LOCAL_DEMO_OUTPUT}
                   language="plaintext"
-                  filename="output"
-                  showLineNumbers
+                  filename="local-demo"
                 />
 
                 <div className="mt-6 mb-10 border-t border-border-subtle pt-6">
@@ -281,6 +283,15 @@ export default function Documentation() {
                     <li>Both parties derive a session key using <code>HKDF-SHA256(K)</code>.</li>
                     <li>Messages are encrypted using <code>AES-256-GCM</code>.</li>
                   </ol>
+                  
+                  <p className="mt-4" style={{ color: "var(--muted)" }}>
+                    Empirical output from a production session:
+                  </p>
+                  <CodeBlock
+                    code={IRC_SESSION_OUTPUT}
+                    language="plaintext"
+                    filename="irc-client"
+                  />
                 </div>
 
                 <h3 id="doc-limitations">Limitations</h3>
@@ -318,6 +329,17 @@ export default function Documentation() {
                   </table>
                 </div>
 
+                <h3 id="doc-performance">Performance Benchmarks</h3>
+                <p className="text-sm" style={{ color: "var(--muted)" }}>
+                  The implementation is optimized for x86_64 systems with AVX2 support. 
+                  Benchmarks confirm the deterministic efficiency of the cryptographic stack.
+                </p>
+                <CodeBlock
+                  code={BENCHMARK_OUTPUT}
+                  language="plaintext"
+                  filename="benchmarks"
+                />
+
                 {}
                 <h3 id="doc-glossary">Glossary</h3>
                 <div className="grid grid-cols-1 gap-2 my-4">
@@ -334,6 +356,27 @@ export default function Documentation() {
                         {GLOSSARY[term]}
                       </p>
                     </div>
+                  ))}
+                </div>
+
+                <h3 id="doc-contributors">Project Contributors</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-4">
+                  {[
+                    { name: "Rupak R. Gupta", id: "231080028", github: "github.com/aitwehrrg" },
+                    { name: "Ghruank Kothare", id: "231080038", github: "github.com/ghruank" },
+                    { name: "Abhay Upadhyay", id: "231080072", github: "github.com/urabhay10" },
+                  ].map((c) => (
+                    <a
+                      key={c.id}
+                      href={`https://${c.github}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-4 rounded-lg border border-border-subtle bg-surface hover:border-accent transition-colors group text-center"
+                    >
+                      <div className="text-sm font-bold group-hover:text-accent transition-colors">{c.name}</div>
+                      <div className="text-[10px] text-muted truncate mt-1">{c.id}</div>
+                      <div className="text-[10px] text-accent/70 mt-1">{c.github}</div>
+                    </a>
                   ))}
                 </div>
               </section>

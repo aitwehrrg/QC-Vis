@@ -89,4 +89,76 @@ Performing ML-KEM-768 encapsulation...
 [you] encrypted : a3f0c29d1b7e82...`,
 } as const;
 
+export const BENCHMARK_OUTPUT = `★ ML-KEM Performance Benchmark (1000 iterations each)
+------------------------------------------------------------
+Parameter Set  |  KeyGen      |  Encaps      |  Decaps
+------------------------------------------------------------
+ML-KEM-512     |  274 μs      |  256 μs      |  403 μs     [OK]
+ML-KEM-768     |  383 μs      |  426 μs      |  644 μs     [OK]
+ML-KEM-1024    |  561 μs      |  632 μs      |  955 μs     [OK]
+------------------------------------------------------------`;
+
+export const LOCAL_DEMO_OUTPUT = `★ === ML-KEM-768 Secure Messaging Demo (FIPS 203) ===
+Who is the sender? Alice
+Who is the receiver? Bob
+
+[ML-KEM] Key Generation complete.
+[Bob] Publishes public key.
+
+[Sender] Encapsulating shared secret...
+[Sender] Encapsulated Key (hex): 3680880a9eb301de7daf6a3b5cef6265...
+
+[AEAD] Encrypting message: "Post-quantum secure messaging"
+[AEAD] Ciphertext (hex): 85fd8dc9fd4398c01e02f60af0efcc31...
+[AEAD] Auth Tag (hex): f31a8c2eb961b522684c92c9641eb7d9
+[AEAD] Nonce (hex): 2331df99bfaa6d26ae9cdc73
+
+[Receiver] Decapsulating shared secret...
+[Session] E2E secure channel established.
+
+=== RESULTS ===
+Bob received: "Post-quantum secure messaging"
+(Message integrity: VERIFIED by AES-256-GCM authentication)`;
+
+export const IRC_SESSION_OUTPUT = `▶ ./client 192.168.1.116
+Quantum IRC Client (Production)
+ML-KEM-768 / AES-256-GCM
+
+Connecting to 192.168.1.116:6667 ...
+Welcome. Use REGISTER <user> <pass> <ek_hex> or AUTH <user> <pass>
+
+[R]egister new account or [L]ogin: r
+Username: ghruank
+Password (min 8 chars): ••••••••
+Confirm password: ••••••••
+
+Found existing keypair for ghruank. Reusing it.
+Registering account...
+✓ Account created! Now logging in...
+✓ Authenticated as ghruank
+Public key: 54bc3573a104b0d74d8d091763177681...
+
+/list
+Online users: hewhocodes rupak
+
+/chat hewhocodes
+Requesting hewhocodes’s public key from server...
+Performing ML-KEM-768 encapsulation for hewhocodes...
+✓ KEM sent. Waiting for hewhocodes to acknowledge...
+
+Session established with hewhocodes
+ML-KEM-768 + HKDF-SHA256 + AES-256-GCM
+
+[you] encrypted : 6ef7275020b5e83400ce9489cdc...
+[you] decrypted : hello rupak
+
+[hewhocodes] encrypted : d710857650dd0f339d58a83...
+[hewhocodes] decrypted : hello ghruank from ty it
+
+[you] encrypted : 3090d721f88484766d69dea35c3...
+[you] decrypted : how are you
+
+[hewhocodes] encrypted : c622b23ede85efe655d04a0...
+[hewhocodes] decrypted : im fine thank you`;
+
 

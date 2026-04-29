@@ -4,7 +4,7 @@ import ProtocolFlow from "./components/ProtocolFlow";
 import GlossaryTooltip from "./components/GlossaryTooltip";
 import ActorBadge from "./components/ActorBadge";
 import CodeBlock from "./components/CodeBlock";
-import { PARAMS } from "./lib/constants";
+import { PARAMS, BENCHMARK_OUTPUT } from "./lib/constants";
 import { FaGithub } from "react-icons/fa";
 
 export default function Home() {
@@ -155,6 +155,12 @@ export default function Home() {
                 ))}
               </div>
 
+              <CodeBlock
+                code={BENCHMARK_OUTPUT}
+                language="plaintext"
+                filename="benchmarks"
+              />
+
               <h3>Threat Model</h3>
               <p className="text-sm" style={{ color: "var(--fg)" }}>
                 ML-KEM is IND-CCA2 secure, meaning it remains secure even when an adversary 
@@ -214,6 +220,26 @@ export default function Home() {
                 <li><code>cmake .. -DENABLE_AVX2=ON</code></li>
                 <li><code>make && ./demo</code></li>
               </ol>
+
+              <h3 className="mt-12">Contributors</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+                {[
+                  { name: "Abhay Upadhyay", github: "github.com/urabhay10" },
+                  { name: "Ghruank Kothare", github: "github.com/ghruank" },
+                  { name: "Rupak R. Gupta", github: "github.com/aitwehrrg" },
+                ].map((c) => (
+                  <a
+                    key={c.github}
+                    href={`https://${c.github}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 rounded-lg border border-border-subtle bg-surface hover:border-accent transition-colors group"
+                  >
+                    <div className="text-xs font-semibold group-hover:text-accent transition-colors">{c.name}</div>
+                    <div className="text-[10px] text-muted truncate">{c.github}</div>
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
         </section>
