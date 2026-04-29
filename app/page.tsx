@@ -255,7 +255,7 @@ export default function Home() {
                 <rect x="2" y="2" width="28" height="28" rx="4" stroke="var(--accent)" strokeWidth="1.5" fill="none" />
                 <circle cx="16" cy="16" r="2.5" fill="var(--accent)" />
               </svg>
-              <span>Quantum IRC Project</span>
+              <span>Post-Quantum IRC Project</span>
             </div>
             <div>
               FIPS 203 Compliant · ML-KEM-768
