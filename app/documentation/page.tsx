@@ -374,7 +374,6 @@ export default function Documentation() {
                       className="p-4 rounded-lg border border-border-subtle bg-surface hover:border-accent transition-colors group text-center"
                     >
                       <div className="text-sm font-bold group-hover:text-accent transition-colors">{c.name}</div>
-                      <div className="text-[10px] text-muted truncate mt-1">{c.id}</div>
                       <div className="text-[10px] text-accent/70 mt-1">{c.github}</div>
                     </a>
                   ))}
