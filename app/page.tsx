@@ -34,28 +34,28 @@ export default function Home() {
                   <line x1="24" y1="24" x2="16" y2="16" stroke="var(--accent)" strokeWidth="0.75" opacity="0.5" />
                 </svg>
                 <div>
-                  <h1 className="text-balance m-0">ML-KEM</h1>
+                  <h1 className="text-balance m-0">Quantum IRC</h1>
                   <p className="text-sm m-0" style={{ color: "var(--muted)" }}>
-                    FIPS 203 Post-Quantum Messaging Stack
+                    Post-Quantum Encrypted 1-to-1 Chat (FIPS 203)
                   </p>
                 </div>
               </div>
 
               <p className="text-lg leading-relaxed" style={{ color: "var(--fg)" }}>
-                A high-performance C++20 implementation of ML-KEM (FIPS 203)
-                supporting 512, 768, and 1024 parameter sets, featuring AVX2 acceleration 
-                and integrated AEAD transport.
+                A terminal-based secure messaging system combining IRC-style chat over TCP 
+                with ML-KEM-768 post-quantum encryption. Built with a high-performance 
+                C++20 ML-KEM implementation featuring AVX2 acceleration.
               </p>
 
               <div className="flex flex-wrap gap-3 mt-4">
                 <a
-                  href="https://github.com/example/mlkem"
+                  href="https://github.com/ghruank/irc-encrypted"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary flex items-center gap-2"
                 >
                   <FaGithub />
-                  View C++ Source on GitHub
+                  View Source on GitHub
                 </a>
                 <a href="/documentation" className="btn-secondary">
                   Documentation
@@ -202,7 +202,7 @@ export default function Home() {
 
               <h3>Repository Structure</h3>
               <CodeBlock
-                code={`pqc/\n├── apps/                # CLI tools (demo, sender, receiver)\n├── benchmarks/          # Performance measurement\n├── include/mlkem/       # Public API headers\n│   ├── mlkem.hpp        # Core ML-KEM templates\n│   ├── mlkem768.hpp     # Object-oriented wrapper\n│   ├── aead.hpp         # HKDF & AES-GCM layer\n│   └── secure_buffer.hpp # Auto-zeroing memory\n├── src/                 # Implementation (.cpp)\n├── tests/               # GoogleTest suite (KAT, Unit)\n├── CMakeLists.txt       # Build configuration\n└── README.md`}
+                code={`/\n├── pqc/                    # ML-KEM-768 library (Abhay & Rupak)\n│   ├── include/mlkem/      # Public API (mlkem.hpp, aead.hpp)\n│   └── src/                # FIPS 203 implementation (NTT, SHA-3)\n└── irc/                    # IRC Chat System (Ghruank)\n    ├── server.cpp          # Blind relay server\n    ├── client.cpp          # Terminal client (handshake, messaging)\n    └── crypto.hpp          # KEM & AEAD wrapper`}
                 language="plaintext"
                 filename="project structure"
               />
@@ -229,10 +229,10 @@ export default function Home() {
                 <rect x="2" y="2" width="28" height="28" rx="4" stroke="var(--accent)" strokeWidth="1.5" fill="none" />
                 <circle cx="16" cy="16" r="2.5" fill="var(--accent)" />
               </svg>
-              <span>ML-KEM C++20 Project</span>
+              <span>Quantum IRC Project</span>
             </div>
             <div>
-              FIPS 203 Compliant · MIT License
+              FIPS 203 Compliant · ML-KEM-768
             </div>
           </div>
         </footer>

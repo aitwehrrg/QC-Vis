@@ -57,6 +57,8 @@ export const GLOSSARY: Record<string, string> = {
     "Chosen Ciphertext Attack security — a security notion where an attacker cannot learn anything even if they can ask for decryptions of other ciphertexts.",
   "AVX2":
     "Advanced Vector Extensions 2 — an expansion of the x86 instruction set architecture used to accelerate NTT computations.",
+  "Blind Relay":
+    "A server architecture where the relay server forwards encrypted messages without having access to the plaintext or session keys.",
 };
 
 export const SAMPLE_VECTORS = {
@@ -69,18 +71,22 @@ export const SAMPLE_VECTORS = {
 } as const;
 
 export const INSTALL_COMMANDS = {
-  clone: "git clone https://github.com/example/mlkem.git\ncd mlkem",
-  prerequisites: "# Requires: OpenSSL 3.0+, CMake 3.15+, C++20 compiler",
-  build: "mkdir build && cd build\ncmake .. -DBUILD_TESTS=ON\nmake -j$(nproc)",
-  run: "./demo",
-  expectedOutput: `[ML-KEM] Key Generation complete.
-[ML-KEM] Public Key (ek) generated.
-[Sender] Encapsulating shared secret...
-[Sender] Ciphertext (c) generated.
-[Receiver] Decapsulating shared secret...
-[Session] Shared Secret (K) derived successfully.
-[AEAD] HKDF-SHA256 session key established.
-[AEAD] AES-256-GCM encryption verified.`,
+  clone: "git clone https://github.com/ghruank/irc-encrypted.git\ncd irc-encrypted",
+  prerequisites: "# Requires: OpenSSL 3.0+, CMake 3.14+, C++20 compiler (GCC 11+, Clang 13+)",
+  build: "mkdir build && cd build\ncmake .. -DCMAKE_BUILD_TYPE=Release\nmake -j$(nproc)",
+  run: "./server\n# In another terminal:\n./client 127.0.0.1",
+  expectedOutput: `[R]egister new account  or  [L]ogin: R
+Username: alice
+Password: ••••••••••
+Generating ML-KEM-768 keypair...
+✓ Keypair saved to ~/.quantumirc/alice.keypair
+✓ Account created! Authenticated as alice
+
+/chat bob
+Requesting bob's public key...
+Performing ML-KEM-768 encapsulation...
+✓ KEM sent. Session established with bob.
+[you] encrypted : a3f0c29d1b7e82...`,
 } as const;
 
 

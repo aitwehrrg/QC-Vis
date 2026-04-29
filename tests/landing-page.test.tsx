@@ -11,10 +11,10 @@ vi.mock('../app/components/ProtocolFlow', () => ({
 }));
 
 describe('Landing Page', () => {
-  it('renders the main heading', () => {
+  it('renders the landing page title and description', () => {
     render(<Home />);
-    expect(screen.getAllByText('ML-KEM').length).toBeGreaterThan(0);
-    expect(screen.getByText('FIPS 203 Post-Quantum Messaging Stack')).toBeInTheDocument();
+    expect(screen.getAllByText('Quantum IRC').length).toBeGreaterThan(0);
+    expect(screen.getByText('Post-Quantum Encrypted 1-to-1 Chat (FIPS 203)')).toBeInTheDocument();
   });
 
   it('renders key sections', () => {
@@ -26,8 +26,9 @@ describe('Landing Page', () => {
 
   it('contains links to GitHub and Documentation', () => {
     render(<Home />);
-    const githubLink = screen.getByRole('link', { name: /View C\+\+ Source on GitHub/i });
+    const githubLink = screen.getByRole('link', { name: /View Source on GitHub/i });
     expect(githubLink).toBeInTheDocument();
-    expect(githubLink).toHaveAttribute('href', 'https://github.com/example/mlkem');
+    expect(githubLink).toHaveAttribute('href', 'https://github.com/ghruank/irc-encrypted');
   });
+
 });

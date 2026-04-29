@@ -19,7 +19,7 @@ describe('Documentation Page', () => {
     render(<Documentation />);
     expect(screen.getAllByText('Technical Documentation').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Protocol Summary').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('API Reference').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Key Generation').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Core Components').length).toBeGreaterThan(0);
   });
 
@@ -34,6 +34,6 @@ describe('Documentation Page', () => {
     render(<Documentation />);
     const githubLinks = screen.getAllByRole('link', { name: /GitHub/i });
     expect(githubLinks.length).toBeGreaterThan(0);
-    expect(githubLinks[0]).toHaveAttribute('href', 'https://github.com/example/mlkem');
+    expect(githubLinks[0]).toHaveAttribute('href', 'https://github.com/ghruank/irc-encrypted');
   });
 });

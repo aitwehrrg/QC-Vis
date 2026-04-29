@@ -20,7 +20,7 @@ export default function Documentation() {
               <nav>
                 <div className="mb-6 px-3 border-b border-border-subtle pb-4">
                   <a
-                    href="https://github.com/example/mlkem"
+                    href="https://github.com/ghruank/irc-encrypted"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-xs flex! items-center gap-2 text-muted hover:text-accent transition-colors"
@@ -48,7 +48,7 @@ export default function Documentation() {
                   <a href="#doc-encap">Encapsulation</a>
                   <a href="#doc-decap">Decapsulation</a>
                   <a href="#doc-noise">Role of Noise</a>
-                  <a href="#doc-why-c-fails">Why C Fails</a>
+                  <a href="#doc-why-c-fails">Why Eavesdropping Fails</a>
                   <a href="#doc-worked-example">Worked Example</a>
                   <a href="#doc-data-structures">Data Structures</a>
                   <a href="#doc-limitations">Limitations</a>
@@ -103,7 +103,7 @@ export default function Documentation() {
 
                 <div className="mt-6 mb-10 border-t border-border-subtle pt-6">
                   <a
-                    href="https://github.com/example/mlkem"
+                    href="https://github.com/ghruank/irc-encrypted"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-sm text-accent hover:underline font-medium"
@@ -212,16 +212,84 @@ export default function Documentation() {
                 />
 
                 {}
-                <h3 id="doc-keygen">API Reference</h3>
+                <h3 id="doc-keygen">Key Generation</h3>
                 <p className="text-sm" style={{ color: "var(--fg)" }}>
-                  The <code>MLKEM768</code> class provides a high-level, object-oriented 
-                  interface for the category 3 parameter set.
+                  Key generation (Algorithm 16) produces the encapsulation key (ek) and 
+                  decapsulation key (dk). It utilizes OS-level CSPRNG to generate random seeds 
+                  which are then expanded into the module matrix and noise vectors.
                 </p>
                 <CodeBlock
-                  code={`// mlkem768.hpp\nclass MLKEM768 {\npublic:\n    // Generates a new keypair using OS CSPRNG\n    static KeyPair generate();\n\n    // Encapsulates a shared secret for the given public key\n    static EncapsResult encapsulate(const PublicKey& ek);\n\n    // Decapsulates the shared secret from a ciphertext\n    static SharedSecret decapsulate(const Ciphertext& c, const PrivateKey& dk);\n};`}
+                  code={`// mlkem768.hpp\n// Generates a new keypair using OS CSPRNG\nstatic KeyPair generate();`}
                   language="cpp"
                   filename="mlkem768.hpp"
                 />
+
+                <h3 id="doc-encap">Encapsulation</h3>
+                <p className="text-sm" style={{ color: "var(--fg)" }}>
+                  Encapsulation (Algorithm 17) uses the public key (ek) to generate a 32-byte 
+                  shared secret and a ciphertext (c). The process involves sampling an 
+                  ephemeral message and encrypting it with a K-PKE scheme.
+                </p>
+                <CodeBlock
+                  code={`// Encapsulates a shared secret for the given public key\nstatic EncapsResult encapsulate(const PublicKey& ek);`}
+                  language="cpp"
+                  filename="mlkem768.hpp"
+                />
+
+                <h3 id="doc-decap">Decapsulation</h3>
+                <p className="text-sm" style={{ color: "var(--fg)" }}>
+                  Decapsulation (Algorithm 18) recovers the shared secret from a ciphertext 
+                  using the private key (dk). It features <strong>implicit rejection</strong>, 
+                  meaning a tampered ciphertext will result in a deterministic random-looking 
+                  key rather than an error, protecting against certain attacks.
+                </p>
+                <CodeBlock
+                  code={`// Decapsulates the shared secret from a ciphertext\nstatic SharedSecret decapsulate(const Ciphertext& c, const PrivateKey& dk);`}
+                  language="cpp"
+                  filename="mlkem768.hpp"
+                />
+
+                <h3 id="doc-noise">Role of Noise</h3>
+                <p className="text-sm" style={{ color: "var(--fg)" }}>
+                  In ML-KEM, "noise" (error vectors sampled from a centered binomial distribution) 
+                  is essential for security. By adding small errors to the polynomial products, 
+                  the resulting public key and ciphertexts become instances of the 
+                  <strong>Learning With Errors (LWE)</strong> problem, which is computationally 
+                  intractable for both classical and quantum computers.
+                </p>
+
+                <h3 id="doc-why-c-fails">Why Eavesdropping Fails</h3>
+                <p className="text-sm" style={{ color: "var(--fg)" }}>
+                  An attacker (Eve) who intercepts the ciphertext $c$ cannot recover the 
+                  shared secret because they lack the private key. Without the secret key 
+                  polynomials, removing the noise from the ciphertext is equivalent to 
+                  solving the M-LWE problem, for which no efficient quantum algorithm 
+                  currently exists.
+                </p>
+
+                <h3 id="doc-worked-example">Worked Example: IRC Session</h3>
+                <div className="text-sm space-y-3" style={{ color: "var(--fg)" }}>
+                  <p>
+                    A typical Quantum IRC session involves a multi-step handshake to establish 
+                    end-to-end encryption between Alice and Bob:
+                  </p>
+                  <ol className="space-y-2">
+                    <li>Alice requests Bob's public key from the server.</li>
+                    <li>Alice runs <code>MLKEM768::encapsulate(bob_ek)</code> to get <code>(K, c)</code>.</li>
+                    <li>Alice sends <code>c</code> to Bob via the server.</li>
+                    <li>Bob runs <code>MLKEM768::decapsulate(c, bob_dk)</code> to recover <code>K</code>.</li>
+                    <li>Both parties derive a session key using <code>HKDF-SHA256(K)</code>.</li>
+                    <li>Messages are encrypted using <code>AES-256-GCM</code>.</li>
+                  </ol>
+                </div>
+
+                <h3 id="doc-limitations">Limitations</h3>
+                <ul className="text-sm space-y-1" style={{ color: "var(--fg)" }}>
+                  <li><strong>1-to-1 only:</strong> No group rooms; sessions are strictly between two users.</li>
+                  <li><strong>No message history:</strong> Messages are not stored; if you're offline, you miss them.</li>
+                  <li><strong>Static identity keys:</strong> Same keypair across sessions; no forward secrecy between sessions.</li>
+                  <li><strong>Linux preferred:</strong> Uses <code>getrandom(2)</code> and POSIX sockets.</li>
+                </ul>
 
                 {}
                 <h3 id="doc-data-structures">Core Components</h3>
@@ -284,10 +352,10 @@ export default function Documentation() {
                 <rect x="2" y="2" width="28" height="28" rx="4" stroke="var(--accent)" strokeWidth="1.5" fill="none" />
                 <circle cx="16" cy="16" r="2.5" fill="var(--accent)" />
               </svg>
-              <span>ML-KEM C++20 Project</span>
+              <span>Quantum IRC Project</span>
             </div>
             <div>
-              FIPS 203 Compliant · MIT License
+              FIPS 203 Compliant · ML-KEM-768
             </div>
           </div>
         </footer>
