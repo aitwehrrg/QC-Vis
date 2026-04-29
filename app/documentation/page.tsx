@@ -272,7 +272,7 @@ export default function Documentation() {
                 <h3 id="doc-worked-example">Worked Example: IRC Session</h3>
                 <div className="text-sm space-y-3" style={{ color: "var(--fg)" }}>
                   <p>
-                    A typical Quantum IRC session involves a multi-step handshake to establish 
+                    A typical Post-Quantum IRC session involves a multi-step handshake to establish 
                     end-to-end encryption between Alice and Bob:
                   </p>
                   <ol className="space-y-2">
@@ -394,7 +394,7 @@ export default function Documentation() {
                 <rect x="2" y="2" width="28" height="28" rx="4" stroke="var(--accent)" strokeWidth="1.5" fill="none" />
                 <circle cx="16" cy="16" r="2.5" fill="var(--accent)" />
               </svg>
-              <span>Quantum IRC Project</span>
+              <span>Post-Quantum IRC Project</span>
             </div>
             <div>
               FIPS 203 Compliant · ML-KEM-768

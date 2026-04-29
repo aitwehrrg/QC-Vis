@@ -34,7 +34,7 @@ export default function Home() {
                   <line x1="24" y1="24" x2="16" y2="16" stroke="var(--accent)" strokeWidth="0.75" opacity="0.5" />
                 </svg>
                 <div>
-                  <h1 className="text-balance m-0">Quantum IRC</h1>
+                  <h1 className="text-balance m-0">Post-Quantum IRC</h1>
                   <p className="text-sm m-0" style={{ color: "var(--muted)" }}>
                     Post-Quantum Encrypted 1-to-1 Chat (FIPS 203)
                   </p>
