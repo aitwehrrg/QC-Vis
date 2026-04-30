@@ -2,10 +2,8 @@ import Navigation from "../components/Navigation";
 import CodeBlock from "../components/CodeBlock";
 import Tabs from "../components/Tabs";
 import Accordion from "../components/Accordion";
-import GlossaryTooltip from "../components/GlossaryTooltip";
-import ActorBadge from "../components/ActorBadge";
-import LatexBlock, { LatexText } from "../components/LatexBlock";
-import { INSTALL_COMMANDS, PARAMS, SAMPLE_VECTORS, GLOSSARY, BENCHMARK_OUTPUT, LOCAL_DEMO_OUTPUT, IRC_SESSION_OUTPUT } from "../lib/constants";
+import { LatexText } from "../components/LatexBlock";
+import { INSTALL_COMMANDS, BENCHMARK_OUTPUT, LOCAL_DEMO_OUTPUT, IRC_SESSION_OUTPUT, GLOSSARY } from "../lib/constants";
 import { FaGithub } from "react-icons/fa";
 
 export default function Documentation() {
@@ -253,7 +251,7 @@ export default function Documentation() {
 
                 <h3 id="doc-noise">Role of Noise</h3>
                 <p className="text-sm" style={{ color: "var(--fg)" }}>
-                  In ML-KEM, "noise" (error vectors sampled from a centered binomial distribution) 
+                  In ML-KEM, &quot;noise&quot; (error vectors sampled from a centered binomial distribution) 
                   is essential for security. By adding small errors to the polynomial products, 
                   the resulting public key and ciphertexts become instances of the 
                   <strong>Learning With Errors (LWE)</strong> problem, which is computationally 
@@ -276,7 +274,7 @@ export default function Documentation() {
                     end-to-end encryption between Alice and Bob:
                   </p>
                   <ol className="space-y-2">
-                    <li>Alice requests Bob's public key from the server.</li>
+                    <li>Alice requests Bob&apos;s public key from the server.</li>
                     <li>Alice runs <code>MLKEM768::encapsulate(bob_ek)</code> to get <code>(K, c)</code>.</li>
                     <li>Alice sends <code>c</code> to Bob via the server.</li>
                     <li>Bob runs <code>MLKEM768::decapsulate(c, bob_dk)</code> to recover <code>K</code>.</li>
@@ -297,7 +295,7 @@ export default function Documentation() {
                 <h3 id="doc-limitations">Limitations</h3>
                 <ul className="text-sm space-y-1" style={{ color: "var(--fg)" }}>
                   <li><strong>1-to-1 only:</strong> No group rooms; sessions are strictly between two users.</li>
-                  <li><strong>No message history:</strong> Messages are not stored; if you're offline, you miss them.</li>
+                  <li><strong>No message history:</strong> Messages are not stored; if you&apos;re offline, you miss them.</li>
                   <li><strong>Static identity keys:</strong> Same keypair across sessions; no forward secrecy between sessions.</li>
                   <li><strong>Linux preferred:</strong> Uses <code>getrandom(2)</code> and POSIX sockets.</li>
                 </ul>
