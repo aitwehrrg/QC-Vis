@@ -10,11 +10,15 @@ vi.mock('../app/components/ProtocolFlow', () => ({
   default: () => <div data-testid="protocol-flow">Protocol Flow</div>
 }));
 
+vi.mock('../app/components/ConversationTerminals', () => ({
+  default: () => <div data-testid="conversation-terminals">Conversation Terminals</div>
+}));
+
 describe('Landing Page', () => {
   it('renders the landing page title and description', () => {
     render(<Home />);
-    expect(screen.getAllByText('Post-Quantum IRC').length).toBeGreaterThan(0);
-    expect(screen.getByText('Post-Quantum Encrypted 1-to-1 Chat (FIPS 203)')).toBeInTheDocument();
+    expect(screen.getAllByText('Quantum IRC').length).toBeGreaterThan(0);
+    expect(screen.getByText('PoC Post-Quantum Encrypted 1-to-1 Chat (FIPS 203)')).toBeInTheDocument();
   });
 
   it('renders key sections', () => {
