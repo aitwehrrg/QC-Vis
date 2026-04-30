@@ -1,10 +1,9 @@
 import Navigation from "./components/Navigation";
 import SystemMap from "./components/SystemMap";
 import ProtocolFlow from "./components/ProtocolFlow";
-import GlossaryTooltip from "./components/GlossaryTooltip";
-import ActorBadge from "./components/ActorBadge";
 import CodeBlock from "./components/CodeBlock";
-import { PARAMS, BENCHMARK_OUTPUT } from "./lib/constants";
+import ConversationTerminals from "./components/ConversationTerminals";
+import { BENCHMARK_OUTPUT } from "./lib/constants";
 import { FaGithub } from "react-icons/fa";
 
 export default function Home() {
@@ -82,7 +81,18 @@ export default function Home() {
                   </p>
                 </div>
               </div>
+            </div>
 
+            <div className="mt-16">
+              <h2 className="text-center mb-8">Post-Quantum Exchange</h2>
+              <p className="text-center text-muted max-w-2xl mx-auto mb-12">
+                Empirical output from a production session between Ghruank and Rupak,
+                demonstrating the ML-KEM-768 handshake and E2E encrypted messaging.
+              </p>
+              <ConversationTerminals />
+            </div>
+
+            <div className="max-w-3xl">
               <h2 id="system-map">System Map</h2>
               <p style={{ color: "var(--muted)" }}>
                 A high-level overview of the cryptographic stack. The KEM establishes a shared secret 
@@ -100,7 +110,7 @@ export default function Home() {
           <div className="section-container">
             <h2 className="mt-0">ML-KEM Protocol Flow</h2>
             <p style={{ color: "var(--muted)" }} className="max-w-2xl">
-              ML-KEM achieves post-quantum security by hiding secrets within "noisy" mathematical lattices. 
+              ML-KEM achieves post-quantum security by hiding secrets within &quot;noisy&quot; mathematical lattices. 
               The process consists of KeyGen, Encapsulation, and Decapsulation.
             </p>
             <div className="mt-8">
