@@ -18,9 +18,9 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ML-KEM Stack",
+  title: "Quantum IRC | Post-Quantum Messaging",
   description:
-    "A high-performance C++20 implementation of ML-KEM (FIPS 203) supporting all parameter sets, featuring AEAD (AES-256-GCM) and AVX2 acceleration.",
+    "A Proof-of-Concept C++20 implementation of ML-KEM (FIPS 203) messaging, featuring AEAD (AES-256-GCM) and AVX2 acceleration. A student research project from VJTI.",
   keywords: [
     "post-quantum cryptography",
     "ML-KEM",
@@ -38,9 +38,9 @@ export const metadata: Metadata = {
     icon: "/icon.svg",
   },
   openGraph: {
-    title: "ML-KEM PQC Stack",
+    title: "Quantum IRC | Post-Quantum Messaging",
     description:
-      "A high-performance C++20 implementation of the ML-KEM (FIPS 203) post-quantum key encapsulation mechanism.",
+      "A student research project from VJTI detailing a C++20 proof-of-concept for secure messaging using ML-KEM-768.",
     type: "website",
     locale: "en_US",
   },

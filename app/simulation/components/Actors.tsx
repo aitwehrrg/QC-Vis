@@ -3,6 +3,7 @@
 import { Text, Float, Html } from "@react-three/drei";
 import { useSimulationStore } from "../store";
 import { SCENES } from "../scenes";
+import { useTheme } from "../../components/ThemeProvider";
 
 interface ActorNodeProps {
   name: string;
@@ -48,27 +49,32 @@ function ActorNode({ name, position, color, label, isActive }: ActorNodeProps) {
 export default function Actors() {
   const currentSceneIndex = useSimulationStore((state) => state.currentSceneIndex);
   const actorFocus = SCENES[currentSceneIndex].actorFocus;
+  const { theme } = useTheme();
+
+  const colorA = theme === "dark" ? "#e5e5e5" : "#222222";
+  const colorB = theme === "dark" ? "#f0f0f0" : "#111111";
+  const colorC = theme === "dark" ? "#fafafa" : "#0a0a0a";
 
   return (
     <group>
       <ActorNode
         name="Alice"
         position={[-8, 0, 0]}
-        color="#6366f1"
+        color={colorA}
         label="Sender"
         isActive={actorFocus === "A"}
       />
       <ActorNode
         name="Bob"
         position={[8, 0, 0]}
-        color="#2d9f7f"
+        color={colorB}
         label="Receiver"
         isActive={actorFocus === "B"}
       />
       <ActorNode
         name="Eve"
         position={[0, 0, 8]}
-        color="#ef4444"
+        color={colorC}
         label="Eavesdropper"
         isActive={actorFocus === "C"}
       />

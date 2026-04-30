@@ -84,8 +84,6 @@ export default function Navigation() {
         style={{
           background: "var(--bg)",
           borderColor: "var(--border-subtle)",
-          backdropFilter: "blur(8px)",
-          backgroundColor: "color-mix(in srgb, var(--bg) 85%, transparent)",
         }}
         role="navigation"
         aria-label="Main navigation"

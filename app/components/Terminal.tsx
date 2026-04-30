@@ -26,7 +26,7 @@ export default function Terminal({
   useEffect(() => {
     if (!animate) {
       if (visibleLines.length !== lines.length) {
-        setVisibleLines(lines);
+        setTimeout(() => setVisibleLines(lines), 0);
       }
       return;
     }
@@ -97,7 +97,7 @@ function getLineClass(line: string) {
     return "text-actor-b";
   }
   if (line.includes("error") || line.includes("!")) {
-    return "text-red-500";
+    return "text-tertiary";
   }
   return "";
 }

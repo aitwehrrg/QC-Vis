@@ -10,7 +10,7 @@ export default function Documentation() {
   return (
     <>
       <Navigation />
-      <main className="flex-1">
+      <main className="flex-1 lattice-bg">
         <div className="section-container">
           <div className="docs-layout">
             {}
@@ -149,7 +149,7 @@ export default function Documentation() {
                 />
               </section>
 
-              <hr className="section-divider my-12" />
+              <hr className="section-divider my-8" />
 
               {}
               <section id="documentation">
@@ -283,7 +283,7 @@ export default function Documentation() {
                   </ol>
                   
                   <p className="mt-4" style={{ color: "var(--muted)" }}>
-                    Empirical output from a production session:
+                    Empirical output from a PoC session:
                   </p>
                   <CodeBlock
                     code={IRC_SESSION_OUTPUT}
@@ -387,17 +387,18 @@ export default function Documentation() {
           style={{ borderColor: "var(--border-subtle)", background: "var(--surface)" }}
         >
           <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs" style={{ color: "var(--muted)" }}>
-            <div className="flex items-center gap-2">
-              <svg width="16" height="16" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                <rect x="2" y="2" width="28" height="28" rx="4" stroke="var(--accent)" strokeWidth="1.5" fill="none" />
-                <circle cx="16" cy="16" r="2.5" fill="var(--accent)" />
-              </svg>
-              <span>Post-Quantum IRC Project</span>
-            </div>
-            <div>
-              FIPS 203 Compliant · ML-KEM-768
-            </div>
+          <div className="flex items-center gap-2">
+          <svg width="16" height="16" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect x="2" y="2" width="28" height="28" rx="4" stroke="var(--accent)" strokeWidth="1.5" fill="none" />
+          <circle cx="16" cy="16" r="2.5" fill="var(--accent)" />
+          </svg>
+          <span>Quantum IRC Project</span>
           </div>
+          <div>
+          PoC Implementation · ML-KEM-768
+          </div>
+          </div>
+
         </footer>
       </main>
     </>

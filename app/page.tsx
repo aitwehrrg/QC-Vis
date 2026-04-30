@@ -33,17 +33,17 @@ export default function Home() {
                   <line x1="24" y1="24" x2="16" y2="16" stroke="var(--accent)" strokeWidth="0.75" opacity="0.5" />
                 </svg>
                 <div>
-                  <h1 className="text-balance m-0">Post-Quantum IRC</h1>
+                  <h1 className="text-balance m-0">Quantum IRC</h1>
                   <p className="text-sm m-0" style={{ color: "var(--muted)" }}>
-                    Post-Quantum Encrypted 1-to-1 Chat (FIPS 203)
+                    PoC Post-Quantum Encrypted 1-to-1 Chat (FIPS 203)
                   </p>
                 </div>
               </div>
 
               <p className="text-lg leading-relaxed" style={{ color: "var(--fg)" }}>
-                A terminal-based secure messaging system combining IRC-style chat over TCP 
-                with ML-KEM-768 post-quantum encryption. Built with a high-performance 
-                C++20 ML-KEM implementation featuring AVX2 acceleration.
+                A Proof-of-Concept terminal messaging system combining IRC-style chat over TCP 
+                with ML-KEM-768 post-quantum encryption. Developed as a student research project 
+                at VJTI featuring a custom C++20 implementation.
               </p>
 
               <div className="flex flex-wrap gap-3 mt-4">
@@ -84,9 +84,9 @@ export default function Home() {
             </div>
 
             <div className="mt-16">
-              <h2 className="text-center mb-8">Post-Quantum Exchange</h2>
+              <h2 className="text-center mb-8">PoC Exchange Demo</h2>
               <p className="text-center text-muted max-w-2xl mx-auto mb-12">
-                Empirical output from a production session between Ghruank and Rupak,
+                Empirical output from a PoC session between Ghruank and Rupak,
                 demonstrating the ML-KEM-768 handshake and E2E encrypted messaging.
               </p>
               <ConversationTerminals />
@@ -213,7 +213,7 @@ export default function Home() {
             <div className="max-w-3xl">
               <h2 className="mt-0">Open Source C++ Implementation</h2>
               <p style={{ color: "var(--muted)" }}>
-                The core library provides a robust, reviewed implementation of ML-KEM.
+                The core library provides a student-developed proof-of-concept implementation of ML-KEM.
               </p>
 
               <h3>Repository Structure</h3>
@@ -265,10 +265,10 @@ export default function Home() {
                 <rect x="2" y="2" width="28" height="28" rx="4" stroke="var(--accent)" strokeWidth="1.5" fill="none" />
                 <circle cx="16" cy="16" r="2.5" fill="var(--accent)" />
               </svg>
-              <span>Post-Quantum IRC Project</span>
+              <span>Quantum IRC Project</span>
             </div>
             <div>
-              FIPS 203 Compliant · ML-KEM-768
+              PoC Implementation · ML-KEM-768
             </div>
           </div>
         </footer>

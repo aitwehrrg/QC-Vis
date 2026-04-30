@@ -62,7 +62,7 @@ export default function CodeBlock({
             aria-label={copied ? "Copied!" : "Copy code"}
           >
             {copied ? (
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a6e3a1" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             ) : (
@@ -73,7 +73,7 @@ export default function CodeBlock({
             )}
           </button>
         </div>
-        <div className="terminal-body bg-[#1e1e2e]">
+        <div className="terminal-body">
           {lines.map((line, i) => (
             <div key={i} className="terminal-line">
               {line.startsWith("$") || line.startsWith(">") || line.startsWith("#") ? (
@@ -149,7 +149,7 @@ function getLineClass(line: string) {
     return "text-actor-b font-medium";
   }
   if (line.includes("error") || line.includes("!")) {
-    return "text-red-400";
+    return "text-tertiary";
   }
   return "";
 }

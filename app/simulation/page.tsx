@@ -8,7 +8,7 @@ const SimulatorScene = dynamic(() => import("./components/SimulatorScene"), {
   ssr: false,
   loading: () => (
     <div className="w-full h-full flex items-center justify-center bg-background text-accent font-mono text-xs uppercase tracking-widest">
-      Initializing Coordinate Space...
+      Loading...
     </div>
   ),
 });
