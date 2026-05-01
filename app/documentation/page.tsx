@@ -39,7 +39,6 @@ export default function Documentation() {
                   <a href="#install-prereqs">Prerequisites</a>
                   <a href="#install-clone">Clone &amp; Build</a>
                   <a href="#install-run">Run Demo</a>
-                  <a href="#install-output">Expected Output</a>
                   <a href="#install-troubleshoot">Troubleshooting</a>
                 </div>
 
@@ -52,11 +51,10 @@ export default function Documentation() {
                   <a href="#doc-decap">Decapsulation</a>
                   <a href="#doc-noise">Role of Noise</a>
                   <a href="#doc-why-c-fails">Why Eavesdropping Fails</a>
-                  <a href="#doc-worked-example">Worked Example</a>
                   <a href="#doc-performance">Performance</a>
-                  <a href="#doc-data-structures">Data Structures</a>
+                  <a href="#doc-references">References</a>
+                  <a href="#doc-data-structures">Core Components</a>
                   <a href="#doc-limitations">Limitations</a>
-                  <a href="#doc-glossary">Glossary</a>
                   <a href="#doc-contributors">Contributors</a>
                 </div>
               </nav>
@@ -67,45 +65,25 @@ export default function Documentation() {
               {}
               <section id="installation">
                 <h2 id="install-top" className="mt-0">Installation</h2>
-                <p style={{ color: "var(--muted)" }}>
-                  Build the C++20 implementation.
-                </p>
 
                 <h3 id="install-prereqs">Prerequisites</h3>
                 <ul className="text-sm space-y-1" style={{ color: "var(--fg)" }}>
-                  <li>C++20-compatible compiler (GCC 11+, Clang 13+, MSVC 19.30+)</li>
-                  <li>OpenSSL 3.0 or higher (for AEAD, HKDF, and PBKDF2)</li>
-                  <li>CMake 3.14 or later</li>
-                  <li>Linux environment (for <code>getrandom(2)</code> and POSIX sockets)</li>
+                  <li>C++20 compiler (GCC 11+, Clang 13+)</li>
+                  <li>OpenSSL 3.0+ (AEAD, HKDF, PBKDF2)</li>
+                  <li>CMake 3.14+</li>
+                  <li>Linux (getrandom(2), POSIX sockets)</li>
                 </ul>
                 <CodeBlock code={INSTALL_COMMANDS.prerequisites} language="bash" filename="prerequisites" />
 
                 <h3 id="install-clone">Clone &amp; Build</h3>
-                <p className="text-sm" style={{ color: "var(--muted)" }}>
-                  Clone the repository and build the IRC client and server using CMake. 
-                  The ML-KEM library is included as a subdirectory.
-                </p>
                 <CodeBlock code={INSTALL_COMMANDS.clone} language="bash" filename="terminal" />
                 <CodeBlock code={INSTALL_COMMANDS.build} language="bash" filename="terminal" />
 
                 <h3 id="install-run">Run the Demo</h3>
                 <p className="text-sm" style={{ color: "var(--muted)" }}>
-                  The <code>demo</code> target in the <code>pqc</code> library validates 
-                  the core ML-KEM-768 flow. The <code>client</code> and <code>server</code> 
-                  binaries provide the full IRC experience.
+                  The <code>demo</code> target validates ML-KEM-768 flow. The <code>client</code> and <code>server</code> binaries provide the full IRC experience.
                 </p>
                 <CodeBlock code={INSTALL_COMMANDS.run} language="bash" filename="terminal" />
-
-                <h3 id="install-output">Expected Output</h3>
-                <p className="text-sm" style={{ color: "var(--muted)" }}>
-                  The local <code>demo</code> target validates the hybrid flow by running a 
-                  standalone KeyGen, Encaps, and Decaps loop:
-                </p>
-                <CodeBlock
-                  code={LOCAL_DEMO_OUTPUT}
-                  language="plaintext"
-                  filename="local-demo"
-                />
 
                 <div className="mt-6 mb-10 border-t border-border-subtle pt-6">
                   <a
@@ -115,7 +93,7 @@ export default function Documentation() {
                     className="inline-flex items-center gap-2 text-sm text-accent hover:underline font-medium"
                   >
                     <FaGithub />
-                    Explore full C++ implementation on GitHub →
+                    Full C++ implementation on GitHub →
                   </a>
                 </div>
 
@@ -129,7 +107,7 @@ export default function Documentation() {
                         <div>
                           <p className="m-0 text-sm" style={{ color: "var(--muted)" }}>
                             This library requires OpenSSL 3.0+ for <code>EVP_CIPHER</code> 
-                            and <code>HKDF</code> support. Ensure the development packages are installed.
+                            and <code>HKDF</code> support.
                           </p>
                           <CodeBlock
                             code={`# Ubuntu / Debian\nsudo apt install libssl-dev\n\n# macOS\nbrew install openssl@3`}
@@ -145,8 +123,7 @@ export default function Documentation() {
                       content: (
                         <p className="m-0 text-sm" style={{ color: "var(--muted)" }}>
                           The current implementation uses <code>getrandom(2)</code> and POSIX 
-                          sockets, making it primarily compatible with Linux. Porting to 
-                          other systems would require replacing these OS-specific calls.
+                          sockets, making it primarily compatible with Linux.
                         </p>
                       ),
                     },
@@ -160,9 +137,6 @@ export default function Documentation() {
               {}
               <section id="documentation">
                 <h2 id="doc-top" className="mt-0">Technical Documentation</h2>
-                <p style={{ color: "var(--muted)" }}>
-                  Deep dive into the ML-KEM implementation architecture.
-                </p>
 
                 {}
                 <h3 id="doc-summary">Protocol Summary</h3>
@@ -175,17 +149,13 @@ export default function Documentation() {
                         <div className="text-sm space-y-3" style={{ color: "var(--fg)" }}>
                           <p>
                             ML-KEM (FIPS 203) is the primary post-quantum key encapsulation 
-                            standard. It provides three security levels:
+                            standard leveraging Module Learning With Errors (M-LWE).
                           </p>
                           <ul className="space-y-1">
-                            <li><strong>ML-KEM-512</strong>: NIST Level 1 (AES-128 equivalent)</li>
-                            <li><strong>ML-KEM-768</strong>: NIST Level 3 (AES-192 equivalent)</li>
-                            <li><strong>ML-KEM-1024</strong>: NIST Level 5 (AES-256 equivalent)</li>
+                            <li><strong>ML-KEM-512</strong>: NIST Level 1</li>
+                            <li><strong>ML-KEM-768</strong>: NIST Level 3</li>
+                            <li><strong>ML-KEM-1024</strong>: NIST Level 5</li>
                           </ul>
-                          <p>
-                            The protocol enables secure key exchange in the presence of quantum computers 
-                            by leveraging the hardness of Module Learning With Errors (M-LWE).
-                          </p>
                         </div>
                       ),
                     },
@@ -195,20 +165,17 @@ export default function Documentation() {
                       content: (
                         <div className="text-sm space-y-3" style={{ color: "var(--fg)" }}>
                           <div className="text-sm leading-relaxed">
-                            <LatexText>{`ML-KEM operates in a module of rank $k$ over the polynomial ring $\\mathcal{R}_q = \\mathbb{Z}_q[x]/(x^n + 1)$ where $n = 256$ and $q = 3329$.`}</LatexText>
-                          </div>
-                          <div className="text-sm">
-                            <LatexText>{`Module rank $k$ varies by parameter set: $k=2$ (512), $k=3$ (768), $k=4$ (1024).`}</LatexText>
+                            <LatexText>{`ML-KEM operates in a module of rank $k$ over $\\mathcal{R}_q = \\mathbb{Z}_q[x]/(x^n + 1)$ ($n=256, q=3329$).`}</LatexText>
                           </div>
                           <ol className="space-y-2">
                             <li>
-                              <strong>KeyGen</strong>: <LatexText className="inline">{`Samples secret $\\mathbf{s}, \\mathbf{e}$ and computes $\\mathbf{b} = \\mathbf{A}\\mathbf{s} + \\mathbf{e}$.`}</LatexText>
+                              <strong>KeyGen</strong>: <LatexText className="inline">{`Samples $\\mathbf{s}, \\mathbf{e}$ and computes $\\mathbf{b} = \\mathbf{A}\\mathbf{s} + \\mathbf{e}$.`}</LatexText>
                             </li>
                             <li>
-                              <strong>Encaps</strong>: <LatexText className="inline">{`Uses public key to encrypt a random 32-byte message $m$ into ciphertext $c$.`}</LatexText>
+                              <strong>Encaps</strong>: <LatexText className="inline">{`Encrypts 32-byte message $m$ into ciphertext $c$.`}</LatexText>
                             </li>
                             <li>
-                              <strong>Decaps</strong>: <LatexText className="inline">{`Recovers $m$ and derives shared secret $K$ using implicit rejection if the ciphertext is tampered.`}</LatexText>
+                              <strong>Decaps</strong>: <LatexText className="inline">{`Recovers $m$ using implicit rejection for CCA security.`}</LatexText>
                             </li>
                           </ol>
                         </div>
@@ -219,11 +186,13 @@ export default function Documentation() {
 
                 {}
                 <h3 id="doc-keygen">Key Generation</h3>
-                <p className="text-sm" style={{ color: "var(--fg)" }}>
-                  Key generation (Algorithm 16) produces the encapsulation key (ek) and 
-                  decapsulation key (dk). It utilizes OS-level CSPRNG to generate random seeds 
-                  which are then expanded into the module matrix and noise vectors.
-                </p>
+                <div className="text-sm" style={{ color: "var(--fg)" }}>
+                  <LatexText>
+                    Key generation (Algorithm 16) produces the encapsulation key $ek$ and 
+                    decapsulation key $dk$. It utilizes OS-level CSPRNG to generate random seeds 
+                    expanded into the module matrix and noise vectors.
+                  </LatexText>
+                </div>
                 <CodeBlock
                   code={`// mlkem768.hpp\n// Generates a new keypair using OS CSPRNG\nstatic KeyPair generate();`}
                   language="cpp"
@@ -231,11 +200,13 @@ export default function Documentation() {
                 />
 
                 <h3 id="doc-encap">Encapsulation</h3>
-                <p className="text-sm" style={{ color: "var(--fg)" }}>
-                  Encapsulation (Algorithm 17) uses the public key (ek) to generate a 32-byte 
-                  shared secret and a ciphertext (c). The process involves sampling an 
-                  ephemeral message and encrypting it with a K-PKE scheme.
-                </p>
+                <div className="text-sm" style={{ color: "var(--fg)" }}>
+                  <LatexText>
+                    Encapsulation (Algorithm 17) uses $ek$ to generate a 32-byte 
+                    shared secret and a ciphertext $c$. It involves sampling an 
+                    ephemeral message and encrypting it with a K-PKE scheme.
+                  </LatexText>
+                </div>
                 <CodeBlock
                   code={`// Encapsulates a shared secret for the given public key\nstatic EncapsResult encapsulate(const PublicKey& ek);`}
                   language="cpp"
@@ -243,12 +214,13 @@ export default function Documentation() {
                 />
 
                 <h3 id="doc-decap">Decapsulation</h3>
-                <p className="text-sm" style={{ color: "var(--fg)" }}>
-                  Decapsulation (Algorithm 18) recovers the shared secret from a ciphertext 
-                  using the private key (dk). It features <strong>implicit rejection</strong>, 
-                  meaning a tampered ciphertext will result in a deterministic random-looking 
-                  key rather than an error, protecting against certain attacks.
-                </p>
+                <div className="text-sm" style={{ color: "var(--fg)" }}>
+                  <LatexText>
+                    Decapsulation (Algorithm 18) recovers the secret from $c$ 
+                    using $dk$. It features **implicit rejection**, 
+                    returning a random-looking key on tamper to mitigate timing attacks.
+                  </LatexText>
+                </div>
                 <CodeBlock
                   code={`// Decapsulates the shared secret from a ciphertext\nstatic SharedSecret decapsulate(const Ciphertext& c, const PrivateKey& dk);`}
                   language="cpp"
@@ -256,57 +228,63 @@ export default function Documentation() {
                 />
 
                 <h3 id="doc-noise">Role of Noise</h3>
-                <p className="text-sm" style={{ color: "var(--fg)" }}>
-                  In ML-KEM, &quot;noise&quot; (error vectors sampled from a centered binomial distribution) 
-                  is essential for security. By adding small errors to the polynomial products, 
-                  the resulting public key and ciphertexts become instances of the 
-                  <strong>Learning With Errors (LWE)</strong> problem, which is computationally 
-                  intractable for both classical and quantum computers.
-                </p>
-
-                <h3 id="doc-why-c-fails">Why Eavesdropping Fails</h3>
-                <p className="text-sm" style={{ color: "var(--fg)" }}>
-                  An attacker (Eve) who intercepts the ciphertext $c$ cannot recover the 
-                  shared secret because they lack the private key. Without the secret key 
-                  polynomials, removing the noise from the ciphertext is equivalent to 
-                  solving the M-LWE problem, for which no efficient quantum algorithm 
-                  currently exists.
-                </p>
-
-                <h3 id="doc-worked-example">Worked Example: IRC Session</h3>
-                <div className="text-sm space-y-3" style={{ color: "var(--fg)" }}>
-                  <p>
-                    A typical Post-Quantum IRC session involves a multi-step handshake to establish 
-                    end-to-end encryption between Alice and Bob:
-                  </p>
-                  <ol className="space-y-2">
-                    <li>Alice requests Bob&apos;s public key from the server.</li>
-                    <li>Alice runs <code>MLKEM768::encapsulate(bob_ek)</code> to get <code>(K, c)</code>.</li>
-                    <li>Alice sends <code>c</code> to Bob via the server.</li>
-                    <li>Bob runs <code>MLKEM768::decapsulate(c, bob_dk)</code> to recover <code>K</code>.</li>
-                    <li>Both parties derive a session key using <code>HKDF-SHA256(K)</code>.</li>
-                    <li>Messages are encrypted using <code>AES-256-GCM</code>.</li>
-                  </ol>
-                  
-                  <p className="mt-4" style={{ color: "var(--muted)" }}>
-                    Empirical output from a PoC session:
-                  </p>
-                  <CodeBlock
-                    code={IRC_SESSION_OUTPUT}
-                    language="plaintext"
-                    filename="irc-client"
-                  />
+                <div className="text-sm" style={{ color: "var(--fg)" }}>
+                  <LatexText>
+                    Noise (error vectors from a centered binomial distribution) is essential. 
+                    Adding errors makes public keys and ciphertexts instances of the 
+                    **Learning With Errors (LWE)** problem, which is computationally 
+                    intractable for quantum computers.
+                  </LatexText>
                 </div>
 
-                <h3 id="doc-limitations">Limitations</h3>
-                <ul className="text-sm space-y-1" style={{ color: "var(--fg)" }}>
-                  <li><strong>1-to-1 only:</strong> No group rooms; sessions are strictly between two users.</li>
-                  <li><strong>No message history:</strong> Messages are not stored; if you&apos;re offline, you miss them.</li>
-                  <li><strong>Static identity keys:</strong> Same keypair across sessions; no forward secrecy between sessions.</li>
-                  <li><strong>Linux preferred:</strong> Uses <code>getrandom(2)</code> and POSIX sockets.</li>
-                </ul>
+                <h3 id="doc-why-c-fails">Why Eavesdropping Fails</h3>
+                <div className="text-sm" style={{ color: "var(--fg)" }}>
+                  <LatexText>
+                    An attacker (Eve) who intercepts $c$ cannot recover the secret without $dk$. 
+                    Without the secret polynomials, removing noise is equivalent to 
+                    solving the M-LWE problem.
+                  </LatexText>
+                </div>
 
-                {}
+                <h3 id="doc-performance">Performance Benchmarks</h3>
+                <p className="text-sm" style={{ color: "var(--muted)" }}>
+                  Benchmarks from a standard release build on typical modern hardware.
+                </p>
+                <CodeBlock
+                  code={BENCHMARK_OUTPUT}
+                  language="plaintext"
+                  filename="benchmarks"
+                />
+
+                <h3 id="doc-references">Scholarly References</h3>
+                <div className="text-sm space-y-4" style={{ color: "var(--fg)" }}>
+                  <div className="p-4 rounded-lg bg-surface border border-border-subtle">
+                    <p className="font-bold mb-1">NIST FIPS 203</p>
+                    <p className="text-xs text-muted mb-2">Standard for Module-Lattice-Based KEM</p>
+                    <a 
+                      href="https://doi.org/10.6028/NIST.FIPS.203" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-xs font-mono text-accent hover:underline"
+                    >
+                      doi.org/10.6028/NIST.FIPS.203
+                    </a>
+                  </div>
+
+                  <div className="p-4 rounded-lg bg-surface border border-border-subtle">
+                    <p className="font-bold mb-1">CRYSTALS-Kyber: a CCA-secure module-lattice-based KEM</p>
+                    <p className="text-xs text-muted mb-2">Bos et al. EuroS&P 2018.</p>
+                    <a 
+                      href="https://pq-crystals.org/kyber/resources.shtml" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-xs font-mono text-accent hover:underline"
+                    >
+                      pq-crystals.org/kyber
+                    </a>
+                  </div>
+                </div>
+
                 <h3 id="doc-data-structures">Core Components</h3>
                 <div className="overflow-x-auto my-4">
                   <table className="w-full text-sm" style={{ borderCollapse: "collapse" }}>
@@ -318,11 +296,11 @@ export default function Documentation() {
                     </thead>
                     <tbody style={{ color: "var(--muted)" }}>
                       {[
-                        ["mlkem.hpp", "Low-level templated implementation of FIPS 203 Algorithms 16-18."],
-                        ["mlkem768.hpp", "High-level ML-KEM-768 class wrapper for ease of use."],
-                        ["aead.hpp", "OpenSSL-backed HKDF-SHA256 and AES-256-GCM implementation."],
-                        ["symmetric.hpp", "Self-contained SHA-3 (Keccak) and SHAKE primitives."],
-                        ["ntt.hpp", "Implementation of the Number Theoretic Transform for polynomial multiplication."],
+                        ["mlkem.hpp", "Low-level templated FIPS 203 implementation."],
+                        ["mlkem768.hpp", "High-level ML-KEM-768 class wrapper."],
+                        ["aead.hpp", "OpenSSL-backed HKDF and AES-256-GCM."],
+                        ["symmetric.hpp", "Self-contained SHA-3 and SHAKE primitives."],
+                        ["ntt.hpp", "Number Theoretic Transform implementation."],
                       ].map(([mod, desc], i) => (
                         <tr key={i} style={{ borderBottom: "1px solid var(--border-subtle)" }}>
                           <td className="py-2 pr-4 font-medium" style={{ color: "var(--fg)" }}>{mod}</td>
@@ -333,35 +311,13 @@ export default function Documentation() {
                   </table>
                 </div>
 
-                <h3 id="doc-performance">Performance Benchmarks</h3>
-                <p className="text-sm" style={{ color: "var(--muted)" }}>
-                  Benchmarks confirm the efficiency of the C++20 implementation on typical 
-                  modern hardware. The following numbers reflect a standard release build.
-                </p>
-                <CodeBlock
-                  code={BENCHMARK_OUTPUT}
-                  language="plaintext"
-                  filename="benchmarks"
-                />
-
-                {}
-                <h3 id="doc-glossary">Glossary</h3>
-                <div className="grid grid-cols-1 gap-2 my-4">
-                  {Object.keys(GLOSSARY).map((term) => (
-                    <div
-                      key={term}
-                      className="p-3 rounded-lg"
-                      style={{ background: "var(--surface)", border: "1px solid var(--border-subtle)" }}
-                    >
-                      <div className="text-sm font-semibold" style={{ color: "var(--accent)" }}>
-                        {term}
-                      </div>
-                      <p className="text-xs m-0 mt-1" style={{ color: "var(--muted)" }}>
-                        {GLOSSARY[term]}
-                      </p>
-                    </div>
-                  ))}
-                </div>
+                <h3 id="doc-limitations">Limitations</h3>
+                <ul className="text-sm space-y-1" style={{ color: "var(--fg)" }}>
+                  <li><strong>1-to-1 only:</strong> No group rooms.</li>
+                  <li><strong>No message history:</strong> Messages are ephemeral.</li>
+                  <li><strong>Static keys:</strong> No forward secrecy between sessions.</li>
+                  <li><strong>Linux preferred:</strong> Uses <code>getrandom(2)</code> and POSIX sockets.</li>
+                </ul>
 
                 <h3 id="doc-contributors">Project Contributors</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-4">

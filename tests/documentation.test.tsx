@@ -23,11 +23,10 @@ describe('Documentation Page', () => {
     expect(screen.getAllByText('Core Components').length).toBeGreaterThan(0);
   });
 
-  it('renders the glossary', () => {
+  it('renders scholarly references', () => {
     render(<Documentation />);
-    expect(screen.getAllByText('Glossary').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('ML-KEM').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('PQC').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Scholarly References').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('NIST FIPS 203').length).toBeGreaterThan(0);
   });
 
   it('contains links to GitHub', () => {
