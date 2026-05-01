@@ -73,11 +73,11 @@ export default function Home() {
                 </div>
                 <div className="p-4 rounded-lg" style={{ background: "var(--surface)", border: "1px solid var(--border-subtle)" }}>
                   <h3 className="text-sm font-semibold m-0 mb-2" style={{ color: "var(--accent)" }}>
-                    AVX2 Optimized
+                    Zero External Deps
                   </h3>
                   <p className="text-sm m-0" style={{ color: "var(--muted)" }}>
-                    Optional AVX2-accelerated NTT path for modern x86 hardware, 
-                    with runtime CPU dispatch and fallbacks for older systems.
+                    The ML-KEM core is entirely self-contained, including a custom 
+                    implementation of SHA-3 and SHAKE without external libraries.
                   </p>
                 </div>
               </div>
@@ -141,22 +141,21 @@ export default function Home() {
                   logic for implicit rejection to mitigate timing side-channels.
                 </li>
                 <li>
-                  <strong>Secure Memory.</strong> Secrets are stored in <code>SecureBuffer</code> 
-                  types that automatically zeroize memory on destruction.
+                  <strong>No Heap Allocation.</strong> All cryptographic buffers are 
+                  stack-allocated with constexpr-sized arrays for safety.
                 </li>
                 <li>
-                  <strong>OpenSSL Integration.</strong> Relies on OpenSSL 3.0+ for 
-                  vetted AES-GCM and HKDF implementations in the AEAD layer.
+                  <strong>Authenticated Encryption.</strong> Relies on OpenSSL 3.0+ for 
+                  vetted AES-256-GCM and HKDF-SHA256 implementations in the AEAD layer.
                 </li>
               </ul>
 
-              <h3>Performance Benchmarks (x86_64, AVX2)</h3>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 my-4">
+              <h3>Performance Benchmarks (x86_64, Release Build)</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 my-4">
                 {[
-                  { label: "KeyGen", time: "28 μs" },
-                  { label: "Encaps", time: "35 μs" },
-                  { label: "Decaps", time: "42 μs" },
-                  { label: "NTT (AVX2)", time: "1.2 μs" },
+                  { label: "KeyGen", time: "~393 μs" },
+                  { label: "Encaps", time: "~421 μs" },
+                  { label: "Decaps", time: "~651 μs" },
                 ].map((stat) => (
                   <div key={stat.label} className="p-3 rounded-lg text-center" style={{ background: "var(--surface)", border: "1px solid var(--border-subtle)" }}>
                     <div className="text-xs font-semibold mb-1" style={{ color: "var(--accent)" }}>{stat.label}</div>
@@ -218,29 +217,30 @@ export default function Home() {
 
               <h3>Repository Structure</h3>
               <CodeBlock
-                code={`/\n├── pqc/                    # ML-KEM-768 library (Abhay & Rupak)\n│   ├── include/mlkem/      # Public API (mlkem.hpp, aead.hpp)\n│   └── src/                # FIPS 203 implementation (NTT, SHA-3)\n└── irc/                    # IRC Chat System (Ghruank)\n    ├── server.cpp          # Blind relay server\n    ├── client.cpp          # Terminal client (handshake, messaging)\n    └── crypto.hpp          # KEM & AEAD wrapper`}
+                code={`/\n├── pqc/                    # ML-KEM library (Abhay Upadhyay, Rupak Gupta)\n│   ├── include/mlkem/      # Public headers (mlkem.hpp, aead.hpp)\n│   └── src/                # FIPS 203 implementation (NTT, SHA-3)\n└── irc/                    # IRC system (Ghruank Kothare)\n    ├── server.cpp          # Blind relay server\n    ├── client.cpp          # Terminal client (handshake, messaging)\n    └── crypto.hpp          # Crypto wrapper`}
                 language="plaintext"
                 filename="project structure"
               />
 
               <h3>Building from Source</h3>
               <ol className="text-sm space-y-2" style={{ color: "var(--fg)" }}>
-                <li>Install OpenSSL 3.0+ and CMake 3.15+.</li>
-                <li><code>mkdir build && cd build</code></li>
-                <li><code>cmake .. -DENABLE_AVX2=ON</code></li>
-                <li><code>make && ./demo</code></li>
+                <li>Install OpenSSL 3.0+ and CMake 3.14+.</li>
+                <li><code>cd irc && mkdir build && cd build</code></li>
+                <li><code>cmake .. -DCMAKE_BUILD_TYPE=Release</code></li>
+                <li><code>make -j$(nproc)</code></li>
               </ol>
 
+
               <h3 className="mt-12">Contributors</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
                 {[
-                  { name: "Abhay Upadhyay", github: "github.com/urabhay10" },
-                  { name: "Ghruank Kothare", github: "github.com/ghruank" },
-                  { name: "Rupak R. Gupta", github: "github.com/aitwehrrg" },
+                  { name: "Abhay Upadhyay", github: "github.com/urabhay10", role: "PQC Library" },
+                  { name: "Ghruank Kothare", github: "github.com/ghruank", role: "IRC & Integration" },
+                  { name: "Rupak R. Gupta", github: "github.com/aitwehrrg", role: "PQC Library" },
                 ].map((c) => (
                   <a
                     key={c.github}
-                    href={`https://${c.github}`}
+                    href={c.github.startsWith("github.com") ? `https://${c.github}` : `https://${c.github}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-3 rounded-lg border border-border-subtle bg-surface hover:border-accent transition-colors group"
@@ -265,7 +265,7 @@ export default function Home() {
                 <rect x="2" y="2" width="28" height="28" rx="4" stroke="var(--accent)" strokeWidth="1.5" fill="none" />
                 <circle cx="16" cy="16" r="2.5" fill="var(--accent)" />
               </svg>
-              <span>Quantum IRC Project</span>
+              <span>Post-Quantum IRC Project</span>
             </div>
             <div>
               PoC Implementation · ML-KEM-768

@@ -55,8 +55,8 @@ export const GLOSSARY: Record<string, string> = {
     "The official NIST standard for Module-Lattice-Based Key Encapsulation Mechanism.",
   "CCA Security":
     "Chosen Ciphertext Attack security — a security notion where an attacker cannot learn anything even if they can ask for decryptions of other ciphertexts.",
-  "AVX2":
-    "Advanced Vector Extensions 2 — an expansion of the x86 instruction set architecture used to accelerate NTT computations.",
+  "Implicit Rejection":
+    "A CCA-secure decapsulation property where a tampered ciphertext produces a random-looking key instead of an error, preventing timing attacks.",
   "Blind Relay":
     "A server architecture where the relay server forwards encrypted messages without having access to the plaintext or session keys.",
 };
@@ -71,7 +71,7 @@ export const SAMPLE_VECTORS = {
 } as const;
 
 export const INSTALL_COMMANDS = {
-  clone: "git clone https://github.com/ghruank/irc-encrypted.git\ncd irc-encrypted",
+  clone: "git clone https://github.com/ghruank/irc-encrypted.git\ncd irc-encrypted/irc",
   prerequisites: "# Requires: OpenSSL 3.0+, CMake 3.14+, C++20 compiler (GCC 11+, Clang 13+)",
   build: "mkdir build && cd build\ncmake .. -DCMAKE_BUILD_TYPE=Release\nmake -j$(nproc)",
   run: "./server\n# In another terminal:\n./client 127.0.0.1",
@@ -89,36 +89,37 @@ Performing ML-KEM-768 encapsulation...
 [you] encrypted : a3f0c29d1b7e82...`,
 } as const;
 
-export const BENCHMARK_OUTPUT = `★ ML-KEM Performance Benchmark (1000 iterations each)
+export const BENCHMARK_OUTPUT = `★ ML-KEM Performance Benchmark (Typical Linux x86-64)
 ------------------------------------------------------------
 Parameter Set  |  KeyGen      |  Encaps      |  Decaps
 ------------------------------------------------------------
-ML-KEM-512     |  274 μs      |  256 μs      |  403 μs     [OK]
-ML-KEM-768     |  383 μs      |  426 μs      |  644 μs     [OK]
-ML-KEM-1024    |  561 μs      |  632 μs      |  955 μs     [OK]
+ML-KEM-512     |  ~270 μs     |  ~263 μs     |  ~386 μs    [OK]
+ML-KEM-768     |  ~393 μs     |  ~421 μs     |  ~651 μs    [OK]
+ML-KEM-1024    |  ~581 μs     |  ~648 μs     |  ~1004 μs   [OK]
 ------------------------------------------------------------`;
 
-export const LOCAL_DEMO_OUTPUT = `★ === ML-KEM-768 Secure Messaging Demo (FIPS 203) ===
+export const LOCAL_DEMO_OUTPUT = `=== ML-KEM Message Sending Simulation ===
+
 Who is the sender? Alice
 Who is the receiver? Bob
 
-[ML-KEM] Key Generation complete.
-[Bob] Publishes public key.
+[1] Bob is generating ML-KEM-768 keypair...
+    Bob's Public Key (ek) (1184 bytes): f75424c5...
+    Bob publishes the public key.
 
-[Sender] Encapsulating shared secret...
-[Sender] Encapsulated Key (hex): 3680880a9eb301de7daf6a3b5cef6265...
+Alice, enter the message you want to send to Bob:
+> PQC is here
 
-[AEAD] Encrypting message: "Post-quantum secure messaging"
-[AEAD] Ciphertext (hex): 85fd8dc9fd4398c01e02f60af0efcc31...
-[AEAD] Auth Tag (hex): f31a8c2eb961b522684c92c9641eb7d9
-[AEAD] Nonce (hex): 2331df99bfaa6d26ae9cdc73
-
-[Receiver] Decapsulating shared secret...
-[Session] E2E secure channel established.
+[2] Alice encapsulates a shared secret using Bob's public key...
+    Alice's Shared Secret (ss) (32 bytes): ...
+[3] Alice encrypts the message using the shared secret...
+[4] Bob receives the ML-KEM ciphertext and decapsulates it...
+    SUCCESS: Shared secrets match!
+[5] Bob decrypts the message using the shared secret...
 
 === RESULTS ===
-Bob received: "Post-quantum secure messaging"
-(Message integrity: VERIFIED by AES-256-GCM authentication)`;
+Bob read the message: "PQC is here"`;
+
 
 export const IRC_SESSION_OUTPUT = `▶ ./client 192.168.1.116
 Quantum IRC Client (Production)

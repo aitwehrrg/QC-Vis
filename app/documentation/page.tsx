@@ -69,24 +69,25 @@ export default function Documentation() {
                 <h3 id="install-prereqs">Prerequisites</h3>
                 <ul className="text-sm space-y-1" style={{ color: "var(--fg)" }}>
                   <li>C++20-compatible compiler (GCC 11+, Clang 13+, MSVC 19.30+)</li>
-                  <li>OpenSSL 3.0 or higher (for AEAD and HKDF)</li>
-                  <li>CMake 3.15 or later</li>
-                  <li>AVX2-capable CPU (optional, for acceleration)</li>
+                  <li>OpenSSL 3.0 or higher (for AEAD, HKDF, and PBKDF2)</li>
+                  <li>CMake 3.14 or later</li>
+                  <li>Linux environment (for <code>getrandom(2)</code> and POSIX sockets)</li>
                 </ul>
                 <CodeBlock code={INSTALL_COMMANDS.prerequisites} language="bash" filename="prerequisites" />
 
                 <h3 id="install-clone">Clone &amp; Build</h3>
                 <p className="text-sm" style={{ color: "var(--muted)" }}>
-                  Clone the repository and build using the standard CMake workflow. Use <code>ENABLE_AVX2</code> 
-                  to toggle optimized NTT paths.
+                  Clone the repository and build the IRC client and server using CMake. 
+                  The ML-KEM library is included as a subdirectory.
                 </p>
                 <CodeBlock code={INSTALL_COMMANDS.clone} language="bash" filename="terminal" />
                 <CodeBlock code={INSTALL_COMMANDS.build} language="bash" filename="terminal" />
 
                 <h3 id="install-run">Run the Demo</h3>
                 <p className="text-sm" style={{ color: "var(--muted)" }}>
-                  The <code>demo</code> target runs an end-to-end flow of ML-KEM-768 key exchange 
-                  followed by AEAD encryption.
+                  The <code>demo</code> target in the <code>pqc</code> library validates 
+                  the core ML-KEM-768 flow. The <code>client</code> and <code>server</code> 
+                  binaries provide the full IRC experience.
                 </p>
                 <CodeBlock code={INSTALL_COMMANDS.run} language="bash" filename="terminal" />
 
@@ -135,12 +136,12 @@ export default function Documentation() {
                     },
                     {
                       id: "avx2",
-                      title: "AVX2 Support Issues",
+                      title: "Operating System Support",
                       content: (
                         <p className="m-0 text-sm" style={{ color: "var(--muted)" }}>
-                          If building for an older CPU, ensure <code>-DENABLE_AVX2=OFF</code> is passed to 
-                          CMake. The library uses runtime detection, but the AVX2 object file must be 
-                          compilable by your toolchain.
+                          The current implementation uses <code>getrandom(2)</code> and POSIX 
+                          sockets, making it primarily compatible with Linux. Porting to 
+                          other systems would require replacing these OS-specific calls.
                         </p>
                       ),
                     },
@@ -313,10 +314,10 @@ export default function Documentation() {
                     <tbody style={{ color: "var(--muted)" }}>
                       {[
                         ["mlkem.hpp", "Low-level templated implementation of FIPS 203 Algorithms 16-18."],
-                        ["ntt_avx2.hpp", "AVX2-optimized Number Theoretic Transform for x86_64."],
+                        ["mlkem768.hpp", "High-level ML-KEM-768 class wrapper for ease of use."],
                         ["aead.hpp", "OpenSSL-backed HKDF-SHA256 and AES-256-GCM implementation."],
-                        ["secure_buffer.hpp", "RAII buffer that zeroizes memory on destruction."],
-                        ["symmetric.hpp", "FIPS-compliant SHA3 and SHAKE primitives."],
+                        ["symmetric.hpp", "Self-contained SHA-3 (Keccak) and SHAKE primitives."],
+                        ["ntt.hpp", "Implementation of the Number Theoretic Transform for polynomial multiplication."],
                       ].map(([mod, desc], i) => (
                         <tr key={i} style={{ borderBottom: "1px solid var(--border-subtle)" }}>
                           <td className="py-2 pr-4 font-medium" style={{ color: "var(--fg)" }}>{mod}</td>
@@ -329,8 +330,8 @@ export default function Documentation() {
 
                 <h3 id="doc-performance">Performance Benchmarks</h3>
                 <p className="text-sm" style={{ color: "var(--muted)" }}>
-                  The implementation is optimized for x86_64 systems with AVX2 support. 
-                  Benchmarks confirm the deterministic efficiency of the cryptographic stack.
+                  Benchmarks confirm the efficiency of the C++20 implementation on typical 
+                  modern hardware. The following numbers reflect a standard release build.
                 </p>
                 <CodeBlock
                   code={BENCHMARK_OUTPUT}
@@ -360,12 +361,12 @@ export default function Documentation() {
                 <h3 id="doc-contributors">Project Contributors</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-4">
                   {[
-                    { name: "Rupak R. Gupta", id: "231080028", github: "github.com/aitwehrrg" },
-                    { name: "Ghruank Kothare", id: "231080038", github: "github.com/ghruank" },
-                    { name: "Abhay Upadhyay", id: "231080072", github: "github.com/urabhay10" },
+                    { name: "Abhay Upadhyay", github: "github.com/urabhay10" },
+                    { name: "Ghruank Kothare", github: "github.com/ghruank" },
+                    { name: "Rupak R. Gupta", github: "github.com/aitwehrrg" },
                   ].map((c) => (
                     <a
-                      key={c.id}
+                      key={c.github}
                       href={`https://${c.github}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -392,7 +393,7 @@ export default function Documentation() {
           <rect x="2" y="2" width="28" height="28" rx="4" stroke="var(--accent)" strokeWidth="1.5" fill="none" />
           <circle cx="16" cy="16" r="2.5" fill="var(--accent)" />
           </svg>
-          <span>Quantum IRC Project</span>
+          <span>Post-Quantum IRC Project</span>
           </div>
           <div>
           PoC Implementation · ML-KEM-768
