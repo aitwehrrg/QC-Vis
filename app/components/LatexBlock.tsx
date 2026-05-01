@@ -44,7 +44,7 @@ export default function LatexBlock({
 export function LatexText({ children, className = "" }: { children: string; className?: string }) {
   const elements = useMemo(() => {
     const parts = children.split(/(\$[^\$]+\$)/g);
-    return parts.map((part, i) => {
+    return parts.flatMap((part, i) => {
       if (part.startsWith("$") && part.endsWith("$")) {
         const tex = part.slice(1, -1);
         try {
@@ -52,12 +52,24 @@ export function LatexText({ children, className = "" }: { children: string; clas
             displayMode: false,
             throwOnError: false,
           });
-          return <span key={i} dangerouslySetInnerHTML={{ __html: html }} />;
+          return <span key={`math-${i}`} dangerouslySetInnerHTML={{ __html: html }} />;
         } catch {
-          return <span key={i}>{part}</span>;
+          return <span key={`math-${i}`}>{part}</span>;
         }
       }
-      return <span key={i}>{part}</span>;
+      
+      // Support for bold text using **
+      const boldParts = part.split(/(\*\*.+?\*\*)/g);
+      return boldParts.map((subPart, j) => {
+        if (subPart.startsWith("**") && subPart.endsWith("**")) {
+          return (
+            <strong key={`bold-${i}-${j}`} className="font-bold">
+              {subPart.slice(2, -2)}
+            </strong>
+          );
+        }
+        return <span key={`text-${i}-${j}`}>{subPart}</span>;
+      });
     });
   }, [children]);
 
