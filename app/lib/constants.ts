@@ -14,6 +14,34 @@ export const NAV_SECTIONS = [
   { id: "simulation", route: "/simulation", label: "Simulation" },
 ] as const;
 
+export const DOC_SECTIONS = [
+  {
+    group: "Installation",
+    items: [
+      { id: "install-prereqs", label: "Prerequisites" },
+      { id: "install-clone", label: "Clone & Build" },
+      { id: "install-run", label: "Run Demo" },
+      { id: "install-troubleshoot", label: "Troubleshooting" },
+    ]
+  },
+  {
+    group: "Documentation",
+    items: [
+      { id: "doc-summary", label: "Protocol Summary" },
+      { id: "doc-keygen", label: "Key Generation" },
+      { id: "doc-encap", label: "Encapsulation" },
+      { id: "doc-decap", label: "Decapsulation" },
+      { id: "doc-noise", label: "Role of Noise" },
+      { id: "doc-why-c-fails", label: "Why Eavesdropping Fails" },
+      { id: "doc-performance", label: "Performance" },
+      { id: "doc-references", label: "References" },
+      { id: "doc-data-structures", label: "Core Components" },
+      { id: "doc-limitations", label: "Limitations" },
+      { id: "doc-contributors", label: "Contributors" },
+    ]
+  }
+] as const;
+
 export const VALUE_COLORS = {
   public: { bg: "var(--color-value-public-bg)", text: "var(--color-value-public-text)", label: "Public" },
   private: { bg: "var(--color-value-private-bg)", text: "var(--color-value-private-text)", label: "Private" },
