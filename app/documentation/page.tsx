@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Navigation from "../components/Navigation";
 import CodeBlock from "../components/CodeBlock";
 import Tabs from "../components/Tabs";
@@ -5,6 +6,10 @@ import Accordion from "../components/Accordion";
 import { LatexText } from "../components/LatexBlock";
 import { INSTALL_COMMANDS, BENCHMARK_OUTPUT, LOCAL_DEMO_OUTPUT, IRC_SESSION_OUTPUT, GLOSSARY } from "../lib/constants";
 import { FaGithub } from "react-icons/fa";
+
+export const metadata: Metadata = {
+  title: "Documentation | Post-Quantum IRC",
+};
 
 export default function Documentation() {
   return (

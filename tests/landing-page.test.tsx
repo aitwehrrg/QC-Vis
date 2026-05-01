@@ -17,7 +17,7 @@ vi.mock('../app/components/ConversationTerminals', () => ({
 describe('Landing Page', () => {
   it('renders the landing page title and description', () => {
     render(<Home />);
-    expect(screen.getAllByText('Quantum IRC').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Post-Quantum IRC').length).toBeGreaterThan(0);
     expect(screen.getByText('PoC Post-Quantum Encrypted 1-to-1 Chat (FIPS 203)')).toBeInTheDocument();
   });
 

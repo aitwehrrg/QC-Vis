@@ -106,7 +106,7 @@
   --code-bg: #1a1a1a;
   --code-fg: #fafafa;
   --scrollbar-thumb: #333333;
-  --lattice-dot: rgba(255,255,255,0.06);
+  --lattice-dot: rgba(255,255,255,0.12);
   --callout-bg-warning: #1a1a1a;
   --callout-border-warning: var(--tertiary);
   --callout-bg-info: #111111;

@@ -18,7 +18,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Quantum IRC | Post-Quantum Messaging",
+  title: "Post-Quantum IRC",
   description:
     "A Proof-of-Concept C++20 implementation of ML-KEM (FIPS 203) messaging, featuring AEAD (AES-256-GCM) and AVX2 acceleration. A student research project from VJTI.",
   keywords: [
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     icon: "/icon.svg",
   },
   openGraph: {
-    title: "Quantum IRC | Post-Quantum Messaging",
+    title: "Post-Quantum IRC",
     description:
       "A student research project from VJTI detailing a C++20 proof-of-concept for secure messaging using ML-KEM-768.",
     type: "website",
