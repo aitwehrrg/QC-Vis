@@ -276,7 +276,7 @@ export default function DocumentationClient() {
                   filename="benchmarks"
                 />
 
-                <h3 id="doc-references">Scholarly References</h3>
+                <h3 id="doc-references">References</h3>
                 <div className="text-sm space-y-4" style={{ color: "var(--fg)" }}>
                   <div className="p-4 rounded-lg bg-surface border border-border-subtle">
                     <p className="font-bold mb-1">NIST FIPS 203</p>

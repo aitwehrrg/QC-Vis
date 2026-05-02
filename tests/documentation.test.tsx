@@ -23,9 +23,9 @@ describe('Documentation Page', () => {
     expect(screen.getAllByText('Core Components').length).toBeGreaterThan(0);
   });
 
-  it('renders scholarly references', () => {
+  it('renders references', () => {
     render(<Documentation />);
-    expect(screen.getAllByText('Scholarly References').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('References').length).toBeGreaterThan(0);
     expect(screen.getAllByText('NIST FIPS 203').length).toBeGreaterThan(0);
   });
 
